@@ -1,11 +1,12 @@
 "use client";
 
+import { READY_STAGES } from "@/lib/release";
 import { ArrowLeft, Check, Hourglass, Lock, SearchX } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { getScenario } from "@/content/scenarios";
 import { derive } from "@/engine/reducer";
-import { PLAYABLE_STAGES, STAGES, type ActionInput, type StageId } from "@/engine/types";
+import { STAGES, type ActionInput, type StageId } from "@/engine/types";
 import { useI18n } from "@/components/i18n-provider";
 import { EvidenceBoard } from "@/components/sim/evidence-board";
 import { StageContext } from "@/components/sim/stage-context";
@@ -75,7 +76,7 @@ export function SimulateView() {
 
         <ol className="grid grid-cols-3 gap-2 md:grid-cols-6" aria-label={t.briefing.stagesTitle}>
           {STAGES.map((n) => {
-            const playable = PLAYABLE_STAGES.includes(n);
+            const playable = READY_STAGES.includes(n);
             const reached = n <= state.stage;
             const isShown = n === shown;
             return (

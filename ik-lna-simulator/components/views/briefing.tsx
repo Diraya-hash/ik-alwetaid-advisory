@@ -1,9 +1,10 @@
 "use client";
 
+import { READY_STAGES } from "@/lib/release";
 import { ArrowRight, Building2, Clock, Hourglass, Lock, Quote, Target } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getScenario } from "@/content/scenarios";
-import { PLAYABLE_STAGES, STAGES } from "@/engine/types";
+import { STAGES } from "@/engine/types";
 import { useI18n } from "@/components/i18n-provider";
 import { DifficultyDots } from "@/components/scenario-card";
 import { Button } from "@/components/ui/button";
@@ -109,7 +110,7 @@ export function BriefingView({ scenarioId }: { scenarioId: string }) {
             <SectionTitle>{t.briefing.stagesTitle}</SectionTitle>
             <ol className="space-y-2.5">
               {STAGES.map((n) => {
-                const playable = PLAYABLE_STAGES.includes(n);
+                const playable = READY_STAGES.includes(n);
                 return (
                   <li key={n} className="flex items-start gap-3 text-[13.5px]">
                     <span className={`num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${playable ? "bg-primary text-primary-fg" : "bg-surface-3 text-ink-subtle"}`}>
