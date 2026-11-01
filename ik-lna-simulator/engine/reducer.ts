@@ -24,6 +24,11 @@ export function initialState(scenario: Scenario): SimState {
     transcript: [],
     hypotheses: [],
     framings: [],
+    causes: {},
+    gaps: {},
+    interventions: {},
+    kpis: {},
+    completed: false,
   };
 }
 
@@ -50,6 +55,7 @@ export function availableQuestions(scenario: Scenario, state: SimState, stakehol
 
 /** Returns why an action cannot be applied, or null if it is valid. */
 export function check(scenario: Scenario, state: SimState, action: Action): Rejection | null {
+  if (state.completed) return "completed";
   switch (action.type) {
     case "REVIEW_EVIDENCE": {
       const ev = findEvidence(scenario, action.evidenceId);
@@ -81,7 +87,31 @@ export function check(scenario: Scenario, state: SimState, action: Action): Reje
       if (!PLAYABLE_STAGES.includes(action.to)) return "stage-locked";
       // A consultant defines the performance gap before interviewing anyone.
       if (action.to === 2 && state.framings.length === 0) return "framing-required";
+      if (action.to === 4 && !Object.values(state.causes).some((c) => c.verdict === "root")) return "diagnosis-required";
+      if (action.to === 5 && scenario.capabilityGaps.some((g) => !state.gaps[g.id])) return "assessment-required";
+      if (action.to === 6 && Object.keys(state.interventions).length === 0) return "solution-required";
       return null;
+    case "SET_CAUSE":
+      if (state.stage < 3) return "stage-locked";
+      if (!scenario.rootCauses.some((c) => c.id === action.causeId)) return "unknown-cause";
+      if (action.evidenceIds.some((id) => !state.discovered.includes(id))) return "undiscovered-evidence";
+      return null;
+    case "SET_GAP":
+      if (state.stage < 4) return "stage-locked";
+      return scenario.capabilityGaps.some((g) => g.id === action.gapId) ? null : "unknown-gap";
+    case "SET_INTERVENTION":
+      if (state.stage < 5) return "stage-locked";
+      if (!scenario.interventions.some((i) => i.id === action.interventionId)) return "unknown-intervention";
+      if (action.causeIds.some((id) => !scenario.rootCauses.some((c) => c.id === id))) return "unknown-cause";
+      return null;
+    case "SET_KPI":
+      if (state.stage < 6) return "stage-locked";
+      if (!scenario.kpis.some((k) => k.id === action.kpiId)) return "unknown-kpi";
+      if (!scenario.stakeholders.some((s) => s.id === action.ownerId)) return "unknown-kpi";
+      return null;
+    case "COMPLETE":
+      if (state.stage !== 6) return "stage-locked";
+      return Object.keys(state.kpis).length === 0 ? "measures-required" : null;
   }
 }
 
@@ -142,6 +172,32 @@ export function apply(scenario: Scenario, state: SimState, action: Action): SimS
       return state.framings.at(-1) === action.optionId ? state : { ...state, framings: [...state.framings, action.optionId] };
     case "ADVANCE_STAGE":
       return { ...state, stage: action.to };
+    case "SET_CAUSE": {
+      const causes = { ...state.causes };
+      if (action.verdict) causes[action.causeId] = { verdict: action.verdict, evidenceIds: [...new Set(action.evidenceIds)] };
+      else delete causes[action.causeId];
+      return { ...state, causes };
+    }
+    case "SET_GAP": {
+      const gaps = { ...state.gaps };
+      if (action.verdict) gaps[action.gapId] = { verdict: action.verdict, nature: action.nature };
+      else delete gaps[action.gapId];
+      return { ...state, gaps };
+    }
+    case "SET_INTERVENTION": {
+      const interventions = { ...state.interventions };
+      if (action.selected) interventions[action.interventionId] = { causeIds: [...new Set(action.causeIds)] };
+      else delete interventions[action.interventionId];
+      return { ...state, interventions };
+    }
+    case "SET_KPI": {
+      const kpis = { ...state.kpis };
+      if (action.selected) kpis[action.kpiId] = { level: action.level, ownerId: action.ownerId, reviewDays: action.reviewDays };
+      else delete kpis[action.kpiId];
+      return { ...state, kpis };
+    }
+    case "COMPLETE":
+      return { ...state, completed: true, completedAt: action.at };
   }
 }
 

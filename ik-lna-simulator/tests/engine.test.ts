@@ -30,9 +30,9 @@ describe("engine", () => {
     expect(check(s, run(), { type: "ASK", stakeholderId: "kh", questionId: "q-kh-outcome", at: 0 })).toBe("stage-locked");
   });
 
-  it("cannot skip to unplayable stages", () => {
+  it("cannot skip stages", () => {
     const st = run(frame, toStage2);
-    expect(check(s, st, { type: "ADVANCE_STAGE", to: 3, at: 0 })).toBe("stage-locked");
+    expect(check(s, st, { type: "ADVANCE_STAGE", to: 4, at: 0 })).toBe("invalid-stage");
   });
 
   it("requires the problem to be framed before stakeholder discovery", () => {

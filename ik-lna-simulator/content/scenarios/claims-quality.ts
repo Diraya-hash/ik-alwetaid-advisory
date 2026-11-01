@@ -6,7 +6,7 @@ import type { Scenario } from "@/engine/types";
  */
 export const claimsQuality: Scenario = {
   id: "claims-quality",
-  version: 2,
+  version: 3,
   category: "performance",
   difficulty: "foundation",
   complexity: 2,
@@ -343,6 +343,7 @@ export const claimsQuality: Scenario = {
     {
       id: "kh",
       role: "buHead",
+      critical: true,
       name: { en: "Khalid Al-Mutairi", ar: "خالد المطيري" },
       title: { en: "Head of Claims Operations", ar: "رئيس عمليات المطالبات" },
       perspective: {
@@ -533,6 +534,7 @@ export const claimsQuality: Scenario = {
     {
       id: "co",
       role: "coo",
+      critical: true,
       name: { en: "Faisal Al-Shammari", ar: "فيصل الشمري" },
       title: { en: "Chief Operating Officer", ar: "الرئيس التنفيذي للعمليات" },
       perspective: {
@@ -688,6 +690,7 @@ export const claimsQuality: Scenario = {
     {
       id: "no",
       role: "hrbp",
+      critical: false,
       name: { en: "Noura Al-Dosari", ar: "نورة الدوسري" },
       title: { en: "HR Business Partner, Operations", ar: "شريكة أعمال الموارد البشرية للعمليات" },
       perspective: {
@@ -852,6 +855,7 @@ export const claimsQuality: Scenario = {
     {
       id: "om",
       role: "expert",
+      critical: true,
       name: { en: "Omar Haddad", ar: "عمر حداد" },
       title: { en: "Product Owner, ClaimsOne Platform", ar: "مالك منتج منصة «كليمز ون»" },
       perspective: {
@@ -1013,6 +1017,7 @@ export const claimsQuality: Scenario = {
     {
       id: "sa",
       role: "expert",
+      critical: true,
       name: { en: "Sara Al-Qahtani", ar: "سارة القحطاني" },
       title: { en: "Quality Assurance Lead, Claims", ar: "قائدة ضمان الجودة، المطالبات" },
       perspective: {
@@ -1160,6 +1165,7 @@ export const claimsQuality: Scenario = {
     {
       id: "pr",
       role: "employee",
+      critical: true,
       name: { en: "Claims Processors", ar: "معالجو المطالبات" },
       title: { en: "Focus group: 6 processors, mixed tenure", ar: "مجموعة نقاش: ٦ معالجين من مستويات خبرة مختلفة" },
       perspective: {
@@ -1380,6 +1386,11 @@ export const claimsQuality: Scenario = {
       population: { en: "38 processors hired in the last 9 months", ar: "٣٨ معالجًا عُيّنوا خلال آخر ٩ أشهر" },
       current: 2,
       required: 4,
+      isGap: true,
+      rationale: {
+        en: "A genuine individual capability gap, bounded to recent hires: complex coding was removed from a compressed onboarding programme.",
+        ar: "فجوة قدرات فردية حقيقية محصورة في الموظفين الجدد؛ إذ حُذف الترميز المعقد من برنامج تهيئة مختصر.",
+      },
     },
     {
       id: "gap-validation",
@@ -1388,17 +1399,375 @@ export const claimsQuality: Scenario = {
       population: { en: "ClaimsOne platform", ar: "منصة «كليمز ون»" },
       current: 2,
       required: 5,
+      isGap: true,
+      rationale: {
+        en: "An organisational capability held in the system, not in people: 212 of 340 rules were never migrated.",
+        ar: "قدرة مؤسسية موجودة في النظام لا في الأفراد؛ إذ لم تُنقل ٢١٢ قاعدة من أصل ٣٤٠.",
+      },
     },
     {
       id: "gap-quality-governance",
       title: { en: "Balanced performance and quality governance", ar: "حوكمة متوازنة للأداء والجودة" },
       nature: "governance",
-      population: { en: "Claims Operations leadership", ar: "قيادة عمليات المطالبات" },
+      population: { en: "Claims Operations leadership and scorecards", ar: "قيادة عمليات المطالبات وبطاقات الأداء" },
       current: 2,
       required: 4,
+      isGap: true,
+      rationale: {
+        en: "Targets, bonus and feedback reward volume only; accuracy has no target or owner. This is a governance barrier, not a skill.",
+        ar: "المستهدفات والمكافأة والتغذية الراجعة تكافئ الحجم وحده، والدقة بلا مستهدف ولا مالك؛ وهذا عائق حوكمة لا مهارة.",
+      },
+    },
+    {
+      id: "gap-qa-independence",
+      title: { en: "Independent quality assurance", ar: "ضمان جودة مستقل" },
+      nature: "structure",
+      population: { en: "QA unit and its reporting line", ar: "وحدة ضمان الجودة وخط تبعيتها" },
+      current: 1,
+      required: 4,
+      isGap: true,
+      rationale: {
+        en: "QA reports to the function it audits, so its capacity was cut without challenge. A structural design issue.",
+        ar: "يتبع ضمانُ الجودة الإدارةَ التي يدققها، فخُفّضت طاقته دون اعتراض؛ وهذه مسألة تصميم هيكلي.",
+      },
+    },
+    {
+      id: "gap-attention",
+      title: { en: "Attention to detail across all 120 processors", ar: "الانتباه للتفاصيل لدى جميع المعالجين الـ١٢٠" },
+      nature: "skill",
+      population: { en: "All claims processors", ar: "جميع معالجي المطالبات" },
+      current: 3,
+      required: 4,
+      isGap: false,
+      rationale: {
+        en: "Not a real gap. Experienced staff held 1.8% error rates for years, last year's training changed nothing, and errors track the system and target changes.",
+        ar: "ليست فجوة حقيقية؛ فذوو الخبرة حافظوا على معدل أخطاء ١٫٨٪ لسنوات، ولم يغيّر تدريب العام الماضي شيئًا، وتتبع الأخطاء تغييرات النظام والمستهدفات.",
+      },
+    },
+    {
+      id: "gap-navigation",
+      title: { en: "ClaimsOne system navigation", ar: "التنقل في نظام «كليمز ون»" },
+      nature: "skill",
+      population: { en: "All claims processors", ar: "جميع معالجي المطالبات" },
+      current: 4,
+      required: 4,
+      isGap: false,
+      rationale: {
+        en: "Not a gap. Onboarding already concentrates on navigation, and nobody reported difficulty using the screens; the problem is what the system does not check.",
+        ar: "ليست فجوة؛ فالتهيئة تركّز أصلًا على التنقل، ولم يشكُ أحد من استخدام الشاشات، والمشكلة فيما لا يتحقق منه النظام.",
+      },
     },
   ],
 
+
+  interventions: [
+    {
+      id: "iv-rules",
+      type: "technology",
+      title: { en: "Migrate the 212 missing validation rules", ar: "نقل قواعد التحقق الـ٢١٢ المفقودة" },
+      description: {
+        en: "Re-prioritise the deferred backlog: two business analysts for about ten weeks, starting with the highest-volume benefit limits.",
+        ar: "إعادة ترتيب أولوية القائمة المؤجلة: محللا أعمال لنحو عشرة أسابيع، بدءًا بحدود المنافع الأعلى حجمًا.",
+      },
+      fit: "essential",
+      addresses: ["rc-rules"],
+      phase: 2,
+      rationale: {
+        en: "Removes the manual check that causes 58% of errors. Fixes the work rather than the worker.",
+        ar: "يزيل التحقق اليدوي المسبب لـ٥٨٪ من الأخطاء؛ أي يصلح العمل لا العامل.",
+      },
+    },
+    {
+      id: "iv-job-aid",
+      type: "job-aid",
+      title: { en: "Interim limit-check job aid inside ClaimsOne", ar: "أداة عمل مؤقتة للتحقق من الحدود داخل «كليمز ون»" },
+      description: {
+        en: "A one-screen checklist and limit lookup surfaced on complex claims until the rules are live.",
+        ar: "قائمة تحقق في شاشة واحدة مع جدول الحدود، تظهر في المطالبات المعقدة إلى أن تُفعَّل القواعد.",
+      },
+      fit: "supportive",
+      addresses: ["rc-rules"],
+      phase: 1,
+      rationale: {
+        en: "Reduces risk while the technology fix is built. A performance-support tool, not a course.",
+        ar: "يقلل المخاطر ريثما يُنجز الحل التقني؛ وهو دعم للأداء لا دورة تدريبية.",
+      },
+    },
+    {
+      id: "iv-targets",
+      type: "performance-management",
+      title: { en: "Reset targets and add accuracy to the bonus", ar: "إعادة ضبط المستهدفات وإدخال الدقة في المكافأة" },
+      description: {
+        en: "Return the daily target to a level that allows manual checks until automation is live, and weight the bonus on accuracy as well as volume.",
+        ar: "إعادة المستهدف اليومي إلى مستوى يتيح التحقق اليدوي إلى حين الأتمتة، وتوزيع وزن المكافأة بين الدقة والحجم.",
+      },
+      fit: "essential",
+      addresses: ["rc-kpi"],
+      phase: 1,
+      rationale: {
+        en: "The current system rewards skipping checks. Changing consequences changes behaviour faster than any training.",
+        ar: "المنظومة الحالية تكافئ تجاوز التحقق، وتغيير العواقب يغيّر السلوك أسرع من أي تدريب.",
+      },
+    },
+    {
+      id: "iv-qa-sampling",
+      type: "governance",
+      title: { en: "Restore QA sampling and monthly feedback", ar: "استعادة عينة ضمان الجودة والتغذية الراجعة الشهرية" },
+      description: {
+        en: "Return sampling to 10% and give every processor monthly feedback on their own errors.",
+        ar: "إعادة العينة إلى ١٠٪ وتزويد كل معالج بملاحظات شهرية على أخطائه.",
+      },
+      fit: "essential",
+      addresses: ["rc-kpi"],
+      phase: 1,
+      rationale: {
+        en: "Without timely feedback people cannot self-correct. This restores the loop that kept accuracy high.",
+        ar: "دون تغذية راجعة في وقتها لا يستطيع الموظف تصحيح نفسه؛ وهذا يعيد الحلقة التي حافظت على الدقة.",
+      },
+    },
+    {
+      id: "iv-qa-independence",
+      type: "org-design",
+      title: { en: "Make QA independent and give accuracy an executive owner", ar: "استقلال ضمان الجودة وتعيين مالك تنفيذي للدقة" },
+      description: {
+        en: "Move QA's reporting line to Compliance, name the COO as executive owner of accuracy, and report it to the board monthly.",
+        ar: "نقل تبعية ضمان الجودة إلى إدارة الالتزام، وتسمية الرئيس التنفيذي للعمليات مالكًا تنفيذيًا للدقة، ورفعها لمجلس الإدارة شهريًا.",
+      },
+      fit: "essential",
+      addresses: ["rc-qa-structure", "rc-kpi"],
+      phase: 2,
+      rationale: {
+        en: "Stops quality being traded for throughput under pressure. A structural fix to a structural cause.",
+        ar: "يمنع مقايضة الجودة بالإنتاجية تحت الضغط؛ علاج هيكلي لسبب هيكلي.",
+      },
+    },
+    {
+      id: "iv-coding",
+      type: "training",
+      title: { en: "Targeted inpatient-coding programme for the 38 recent hires", ar: "برنامج موجّه لترميز التنويم للموظفين الجدد الـ٣٨" },
+      description: {
+        en: "Short practice-based modules on real complex claims, with a coding sign-off before working them unsupervised.",
+        ar: "وحدات قصيرة قائمة على التطبيق على مطالبات معقدة حقيقية، مع اعتماد للترميز قبل العمل عليها دون إشراف.",
+      },
+      fit: "essential",
+      addresses: ["rc-onboarding"],
+      phase: 1,
+      rationale: {
+        en: "Training is right here because the diagnosis found a genuine, bounded skill gap. Note the target group: 38 people, not 120.",
+        ar: "التدريب مناسب هنا لأن التشخيص كشف فجوة مهارية حقيقية ومحصورة. لاحظ الفئة المستهدفة: ٣٨ شخصًا لا ١٢٠.",
+      },
+    },
+    {
+      id: "iv-buddy",
+      type: "mentoring",
+      title: { en: "Buddy experienced processors with recent hires", ar: "ربط المعالجين ذوي الخبرة بالموظفين الجدد" },
+      description: {
+        en: "Each recent hire is paired with an experienced processor for complex claims during their first six months.",
+        ar: "يُربط كل موظف جديد بمعالج خبير في المطالبات المعقدة خلال أشهره الستة الأولى.",
+      },
+      fit: "supportive",
+      addresses: ["rc-onboarding"],
+      phase: 1,
+      rationale: {
+        en: "Formalises the learning that already happens informally, and transfers tacit coding judgement.",
+        ar: "يضفي طابعًا رسميًا على تعلّم يحدث أصلًا بشكل غير رسمي، وينقل الحكم المهني الضمني في الترميز.",
+      },
+    },
+    {
+      id: "iv-onboarding",
+      type: "process-redesign",
+      title: { en: "Redesign onboarding to include complex coding", ar: "إعادة تصميم التهيئة لتشمل الترميز المعقد" },
+      description: {
+        en: "Restore a five-week pathway with coding modules and a supervised period, so the gap does not reopen with the next intake.",
+        ar: "استعادة مسار من خمسة أسابيع يتضمن وحدات الترميز وفترة إشراف، كي لا تعود الفجوة مع الدفعة التالية.",
+      },
+      fit: "supportive",
+      addresses: ["rc-onboarding"],
+      phase: 2,
+      rationale: {
+        en: "Prevents recurrence: a process fix to how capability is built, rather than a one-off course.",
+        ar: "يمنع التكرار؛ إصلاح لطريقة بناء القدرات لا دورة لمرة واحدة.",
+      },
+    },
+    {
+      id: "iv-leadership-message",
+      type: "change-management",
+      title: { en: "COO-led reset of the speed–accuracy balance", ar: "إعادة ضبط التوازن بين السرعة والدقة بقيادة الرئيس التنفيذي للعمليات" },
+      description: {
+        en: "The COO explains the change in targets and why accuracy now counts, and reports accuracy alongside turnaround.",
+        ar: "يوضح الرئيس التنفيذي للعمليات تغيير المستهدفات وسبب احتساب الدقة الآن، ويعرض الدقة إلى جانب مدة الإنجاز.",
+      },
+      fit: "supportive",
+      addresses: ["rc-kpi", "rc-qa-structure"],
+      phase: 1,
+      rationale: {
+        en: "Processors will not believe new targets unless leadership visibly changes what it pays attention to.",
+        ar: "لن يصدّق المعالجون المستهدفات الجديدة ما لم تغيّر القيادة علنًا ما تلتفت إليه.",
+      },
+    },
+    {
+      id: "iv-workshop",
+      type: "training",
+      title: { en: "Two-day accuracy workshop for all 120 processors", ar: "ورشة دقة لمدة يومين لجميع المعالجين الـ١٢٠" },
+      description: {
+        en: "The original request: an 'Accuracy & Attention to Detail' workshop before quarter end.",
+        ar: "الطلب الأصلي: ورشة «الدقة والانتباه للتفاصيل» قبل نهاية الربع.",
+      },
+      fit: "harmful",
+      addresses: [],
+      phase: 1,
+      rationale: {
+        en: "Treats a skill gap that does not exist for most staff, takes 240 processor-days from a backlog under a 60/day target, repeats an intervention that already failed, and signals that the problem is the people.",
+        ar: "يعالج فجوة مهارية غير موجودة لدى معظم الموظفين، ويستهلك ٢٤٠ يوم عمل وسط مستهدف الستين يوميًا، ويكرر تدخلًا فشل من قبل، ويوحي بأن المشكلة في الأفراد.",
+      },
+    },
+    {
+      id: "iv-elearning",
+      type: "training",
+      title: { en: "Re-run last year's accuracy e-learning for everyone", ar: "إعادة تقديم برنامج الدقة الإلكتروني للجميع" },
+      description: {
+        en: "Reassign the existing module to all processors with a new completion deadline.",
+        ar: "إعادة إسناد الوحدة الحالية لجميع المعالجين بموعد إكمال جديد.",
+      },
+      fit: "neutral",
+      addresses: [],
+      phase: 1,
+      rationale: {
+        en: "Cheap but pointless: the same module produced no change last year because knowledge was never the constraint.",
+        ar: "قليل التكلفة لكنه بلا جدوى؛ فالوحدة نفسها لم تُحدث تغييرًا العام الماضي لأن المعرفة لم تكن القيد أصلًا.",
+      },
+    },
+    {
+      id: "iv-penalties",
+      type: "performance-management",
+      title: { en: "Individual error penalties and written warnings", ar: "عقوبات فردية على الأخطاء وإنذارات كتابية" },
+      description: {
+        en: "Introduce warnings for processors above an error threshold.",
+        ar: "إصدار إنذارات للمعالجين الذين يتجاوزون حدًا معينًا من الأخطاء.",
+      },
+      fit: "harmful",
+      addresses: [],
+      phase: 1,
+      rationale: {
+        en: "Punishes people for a system they did not design, encourages hiding errors, and will raise attrition further.",
+        ar: "يعاقب الأفراد على منظومة لم يصمموها، ويشجع على إخفاء الأخطاء، وسيرفع التسرب أكثر.",
+      },
+    },
+  ],
+  kpis: [
+    {
+      id: "k-accuracy",
+      title: { en: "Claims accuracy against the 98% contract SLA", ar: "دقة المطالبات مقابل اتفاقية مستوى الخدمة البالغة ٩٨٪" },
+      level: "strategic",
+      baseline: { en: "93.2%", ar: "٩٣٫٢٪" },
+      target: { en: "98% or above before the Q2 renewal", ar: "٩٨٪ فأكثر قبل تجديد الربع الثاني" },
+      owners: ["co", "kh"],
+      relevant: true,
+      rationale: { en: "The business outcome at stake: the SAR 140M contract and the regulator.", ar: "النتيجة المؤسسية على المحك: العقد البالغ ١٤٠ مليون ريال والجهة الرقابية." },
+    },
+    {
+      id: "k-findings",
+      title: { en: "Material regulatory findings", ar: "الملاحظات الرقابية الجوهرية" },
+      level: "strategic",
+      baseline: { en: "Supervisory letter citing 46 errors", ar: "خطاب رقابي يشير إلى ٤٦ خطأ" },
+      target: { en: "Remediation plan accepted; zero material findings at the next review", ar: "قبول خطة المعالجة؛ ولا ملاحظات جوهرية في المراجعة القادمة" },
+      owners: ["co"],
+      relevant: true,
+      rationale: { en: "Directly tracks the zero-findings strategic priority.", ar: "يتتبع مباشرة أولوية «عدم وجود ملاحظات رقابية»." },
+    },
+    {
+      id: "k-turnaround",
+      title: { en: "Claims turnaround time (guardrail)", ar: "مدة إنجاز المطالبات (حد ضابط)" },
+      level: "strategic",
+      baseline: { en: "4.9 days", ar: "٤٫٩ أيام" },
+      target: { en: "Stays under 5 days while accuracy recovers", ar: "تبقى دون ٥ أيام أثناء تعافي الدقة" },
+      owners: ["co", "kh"],
+      relevant: true,
+      rationale: { en: "Protects the other strategic priority, so the fix does not simply swap one problem for another.", ar: "يحمي الأولوية الاستراتيجية الأخرى كي لا يستبدل الحلُّ مشكلةً بأخرى." },
+    },
+    {
+      id: "k-limit-errors",
+      title: { en: "Coverage-limit error rate", ar: "معدل أخطاء حدود التغطية" },
+      level: "operational",
+      baseline: { en: "About 3.9% of claims (58% of all errors)", ar: "نحو ٣٫٩٪ من المطالبات (٥٨٪ من مجمل الأخطاء)" },
+      target: { en: "Below 0.5% once the rules are live", ar: "أقل من ٠٫٥٪ بعد تفعيل القواعد" },
+      owners: ["om", "kh"],
+      relevant: true,
+      rationale: { en: "Measures whether the largest cause has actually been removed.", ar: "يقيس ما إذا أُزيل السبب الأكبر فعلًا." },
+    },
+    {
+      id: "k-rules-live",
+      title: { en: "Validation rules live in ClaimsOne", ar: "قواعد التحقق المفعّلة في «كليمز ون»" },
+      level: "operational",
+      baseline: { en: "128 of 340", ar: "١٢٨ من ٣٤٠" },
+      target: { en: "340 of 340 within 10 weeks", ar: "٣٤٠ من ٣٤٠ خلال ١٠ أسابيع" },
+      owners: ["om"],
+      relevant: true,
+      rationale: { en: "A leading indicator for the technology fix, owned by the person who can deliver it.", ar: "مؤشر استباقي للحل التقني، يملكه من يستطيع تنفيذه." },
+    },
+    {
+      id: "k-qa-feedback",
+      title: { en: "QA sampling rate and feedback cycle", ar: "نسبة عينة ضمان الجودة ودورة التغذية الراجعة" },
+      level: "operational",
+      baseline: { en: "3% sampled; feedback quarterly", ar: "عينة ٣٪؛ وتغذية راجعة ربع سنوية" },
+      target: { en: "10% sampled; feedback monthly", ar: "عينة ١٠٪؛ وتغذية راجعة شهرية" },
+      owners: ["sa"],
+      relevant: true,
+      rationale: { en: "Confirms the governance fix is in place and the feedback loop restored.", ar: "يؤكد تطبيق إصلاح الحوكمة واستعادة حلقة التغذية الراجعة." },
+    },
+    {
+      id: "k-checks",
+      title: { en: "Limit checks completed on complex claims (audited sample)", ar: "اكتمال التحقق من الحدود في المطالبات المعقدة (عينة مدققة)" },
+      level: "behavioural",
+      baseline: { en: "Routinely skipped on 'normal-looking' claims", ar: "يُتجاوز عادةً في المطالبات «التي تبدو عادية»" },
+      target: { en: "100% of audited complex claims", ar: "١٠٠٪ من المطالبات المعقدة المدققة" },
+      owners: ["kh", "sa"],
+      relevant: true,
+      rationale: { en: "Shows whether the new targets changed what people actually do.", ar: "يبيّن ما إذا غيّرت المستهدفات الجديدة ما يفعله الناس فعلًا." },
+    },
+    {
+      id: "k-newhire-coding",
+      title: { en: "Coding error rate of recent hires", ar: "معدل أخطاء الترميز لدى الموظفين الجدد" },
+      level: "capability",
+      baseline: { en: "9.6% overall error rate for recent hires", ar: "٩٫٦٪ معدل الأخطاء الإجمالي لدى الجدد" },
+      target: { en: "Within 1 point of experienced staff after 90 days", ar: "في حدود نقطة واحدة من ذوي الخبرة بعد ٩٠ يومًا" },
+      owners: ["kh", "sa"],
+      relevant: true,
+      rationale: { en: "Measures the one genuine capability gap at the level that matters: performance on the job.", ar: "يقيس فجوة القدرات الحقيقية الوحيدة في المستوى المهم: الأداء في العمل." },
+    },
+    {
+      id: "k-coding-assessment",
+      title: { en: "Coding programme assessment pass rate", ar: "نسبة النجاح في تقييم برنامج الترميز" },
+      level: "learning",
+      baseline: { en: "Not yet measured", ar: "لم يُقس بعد" },
+      target: { en: "90% pass at first attempt", ar: "نجاح ٩٠٪ من المحاولة الأولى" },
+      owners: ["no"],
+      relevant: true,
+      rationale: { en: "A legitimate learning metric for the targeted programme, but it says nothing about business impact on its own.", ar: "مؤشر تعلّم مشروع للبرنامج الموجّه، لكنه وحده لا يقول شيئًا عن الأثر على الأعمال." },
+    },
+    {
+      id: "k-workshop-satisfaction",
+      title: { en: "Workshop attendance and satisfaction for all staff", ar: "حضور الورشة ورضا جميع الموظفين عنها" },
+      level: "learning",
+      baseline: { en: "Not applicable", ar: "غير منطبق" },
+      target: { en: "95% attendance; 4.5/5 satisfaction", ar: "حضور ٩٥٪؛ ورضا ٤٫٥ من ٥" },
+      owners: ["no"],
+      relevant: false,
+      rationale: { en: "A vanity metric for an intervention the diagnosis does not support.", ar: "مؤشر شكلي لتدخل لا يدعمه التشخيص." },
+    },
+  ],
+  debrief: {
+    expertSummary: {
+      en: "An expert treats the request as a hypothesis. They frame the gap in business terms (accuracy against a contract SLA and a regulatory priority), notice that errors and productivity rose in the same month, and segment the data by tenure and error type. That shows errors rising among experienced staff too, which points away from capability and toward the system: missing validation rules, volume-only targets, weakened and dependent QA. Only one bounded skill gap exists, among 38 recent hires.",
+      ar: "يتعامل الخبير مع الطلب بوصفه فرضية؛ فيؤطّر الفجوة بلغة الأعمال (الدقة مقابل اتفاقية عقد وأولوية رقابية)، ويلاحظ ارتفاع الأخطاء والإنتاجية في الشهر نفسه، ويقسّم البيانات حسب مدة الخدمة ونوع الخطأ. فيتبيّن أن الأخطاء ارتفعت حتى لدى ذوي الخبرة، مما يصرف النظر عن القدرات إلى المنظومة: قواعد تحقق مفقودة، ومستهدفات قائمة على الحجم وحده، وضمان جودة أضعف وغير مستقل. ولا توجد إلا فجوة مهارية محصورة لدى ٣٨ موظفًا جديدًا.",
+    },
+    recommendedApproach: {
+      en: "Migrate the rules (with an interim job aid), reset targets and add accuracy to the bonus, restore QA sampling and make QA independent with an executive owner for accuracy, and run a short, practice-based coding programme for recent hires only. Measure accuracy against the SLA, regulatory findings and turnaround as a guardrail, with learning metrics kept separate.",
+      ar: "نقل القواعد (مع أداة عمل مؤقتة)، وإعادة ضبط المستهدفات وإدخال الدقة في المكافأة، واستعادة عينة ضمان الجودة وجعله مستقلًا مع مالك تنفيذي للدقة، وتنفيذ برنامج ترميز قصير قائم على التطبيق للموظفين الجدد فقط. ويُقاس النجاح بالدقة مقابل الاتفاقية والملاحظات الرقابية ومدة الإنجاز حدًّا ضابطًا، مع فصل مؤشرات التعلم.",
+    },
+    methodology: ["gap", "whys", "process", "systems"],
+    nextScenarios: ["platform-adoption", "strategy-stalled"],
+  },
   framing: {
     prompt: {
       en: "Before you interview anyone, how would you frame the problem you have been asked to solve?",

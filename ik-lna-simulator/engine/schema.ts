@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { conditionRefs } from "./conditions";
-import { CAUSE_TYPES, DIMENSIONS, type Condition, type Scenario } from "./types";
+import { CAUSE_TYPES, DIMENSIONS, INTERVENTION_TYPES, KPI_LEVELS, type Condition, type Scenario } from "./types";
 
 /** Bilingual string: both languages must be present and non-empty. */
 const L = z.object({ en: z.string().trim().min(1), ar: z.string().trim().min(1) });
@@ -96,6 +96,7 @@ export const ScenarioSchema = z.object({
         concerns: z.array(L).min(1),
         bias: z.object({ type: L, note: L }),
         initialOpenness: z.number().min(0).max(100),
+        critical: z.boolean(),
         questions: z.array(Question).min(1),
       })
     )
@@ -118,16 +119,55 @@ export const ScenarioSchema = z.object({
       .array(z.object({ id: z.string().min(1), text: L, kind: z.enum(["solution", "cause-assumption", "symptom", "performance-gap"]), explanation: L }))
       .min(3),
   }),
-  capabilityGaps: z.array(
-    z.object({
-      id: z.string(),
-      title: L,
-      nature: causeType,
-      population: L,
-      current: z.number().min(1).max(5),
-      required: z.number().min(1).max(5),
-    })
-  ),
+  capabilityGaps: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        title: L,
+        nature: causeType,
+        population: L,
+        current: z.number().min(1).max(5),
+        required: z.number().min(1).max(5),
+        isGap: z.boolean(),
+        rationale: L,
+      })
+    )
+    .min(3),
+  interventions: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        type: z.enum(INTERVENTION_TYPES as [string, ...string[]]),
+        title: L,
+        description: L,
+        fit: z.enum(["essential", "supportive", "neutral", "harmful"]),
+        addresses: z.array(z.string()),
+        phase: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+        rationale: L,
+      })
+    )
+    .min(6),
+  kpis: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        title: L,
+        level: z.enum(KPI_LEVELS as [string, ...string[]]),
+        baseline: L,
+        target: L,
+        owners: z.array(z.string()).min(1),
+        relevant: z.boolean(),
+        rationale: L,
+      })
+    )
+    .min(5),
+  debrief: z.object({
+    expertSummary: L,
+    recommendedApproach: L,
+    methodology: z.array(z.enum(["whys", "fishbone", "gap", "systems", "process", "sevenS"])).min(1),
+    nextScenarios: z.array(z.string()),
+  }),
+  weights: z.record(dimension, z.number().positive()).optional(),
 });
 
 /**
@@ -195,6 +235,27 @@ export function validateScenario(input: unknown): string[] {
   // Every evidence item must be reachable, otherwise it is dead content.
   s.evidence.forEach((e) => !revealable.has(e.id) && errors.push(`evidence "${e.id}" can never be discovered`));
   if (!s.rootCauses.some((c) => c.isTrue)) errors.push("scenario has no true root cause");
+  // Stage 4–6 integrity.
+  s.interventions.forEach((iv) =>
+    iv.addresses.forEach((c) => !causeIds.has(c) && errors.push(`intervention "${iv.id}" addresses unknown cause "${c}"`))
+  );
+  s.kpis.forEach((k) =>
+    k.owners.forEach((o) => !stakeholderIds.has(o) && errors.push(`kpi "${k.id}" has unknown owner "${o}"`))
+  );
+  dup("intervention", s.interventions.map((i) => i.id));
+  dup("kpi", s.kpis.map((k) => k.id));
+  dup("gap", s.capabilityGaps.map((g) => g.id));
+  s.rootCauses.filter((c) => c.isTrue).forEach((c) => {
+    if (!s.interventions.some((i) => i.addresses.includes(c.id) && i.fit === "essential"))
+      errors.push(`true cause "${c.id}" has no essential intervention`);
+    if (!s.evidence.some((e) => e.supports.includes(c.id))) errors.push(`true cause "${c.id}" has no supporting evidence`);
+  });
+  if (!s.interventions.some((i) => i.type === "training" && (i.fit === "neutral" || i.fit === "harmful")))
+    errors.push("scenario needs a poorly-fitting training option (training must never be the default answer)");
+  if (!s.capabilityGaps.some((g) => !g.isGap)) errors.push("capability assessment needs at least one non-gap distractor");
+  if (!s.kpis.some((k) => k.level === "learning")) errors.push("KPI options need at least one learning metric to distinguish from impact");
+  if (!s.kpis.some((k) => k.level === "strategic" && k.relevant)) errors.push("KPI options need a relevant strategic KPI");
+  if (!s.stakeholders.some((x) => x.critical)) errors.push("mark the stakeholders that must be interviewed as critical");
   if (!s.framing.options.some((o) => o.kind === "performance-gap")) errors.push("framing needs a performance-gap option");
   if (!s.framing.options.some((o) => o.kind === "solution")) errors.push("framing needs a solution-first distractor");
   const weights = s.rootCauses.filter((c) => c.isTrue).reduce((n, c) => n + c.weight, 0);
