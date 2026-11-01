@@ -23,9 +23,9 @@ interventions. The architecture and roadmap are in
 | Scenario library | 1 pilot scenario (Foundation, *The Accuracy Problem* v2): 6 stakeholders incl. COO, 4 true causes across technology, governance, structure and skill |
 | Single-file preview build for sandboxed hosting (hash routing, same components) | ✅ `npm run build:preview` |
 
-**Brand note:** colour tokens in `styles/tokens.css` and the `IK` wordmark in
-`components/layout/logo.tsx` are placeholders that follow the written IK direction
-(navy/blue). Replace them with the official IK guideline values; no component changes are needed.
+**Brand:** colours follow the approved IK palette (`styles/tokens.css`). The `IK` mark in
+`components/layout/logo.tsx` is typographic until a final logo is approved; the Canva
+"Cream Black Typography Loop" template was assessed and not adopted.
 
 ## Run
 

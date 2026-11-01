@@ -19,8 +19,8 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F9FD" },
-    { media: "(prefers-color-scheme: dark)", color: "#050D1B" },
+    { media: "(prefers-color-scheme: light)", color: "#EAF4FF" },
+    { media: "(prefers-color-scheme: dark)", color: "#071426" },
   ],
 };
 

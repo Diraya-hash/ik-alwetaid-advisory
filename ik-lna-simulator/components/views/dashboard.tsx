@@ -25,7 +25,7 @@ export function DashboardView() {
     <div className="space-y-8">
       <section className="relative overflow-hidden rounded-2xl bg-navy px-6 py-10 text-navy-fg sm:px-10 lg:py-14">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden />
-        <div className="pointer-events-none absolute -end-24 -top-24 h-72 w-72 rounded-full bg-primary/30 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -end-24 -top-24 h-72 w-72 rounded-full bg-accent/35 blur-3xl" aria-hidden />
         <div className="relative max-w-3xl">
           <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-navy-fg/70">{t.dashboard.eyebrow}</p>
           <h1 className="text-display-lg font-semibold">{t.dashboard.title}</h1>

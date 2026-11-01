@@ -95,7 +95,8 @@ export function StageInterviews({
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 id="iv-title" className="text-lg font-semibold">{f(t.sim.interviewWith, { name: l(stakeholder.name) })}</h2>
-                <p className="text-[13px] text-ink-subtle">{l(stakeholder.title)}{t.common.sep}{t.role[stakeholder.role]}</p>
+                <p className="text-[13px] text-ink-subtle">{l(stakeholder.title)}
+                  {t.role[stakeholder.role] !== l(stakeholder.title) && <>{t.common.sep}{t.role[stakeholder.role]}</>}</p>
               </div>
               <Badge>
                 {t.openness.label}: {t.openness[opennessBand(state.openness[stakeholder.id] ?? 0)]}

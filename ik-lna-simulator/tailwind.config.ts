@@ -22,6 +22,7 @@ const config: Config = {
           "soft-fg": token("primary-soft-fg"),
         },
         navy: { DEFAULT: token("navy"), fg: token("navy-fg") },
+        accent: token("accent"),
         fact: { DEFAULT: token("fact"), soft: token("fact-soft") },
         claim: { DEFAULT: token("claim"), soft: token("claim-soft") },
         assumption: { DEFAULT: token("assumption"), soft: token("assumption-soft") },

@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useI18n } from "@/components/i18n-provider";
 
-/** Placeholder IK wordmark: to be replaced by the official IK logo asset. */
+/** Typographic IK mark in the approved palette. Replace with the final IK logo when one is approved. */
 export function Logo() {
   const { t, href } = useI18n();
   return (
     <Link href={href("/")} className="flex items-center gap-3" aria-label={t.brand.name}>
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy text-[13px] font-bold tracking-tight text-navy-fg ring-1 ring-inset ring-primary/40" dir="ltr">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy text-[13px] font-bold tracking-tight text-navy-fg ring-1 ring-inset ring-accent/60" dir="ltr">
         IK
       </span>
       <span className="flex flex-col leading-tight">
