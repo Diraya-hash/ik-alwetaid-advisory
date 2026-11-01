@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm ci --prefix ik-lna-simulator",
+  "buildCommand": "npm run build --prefix ik-lna-simulator",
+  "outputDirectory": "ik-lna-simulator/out"
+}
