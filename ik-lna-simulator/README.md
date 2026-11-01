@@ -16,11 +16,12 @@ interventions. The architecture and roadmap are in
 | Light / Dark / System theme, persisted | ✅ |
 | Scenario Library with filters (difficulty, category, complexity, duration, competency) | ✅ |
 | Simulation engine: event-sourced reducer, conditions, hours budget, openness, challenge-with-evidence | ✅ |
-| Stage 1 (Strategic Context) and Stage 2 (Stakeholder Discovery) playable | ✅ |
+| Stage 1 (Strategic Context, ending in a required problem-framing decision) and Stage 2 (Stakeholder Discovery) playable | ✅ |
 | Evidence board with provenance labels; user hypotheses | ✅ |
 | Local-first persistence, versioned, with JSON export and reset | ✅ |
 | Stages 3–6, scoring, debriefs, reports, analytics | ⏳ Phases 3–4 (shown as unavailable in the UI, never faked) |
-| Scenario library | 1 pilot scenario (Foundation · *The Accuracy Problem*); see roadmap |
+| Scenario library | 1 pilot scenario (Foundation, *The Accuracy Problem* v2): 6 stakeholders incl. COO, 4 true causes across technology, governance, structure and skill |
+| Single-file preview build for sandboxed hosting (hash routing, same components) | ✅ `npm run build:preview` |
 
 **Brand note:** colour tokens in `styles/tokens.css` and the `IK` wordmark in
 `components/layout/logo.tsx` are placeholders that follow the written IK direction
@@ -32,6 +33,7 @@ interventions. The architecture and roadmap are in
 npm install
 npm run dev          # http://localhost:3000 → redirects to /en or /ar
 npm run verify       # typecheck, unit tests, contrast audit, static build, end-to-end checks
+npm run build:preview && node scripts/test-preview.mjs   # single-file preview + its checks
 ```
 
 `npm run build` produces a fully static site in `out/` (no server required).

@@ -6,13 +6,13 @@ import type { Scenario } from "@/engine/types";
  */
 export const claimsQuality: Scenario = {
   id: "claims-quality",
-  version: 1,
+  version: 2,
   category: "performance",
   difficulty: "foundation",
   complexity: 2,
-  estMinutes: 35,
-  competencyFocus: ["diagnosticThinking", "evidenceBasedDecisions", "rootCauseIdentification"],
-  budgetHours: 16,
+  estMinutes: 40,
+  competencyFocus: ["strategicAlignment", "diagnosticThinking", "evidenceBasedDecisions", "rootCauseIdentification"],
+  budgetHours: 18,
   title: {
     en: "The Accuracy Problem",
     ar: "معضلة الدقة",
@@ -37,7 +37,7 @@ export const claimsQuality: Scenario = {
       ar: "شركة تأمين صحي متوسطة الحجم نمت بسرعة عبر عقود الشركات. قبل ثمانية أشهر استبدلت نظام المطالبات القديم الذي عمل اثني عشر عامًا بمنصة جديدة اسمها «كليمز ون» ضمن برنامج لخفض تكلفة الخدمة.",
     },
     structure: [
-      { name: { en: "Claims Operations", ar: "عمليات المطالبات" }, headcount: 140, note: { en: "120 processors in 8 teams, team leads, QA unit", ar: "١٢٠ معالجًا في ٨ فرق، وقادة فرق، ووحدة ضمان الجودة" } },
+      { name: { en: "Claims Operations", ar: "عمليات المطالبات" }, headcount: 140, note: { en: "120 processors in 8 teams, team leads, and a QA unit that reports to the Head of Claims Operations", ar: "١٢٠ معالجًا في ٨ فرق، وقادة فرق، ووحدة ضمان جودة تتبع رئيس عمليات المطالبات" } },
       { name: { en: "Technology & Digital", ar: "التقنية والتحول الرقمي" }, headcount: 85, note: { en: "Owns the ClaimsOne platform", ar: "تملك منصة «كليمز ون»" } },
       { name: { en: "Human Resources", ar: "الموارد البشرية" }, headcount: 32, note: { en: "HR business partner model; L&D sits in HR", ar: "نموذج شريك أعمال الموارد البشرية؛ ويتبع التعلم والتطوير للموارد البشرية" } },
       { name: { en: "Medical Network & Providers", ar: "الشبكة الطبية ومقدمو الخدمة" }, headcount: 60 },
@@ -182,7 +182,7 @@ export const claimsQuality: Scenario = {
       sourceStakeholderId: "sa",
       initiallyAvailable: false,
       reviewCostHours: 0,
-      supports: ["rc-kpi"],
+      supports: ["rc-kpi", "rc-qa-structure"],
       contradicts: [],
       critical: true,
     },
@@ -275,6 +275,66 @@ export const claimsQuality: Scenario = {
       supports: ["rc-kpi", "rc-rules"],
       contradicts: ["rc-broad-skill"],
       critical: false,
+    },
+    {
+      id: "ev-contract-risk",
+      kind: "data",
+      title: { en: "Corporate Contract at Risk", ar: "عقد مؤسسي معرّض للخطر" },
+      body: {
+        en: "Masar's largest corporate contract (SAR 140M a year) renews in Q2 and carries a 98% claims-accuracy SLA. Current accuracy is 93.2%. The board reviews turnaround monthly; accuracy is reported only quarterly.",
+        ar: "أكبر عقود «مسار» المؤسسية (١٤٠ مليون ريال سنويًا) يُجدَّد في الربع الثاني، ويتضمن اتفاقية مستوى خدمة لدقة المطالبات بنسبة ٩٨٪، بينما الدقة الحالية ٩٣٫٢٪. ويراجع مجلس الإدارة مدة الإنجاز شهريًا، أما الدقة فلا تُرفع إليه إلا كل ربع سنة.",
+      },
+      sourceStakeholderId: "co",
+      initiallyAvailable: false,
+      reviewCostHours: 0,
+      supports: [],
+      contradicts: [],
+      critical: true,
+    },
+    {
+      id: "ev-accuracy-ownership",
+      kind: "observation",
+      title: { en: "No Executive Owner for Accuracy", ar: "لا مالك تنفيذيًا للدقة" },
+      body: {
+        en: "Claims accuracy has no named executive owner. The Head of Claims' scorecard measures turnaround and cost per claim only; accuracy appears in the strategy as a measure without a target.",
+        ar: "لا يوجد مالك تنفيذي مسمّى لدقة المطالبات. وبطاقة أداء رئيس المطالبات تقيس مدة الإنجاز وتكلفة المطالبة فقط، وتَرِد الدقة في الاستراتيجية مؤشرًا دون مستهدف.",
+      },
+      sourceStakeholderId: "co",
+      initiallyAvailable: false,
+      reviewCostHours: 0,
+      supports: ["rc-kpi", "rc-qa-structure"],
+      contradicts: [],
+      critical: true,
+    },
+    {
+      id: "ev-business-case",
+      kind: "document",
+      title: { en: "ClaimsOne Business Case Assumptions", ar: "افتراضات دراسة الجدوى لـ«كليمز ون»" },
+      body: {
+        en: "The 60-claims-a-day productivity target and the 15% cost-to-serve saving both assumed 100% of validation rules would be automated at go-live. That assumption was never revisited after 212 rules were deferred.",
+        ar: "بُني مستهدف الستين مطالبة يوميًا وتوفير ١٥٪ في تكلفة الخدمة على افتراض أتمتة جميع قواعد التحقق عند التشغيل. ولم يُراجَع هذا الافتراض بعد تأجيل ٢١٢ قاعدة.",
+      },
+      sourceStakeholderId: "co",
+      initiallyAvailable: false,
+      reviewCostHours: 0,
+      supports: ["rc-rules", "rc-kpi"],
+      contradicts: ["rc-carelessness"],
+      critical: true,
+    },
+    {
+      id: "ev-qa-reporting",
+      kind: "observation",
+      title: { en: "QA Reports to the Function It Audits", ar: "ضمان الجودة يتبع الإدارة التي يدققها" },
+      body: {
+        en: "The QA Lead reports to the Head of Claims Operations. The decision to cut sampling from 10% to 3% was taken inside Operations to support the productivity ramp; Compliance and Risk were not consulted.",
+        ar: "تتبع قائدة ضمان الجودة رئيسَ عمليات المطالبات. واتُّخذ قرار خفض العينة من ١٠٪ إلى ٣٪ داخل العمليات لدعم رفع الإنتاجية، دون استشارة إدارتي الالتزام والمخاطر.",
+      },
+      sourceStakeholderId: "sa",
+      initiallyAvailable: false,
+      reviewCostHours: 0,
+      supports: ["rc-qa-structure"],
+      contradicts: ["rc-carelessness"],
+      critical: true,
     },
   ],
 
@@ -464,6 +524,161 @@ export const claimsQuality: Scenario = {
           whyItMatters: {
             en: "Prior intervention history is evidence. If the same solution already failed to move the metric, the problem probably isn't a knowledge gap.",
             ar: "سجل التدخلات السابقة دليل بحد ذاته؛ فإذا فشل الحل نفسه سابقًا في تحريك المؤشر، فالأرجح أن المشكلة ليست فجوة معرفية.",
+          },
+        },
+      ],
+    },
+
+    // ---------------- Faisal — COO (strategy owner) ----------------
+    {
+      id: "co",
+      role: "coo",
+      name: { en: "Faisal Al-Shammari", ar: "فيصل الشمري" },
+      title: { en: "Chief Operating Officer", ar: "الرئيس التنفيذي للعمليات" },
+      perspective: {
+        en: "Sponsor of the cost-to-serve programme and ClaimsOne. Reports turnaround gains to the board every month.",
+        ar: "راعي برنامج خفض تكلفة الخدمة ومنصة «كليمز ون»، ويعرض تحسّن مدة الإنجاز على مجلس الإدارة كل شهر.",
+      },
+      objectives: [
+        { en: "Deliver the 15% cost-to-serve reduction", ar: "تحقيق خفض تكلفة الخدمة بنسبة ١٥٪" },
+        { en: "Keep the regulator and corporate clients satisfied", ar: "الحفاظ على رضا الجهة الرقابية وعملاء الشركات" },
+      ],
+      concerns: [{ en: "The transformation being seen as a failure", ar: "أن يُنظر إلى التحول على أنه إخفاق" }],
+      bias: {
+        type: { en: "Success narrative", ar: "سردية النجاح" },
+        note: {
+          en: "Reads the turnaround gains as proof the programme works, and may treat the error rate as a separate people issue.",
+          ar: "يقرأ تحسّن مدة الإنجاز دليلًا على نجاح البرنامج، وقد يتعامل مع معدل الأخطاء بوصفه مسألة أفراد منفصلة.",
+        },
+      },
+      initialOpenness: 50,
+      questions: [
+        {
+          id: "q-co-priorities",
+          text: {
+            en: "When speed, cost and regulatory compliance pull against each other, which takes precedence for Masar right now?",
+            ar: "حين تتعارض السرعة والتكلفة والالتزام الرقابي، أيّها يتقدّم لدى «مسار» الآن؟",
+          },
+          costHours: 1,
+          quality: "critical",
+          responses: [
+            {
+              reply: {
+                en: "Compliance. A material finding would put our largest corporate contract at risk: SAR 140 million a year, renewing in Q2, with a 98% accuracy SLA. The uncomfortable part is that the board sees turnaround every month and accuracy only every quarter.",
+                ar: "الالتزام. فأي ملاحظة جوهرية ستعرّض أكبر عقودنا المؤسسية للخطر: ١٤٠ مليون ريال سنويًا، يُجدَّد في الربع الثاني، باتفاقية دقة ٩٨٪. والمزعج أن مجلس الإدارة يرى مدة الإنجاز كل شهر، ولا يرى الدقة إلا كل ربع سنة.",
+              },
+              reveals: ["ev-contract-risk"],
+              opennessDelta: 10,
+            },
+          ],
+          dimensions: { strategicAlignment: 3, businessImpact: 2 },
+          whyItMatters: {
+            en: "Forcing an explicit trade-off between strategic priorities reveals what is really at stake, and what the organisation actually pays attention to.",
+            ar: "دفع القيادة إلى المفاضلة الصريحة بين الأولويات الاستراتيجية يكشف ما هو على المحك فعلًا، وما تلتفت إليه المنظمة حقيقةً.",
+          },
+        },
+        {
+          id: "q-co-owner",
+          text: {
+            en: "Who owns claims accuracy at executive level, and how is it reported?",
+            ar: "من يملك دقة المطالبات على المستوى التنفيذي؟ وكيف تُرفع تقاريرها؟",
+          },
+          costHours: 1,
+          quality: "critical",
+          responses: [
+            {
+              when: { opennessGte: ["co", 55] },
+              reply: {
+                en: "Honestly, nobody explicitly. Khalid's scorecard is turnaround and cost per claim. Accuracy is in the strategy as a measure, but it has no target and no owner. I signed off on that.",
+                ar: "بصراحة، لا أحد بشكل صريح. بطاقة أداء خالد تقيس مدة الإنجاز وتكلفة المطالبة. والدقة مذكورة في الاستراتيجية مؤشرًا، لكن بلا مستهدف ولا مالك، وأنا من اعتمد ذلك.",
+              },
+              reveals: ["ev-accuracy-ownership"],
+              opennessDelta: 5,
+            },
+            {
+              reply: {
+                en: "Operations owns it, broadly. Khalid runs claims.",
+                ar: "العمليات هي المسؤولة عمومًا، وخالد يدير المطالبات.",
+              },
+              opennessDelta: 0,
+            },
+          ],
+          dimensions: { strategicAlignment: 2, rootCauseIdentification: 2 },
+          whyItMatters: {
+            en: "A measure with no owner and no target is not managed. Accountability gaps are a governance problem that no training can close.",
+            ar: "المؤشر الذي لا مالك له ولا مستهدف لا يُدار. وفجوات المساءلة مشكلة حوكمة لا يسدّها أي تدريب.",
+          },
+        },
+        {
+          id: "q-co-business-case",
+          text: {
+            en: "What did the productivity programme assume ClaimsOne would deliver?",
+            ar: "ما الذي افترضه برنامج الإنتاجية أن تحققه «كليمز ون»؟",
+          },
+          costHours: 1,
+          quality: "strong",
+          responses: [
+            {
+              reply: {
+                en: "Full automation of validation at go-live. That is where the 60-a-day figure came from, and the 15% saving. I'll be honest: we never re-ran those numbers after go-live.",
+                ar: "أتمتة التحقق بالكامل عند التشغيل. ومن هنا جاء رقم الستين مطالبة يوميًا وتوفير الـ١٥٪. وسأكون صريحًا: لم نُعِد حساب تلك الأرقام بعد التشغيل.",
+              },
+              reveals: ["ev-business-case"],
+              opennessDelta: 5,
+            },
+          ],
+          dimensions: { strategicAlignment: 2, diagnosticThinking: 2 },
+          whyItMatters: {
+            en: "Targets inherit the assumptions of the business case behind them. When an assumption fails, the target becomes a cause of poor performance.",
+            ar: "المستهدفات ترث افتراضات دراسة الجدوى التي بُنيت عليها، فإذا سقط الافتراض صار المستهدف نفسه سببًا لضعف الأداء.",
+          },
+        },
+        {
+          id: "q-co-sponsor",
+          text: {
+            en: "Will you sponsor the accuracy workshop Khalid has requested?",
+            ar: "هل ستتبنّى ورشة الدقة التي طلبها خالد؟",
+          },
+          costHours: 1,
+          quality: "solution-first",
+          responses: [
+            {
+              reply: {
+                en: "If HR thinks it will work, yes. Two days for 120 people is cheap next to a regulatory fine. Send me the cost.",
+                ar: "إن رأت الموارد البشرية أنها ستنجح، فنعم. يومان لـ١٢٠ موظفًا تكلفة زهيدة مقارنة بغرامة رقابية. أرسل لي التكلفة.",
+              },
+              opennessDelta: -10,
+            },
+          ],
+          dimensions: { solutionAppropriateness: -2, strategicAlignment: -1 },
+          whyItMatters: {
+            en: "Executive willingness to fund a solution is not evidence that it addresses the cause. Securing sponsorship before diagnosis locks in the wrong intervention.",
+            ar: "استعداد القيادة لتمويل حل ليس دليلًا على أنه يعالج السبب، وتأمين الرعاية قبل التشخيص يثبّت التدخل الخطأ.",
+          },
+        },
+        {
+          id: "q-co-ch-target",
+          kind: "challenge",
+          available: { hasEvidence: "ev-rules-backlog" },
+          text: {
+            en: "The 60-a-day target assumed automation that was never delivered: 212 limit checks are still manual. Should the target stand while that is true?",
+            ar: "افترض مستهدف الستين مطالبة أتمتةً لم تتحقق؛ إذ لا تزال ٢١٢ عملية تحقق يدوية. هل ينبغي أن يبقى المستهدف قائمًا والحال كذلك؟",
+          },
+          costHours: 1,
+          quality: "critical",
+          responses: [
+            {
+              reply: {
+                en: "…No. If the rules aren't live, the target rests on a false premise. I would rather slow down for a quarter than walk into the Q2 renewal at 93% accuracy. Put that in a one-page recommendation for me.",
+                ar: "…لا. إن لم تكن القواعد مفعّلة فالمستهدف قائم على فرضية خاطئة. أفضّل أن نبطئ ربعًا واحدًا على أن ندخل تجديد الربع الثاني بدقة ٩٣٪. ضع ذلك في توصية من صفحة واحدة.",
+              },
+              opennessDelta: 10,
+            },
+          ],
+          dimensions: { evidenceBasedDecisions: 3, strategicAlignment: 2, solutionAppropriateness: 2 },
+          whyItMatters: {
+            en: "Connecting an operational finding to a strategic decision is what earns a consultant a seat with the executive. Evidence changed the sponsor's position.",
+            ar: "ربط نتيجة تشغيلية بقرار استراتيجي هو ما يمنح المستشار مقعدًا مع القيادة التنفيذية، وقد غيّر الدليلُ موقفَ الراعي.",
           },
         },
       ],
@@ -887,6 +1102,38 @@ export const claimsQuality: Scenario = {
           },
         },
         {
+          id: "q-sa-independence",
+          text: {
+            en: "Who decided to reduce QA sampling, and who does QA report to?",
+            ar: "من قرر خفض عينة ضمان الجودة؟ ولمن يتبع ضمان الجودة؟",
+          },
+          costHours: 1,
+          quality: "critical",
+          responses: [
+            {
+              when: { opennessGte: ["sa", 55] },
+              reply: {
+                en: "I report to Khalid. The cut was his call, to support the ramp to 60 a day. Compliance wasn't consulted. I raised it, but it's hard to push back on the person who writes your appraisal.",
+                ar: "أنا أتبع خالد، وكان القرار قراره لدعم الوصول إلى ستين مطالبة يوميًا، ولم تُستشَر إدارة الالتزام. اعترضتُ، لكن من الصعب أن تعارض من يكتب تقييم أدائك.",
+              },
+              reveals: ["ev-qa-reporting"],
+              opennessDelta: 5,
+            },
+            {
+              reply: {
+                en: "It was a management decision. I'd rather not go further than that.",
+                ar: "كان قرارًا إداريًا، وأفضّل ألا أتوسع أكثر من ذلك.",
+              },
+              opennessDelta: 0,
+            },
+          ],
+          dimensions: { rootCauseIdentification: 3, diagnosticThinking: 2 },
+          whyItMatters: {
+            en: "Reporting lines shape decisions. When assurance reports to the function it audits, quality becomes negotiable under pressure. That is a structural issue, not a skill gap.",
+            ar: "خطوط التبعية تشكّل القرارات؛ فحين يتبع ضمانُ الجودة الإدارةَ التي يدققها تصبح الجودة قابلة للتفاوض تحت الضغط. وهذه مسألة هيكلية لا فجوة مهارية.",
+          },
+        },
+        {
           id: "q-sa-names",
           text: { en: "Who is making the most mistakes, so we can target them?", ar: "من الأكثر ارتكابًا للأخطاء لنستهدفه؟" },
           costHours: 1,
@@ -1055,7 +1302,7 @@ export const claimsQuality: Scenario = {
         ar: "أُجّل ٢١٢ فحصًا آليًا من أصل ٣٤٠ عند التشغيل، واستُبدلت بتحقق يدوي بطيء ويسهل تجاوزه.",
       },
       isTrue: true,
-      weight: 0.4,
+      weight: 0.35,
     },
     {
       id: "rc-kpi",
@@ -1066,7 +1313,18 @@ export const claimsQuality: Scenario = {
         ar: "ارتفعت المستهدفات ٣٣٪ مع مكافأة قائمة على الحجم فقط، بينما انخفضت عينة ضمان الجودة من ١٠٪ إلى ٣٪؛ فالمنظومة تكافئ السرعة وتُخفي الأخطاء.",
       },
       isTrue: true,
-      weight: 0.35,
+      weight: 0.3,
+    },
+    {
+      id: "rc-qa-structure",
+      type: "structure",
+      title: { en: "Quality assurance lacks independence from production", ar: "افتقار ضمان الجودة إلى الاستقلال عن الإنتاج" },
+      explanation: {
+        en: "QA reports to the Head of Claims, and accuracy has no executive owner, so quality capacity was traded for throughput without independent challenge.",
+        ar: "يتبع ضمان الجودة رئيسَ المطالبات، ولا مالك تنفيذيًا للدقة، فجرت مقايضة طاقة الجودة بالإنتاجية دون أي مراجعة مستقلة.",
+      },
+      isTrue: true,
+      weight: 0.15,
     },
     {
       id: "rc-onboarding",
@@ -1077,7 +1335,7 @@ export const claimsQuality: Scenario = {
         ar: "اختُصرت التهيئة وحُذف منها الترميز المعقد، فنشأت فجوة مهارية حقيقية لكنها محصورة لدى ٣٨ موظفًا جديدًا.",
       },
       isTrue: true,
-      weight: 0.25,
+      weight: 0.2,
     },
     {
       id: "rc-carelessness",
@@ -1140,4 +1398,73 @@ export const claimsQuality: Scenario = {
       required: 4,
     },
   ],
+
+  framing: {
+    prompt: {
+      en: "Before you interview anyone, how would you frame the problem you have been asked to solve?",
+      ar: "قبل أن تقابل أحدًا: كيف تؤطّر المشكلة التي طُلب منك حلّها؟",
+    },
+    options: [
+      {
+        id: "f-training",
+        kind: "solution",
+        text: {
+          en: "Claims processors need accuracy and attention-to-detail training.",
+          ar: "يحتاج معالجو المطالبات إلى تدريب على الدقة والانتباه للتفاصيل.",
+        },
+        explanation: {
+          en: "This restates the requested solution. It assumes the cause is a skill gap before any evidence has been gathered.",
+          ar: "هذا إعادة صياغة للحل المطلوب، ويفترض أن السبب فجوة مهارية قبل جمع أي دليل.",
+        },
+      },
+      {
+        id: "f-careless",
+        kind: "cause-assumption",
+        text: {
+          en: "Processors have become careless under pressure and need to be held accountable.",
+          ar: "أصبح المعالجون أقل حرصًا تحت الضغط ويجب مساءلتهم.",
+        },
+        explanation: {
+          en: "This adopts the requester's attribution of the cause. It is an untested assumption about people, not a definition of the problem.",
+          ar: "هذا تبنٍّ لتفسير صاحب الطلب للسبب، وهو افتراض غير مختبَر عن الأفراد لا تعريف للمشكلة.",
+        },
+      },
+      {
+        id: "f-system",
+        kind: "cause-assumption",
+        text: {
+          en: "The new ClaimsOne platform is causing the errors and needs to be fixed.",
+          ar: "منصة «كليمز ون» الجديدة هي سبب الأخطاء ويجب إصلاحها.",
+        },
+        explanation: {
+          en: "This also jumps to a cause. It points toward one real factor, but it was chosen before any evidence, and it misses the governance and structural causes.",
+          ar: "هذا أيضًا قفز إلى السبب. صحيح أنه يشير إلى عامل حقيقي، لكنه اختير قبل أي دليل، ويُغفل الأسباب المتعلقة بالحوكمة والهيكل.",
+        },
+      },
+      {
+        id: "f-symptom",
+        kind: "symptom",
+        text: {
+          en: "The error rate is too high and must come down to 2.5%.",
+          ar: "معدل الأخطاء مرتفع جدًا ويجب خفضه إلى ٢٫٥٪.",
+        },
+        explanation: {
+          en: "This names the symptom and a target, but it does not connect the gap to the strategy or to what is at stake for the business.",
+          ar: "هذا يسمّي العَرَض ومستهدفًا، لكنه لا يربط الفجوة بالاستراتيجية ولا بما هو على المحك بالنسبة للأعمال.",
+        },
+      },
+      {
+        id: "f-gap",
+        kind: "performance-gap",
+        text: {
+          en: "Claims accuracy has fallen from 97.9% to 93.2% in two quarters while productivity rose 29%, putting the zero-regulatory-findings priority and corporate contracts at risk. The causes are not yet known.",
+          ar: "تراجعت دقة المطالبات من ٩٧٫٩٪ إلى ٩٣٫٢٪ خلال ربعين بينما ارتفعت الإنتاجية ٢٩٪، مما يعرّض أولوية «عدم وجود ملاحظات رقابية» وعقود الشركات للخطر. والأسباب لم تُعرف بعد.",
+        },
+        explanation: {
+          en: "This defines the gap between desired and actual performance in business terms, links it to a strategic priority, notes the speed-accuracy trade-off, and leaves the cause open for investigation.",
+          ar: "هذا يعرّف الفجوة بين الأداء المطلوب والفعلي بلغة الأعمال، ويربطها بأولوية استراتيجية، ويلاحظ المقايضة بين السرعة والدقة، ويترك السبب مفتوحًا للتحقيق.",
+        },
+      },
+    ],
+  },
 };

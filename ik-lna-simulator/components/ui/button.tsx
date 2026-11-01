@@ -27,7 +27,10 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
 }
 
-export function Button({ variant = "primary", size = "md", href, className, type, children, ...rest }: Props) {
+export const Button = React.forwardRef<HTMLButtonElement, Props>(function Button(
+  { variant = "primary", size = "md", href, className, type, children, ...rest },
+  ref
+) {
   const classes = cn(base, variants[variant], sizes[size], className);
   if (href) {
     return (
@@ -37,8 +40,8 @@ export function Button({ variant = "primary", size = "md", href, className, type
     );
   }
   return (
-    <button type={type ?? "button"} className={classes} {...rest}>
+    <button ref={ref} type={type ?? "button"} className={classes} {...rest}>
       {children}
     </button>
   );
-}
+});

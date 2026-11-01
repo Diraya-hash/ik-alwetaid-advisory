@@ -165,6 +165,22 @@ export interface CapabilityGap {
   required: number; // 1–5
 }
 
+export type FramingKind = "solution" | "cause-assumption" | "symptom" | "performance-gap";
+
+export interface FramingOption {
+  id: string;
+  text: L;
+  kind: FramingKind;
+  /** Shown in the debrief, never during play. */
+  explanation: L;
+}
+
+/** The Stage 1 decision: how the user frames the problem before any interview. */
+export interface ProblemFraming {
+  prompt: L;
+  options: FramingOption[];
+}
+
 export interface Scenario {
   id: string;
   version: number;
@@ -195,6 +211,7 @@ export interface Scenario {
   stakeholders: Stakeholder[];
   rootCauses: RootCause[];
   capabilityGaps: CapabilityGap[];
+  framing: ProblemFraming;
 }
 
 // ---------- Simulation actions & state ----------
@@ -204,6 +221,7 @@ export type Action =
   | { type: "ASK"; stakeholderId: string; questionId: string; at: number }
   | { type: "LOG_HYPOTHESIS"; hypothesisId: string; text: string; causeType: CauseType; at: number }
   | { type: "REMOVE_HYPOTHESIS"; hypothesisId: string; at: number }
+  | { type: "FRAME_PROBLEM"; optionId: string; at: number }
   | { type: "ADVANCE_STAGE"; to: StageId; at: number };
 
 /** Distributive omit so each Action variant keeps its own fields. */
@@ -235,6 +253,8 @@ export interface SimState {
   openness: Record<string, number>;
   transcript: TranscriptEntry[];
   hypotheses: Hypothesis[];
+  /** Every framing the user recorded, in order; the last one is current. */
+  framings: string[];
 }
 
 export type Rejection =
@@ -247,4 +267,6 @@ export type Rejection =
   | "stage-locked"
   | "invalid-stage"
   | "empty-hypothesis"
-  | "unknown-hypothesis";
+  | "unknown-hypothesis"
+  | "unknown-framing"
+  | "framing-required";

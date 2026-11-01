@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRight, Check, FileSearch, Quote } from "lucide-react";
+import { ArrowRight, Check, Crosshair, FileSearch, Quote } from "lucide-react";
+import { useState } from "react";
 import type { ActionInput, Scenario, SimState } from "@/engine/types";
 import { useI18n } from "@/components/i18n-provider";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,10 @@ function List({ title, items }: { title: string; items: string[] }) {
 }
 
 export function StageContext({ scenario, state, dispatch }: { scenario: Scenario; state: SimState; dispatch: (a: ActionInput) => void }) {
-  const { t, l, f } = useI18n();
+  const { t, l, f, p } = useI18n();
+  const current = state.framings.at(-1);
+  const [choice, setChoice] = useState<string | null>(null);
+  const selected = choice ?? current ?? null;
   const docs = scenario.evidence.filter((e) => e.initiallyAvailable);
   const requester = scenario.stakeholders.find((s) => s.id === scenario.request.from)!;
 
@@ -98,13 +102,59 @@ export function StageContext({ scenario, state, dispatch }: { scenario: Scenario
         </ul>
       </Card>
 
+      <Card>
+        <SectionTitle hint={t.sim.framingHint}>
+          <span className="inline-flex items-center gap-2"><Crosshair className="h-4 w-4 text-primary" aria-hidden />{t.sim.framingTitle}</span>
+        </SectionTitle>
+        <fieldset>
+          <legend className="mb-3 text-[14px] font-medium">{l(scenario.framing.prompt)}</legend>
+          <div className="space-y-2">
+            {scenario.framing.options.map((o) => (
+              <label
+                key={o.id}
+                htmlFor={`framing-${o.id}`}
+                className={`flex cursor-pointer gap-3 rounded-xl border p-3 text-[13.5px] leading-relaxed transition-colors ${selected === o.id ? "border-primary bg-primary-soft/50" : "border-line hover:border-line-strong"}`}
+              >
+                <input
+                  id={`framing-${o.id}`}
+                  type="radio"
+                  name="framing"
+                  value={o.id}
+                  checked={selected === o.id}
+                  disabled={state.stage > 2}
+                  onChange={() => setChoice(o.id)}
+                  className="mt-1 h-4 w-4 shrink-0 accent-[rgb(var(--primary))]"
+                />
+                <span>{l(o.text)}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Button
+            variant="secondary"
+            disabled={!selected || selected === current}
+            onClick={() => selected && dispatch({ type: "FRAME_PROBLEM", optionId: selected })}
+          >
+            {t.sim.framingRecord}
+          </Button>
+          {current && (
+            <p role="status" className="flex items-center gap-2 text-[12.5px] text-ink-muted">
+              <Check className="h-3.5 w-3.5 text-primary" aria-hidden />
+              {t.sim.framingCurrent}
+              {state.framings.length > 1 && <span className="text-ink-subtle">{t.common.sep}{p(t.sim.framingRevised, state.framings.length - 1)}</span>}
+            </p>
+          )}
+        </div>
+      </Card>
+
       {state.stage === 1 && (
         <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-          <Button size="lg" onClick={() => dispatch({ type: "ADVANCE_STAGE", to: 2 })}>
+          <Button size="lg" disabled={!current} onClick={() => dispatch({ type: "ADVANCE_STAGE", to: 2 })}>
             {t.sim.advance2}
             <ArrowRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden />
           </Button>
-          <p className="text-[12.5px] text-ink-subtle">{t.sim.advance2Hint}</p>
+          <p className="text-[12.5px] text-ink-subtle">{current ? t.sim.advance2Hint : t.sim.framingRequired}</p>
         </div>
       )}
     </div>

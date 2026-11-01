@@ -23,6 +23,7 @@ export function initialState(scenario: Scenario): SimState {
     openness: Object.fromEntries(scenario.stakeholders.map((s) => [s.id, s.initialOpenness])),
     transcript: [],
     hypotheses: [],
+    framings: [],
   };
 }
 
@@ -71,9 +72,15 @@ export function check(scenario: Scenario, state: SimState, action: Action): Reje
       return action.text.trim().length === 0 ? "empty-hypothesis" : null;
     case "REMOVE_HYPOTHESIS":
       return state.hypotheses.some((h) => h.id === action.hypothesisId) ? null : "unknown-hypothesis";
+    case "FRAME_PROBLEM":
+      if (!scenario.framing.options.some((o) => o.id === action.optionId)) return "unknown-framing";
+      if (state.stage > 2) return "stage-locked";
+      return null;
     case "ADVANCE_STAGE":
       if (action.to !== state.stage + 1) return "invalid-stage";
       if (!PLAYABLE_STAGES.includes(action.to)) return "stage-locked";
+      // A consultant defines the performance gap before interviewing anyone.
+      if (action.to === 2 && state.framings.length === 0) return "framing-required";
       return null;
   }
 }
@@ -131,6 +138,8 @@ export function apply(scenario: Scenario, state: SimState, action: Action): SimS
       };
     case "REMOVE_HYPOTHESIS":
       return { ...state, hypotheses: state.hypotheses.filter((h) => h.id !== action.hypothesisId) };
+    case "FRAME_PROBLEM":
+      return state.framings.at(-1) === action.optionId ? state : { ...state, framings: [...state.framings, action.optionId] };
     case "ADVANCE_STAGE":
       return { ...state, stage: action.to };
   }

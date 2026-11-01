@@ -5,6 +5,7 @@ import { getScenario } from "@/content/scenarios";
 import { derive } from "@/engine/reducer";
 import { useI18n } from "@/components/i18n-provider";
 import { Button } from "@/components/ui/button";
+import { ConfirmButton } from "@/components/ui/confirm-button";
 import { Badge, EmptyState, Meter, PageHeader } from "@/components/ui/primitives";
 import { useHydrated, useSimStore } from "@/store/sim-store";
 
@@ -53,11 +54,11 @@ export function SimulationsView() {
                   </div>
                   <p className="mt-2 text-[11.5px] text-ink-subtle">{f(t.common.started, { date: date(a.createdAt) })}{t.common.sep}{f(t.common.updated, { date: date(a.updatedAt) })}</p>
                 </div>
-                <div className="flex shrink-0 gap-2">
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
                   <Button href={href(`/simulate?attempt=${a.id}`)}>{t.common.resume}</Button>
-                  <Button variant="danger" onClick={() => window.confirm(t.simulations.deleteConfirm) && deleteAttempt(a.id)} aria-label={`${t.common.delete}: ${l(sc.title)}`}>
+                  <ConfirmButton question={t.simulations.deleteConfirm} onConfirm={() => deleteAttempt(a.id)} label={`${t.common.delete}: ${l(sc.title)}`}>
                     <Trash2 className="h-4 w-4" aria-hidden />
-                  </Button>
+                  </ConfirmButton>
                 </div>
               </li>
             );

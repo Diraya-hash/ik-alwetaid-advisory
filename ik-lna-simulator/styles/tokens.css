@@ -65,5 +65,5 @@
 }
 
 /* Typography per script */
-html[lang="en"] { --font-sans: "Inter Variable", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif; --tracking-tight: -0.022em; }
-html[lang="ar"] { --font-sans: "IBM Plex Sans Arabic", "Inter Variable", ui-sans-serif, system-ui, sans-serif; --tracking-tight: 0; }
+html[lang="en"] { --font-sans: "Inter Variable", "Inter", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif; --tracking-tight: -0.022em; }
+html[lang="ar"] { --font-sans: "IBM Plex Sans Arabic", "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif; --tracking-tight: 0; }

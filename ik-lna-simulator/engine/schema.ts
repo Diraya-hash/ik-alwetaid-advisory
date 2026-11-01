@@ -112,6 +112,12 @@ export const ScenarioSchema = z.object({
       })
     )
     .min(1),
+  framing: z.object({
+    prompt: L,
+    options: z
+      .array(z.object({ id: z.string().min(1), text: L, kind: z.enum(["solution", "cause-assumption", "symptom", "performance-gap"]), explanation: L }))
+      .min(3),
+  }),
   capabilityGaps: z.array(
     z.object({
       id: z.string(),
@@ -189,5 +195,15 @@ export function validateScenario(input: unknown): string[] {
   // Every evidence item must be reachable, otherwise it is dead content.
   s.evidence.forEach((e) => !revealable.has(e.id) && errors.push(`evidence "${e.id}" can never be discovered`));
   if (!s.rootCauses.some((c) => c.isTrue)) errors.push("scenario has no true root cause");
+  if (!s.framing.options.some((o) => o.kind === "performance-gap")) errors.push("framing needs a performance-gap option");
+  if (!s.framing.options.some((o) => o.kind === "solution")) errors.push("framing needs a solution-first distractor");
+  const weights = s.rootCauses.filter((c) => c.isTrue).reduce((n, c) => n + c.weight, 0);
+  if (Math.abs(weights - 1) > 0.001) errors.push(`true root-cause weights sum to ${weights}, expected 1`);
+  // Product standard: beyond Foundation, individual skill gaps may explain at most 30% of the problem.
+  const skillWeight = s.rootCauses.filter((c) => c.isTrue && c.type === "skill").reduce((n, c) => n + c.weight, 0);
+  if (s.difficulty !== "foundation" && skillWeight > 0.3 + 1e-9)
+    errors.push(`skill causes carry ${skillWeight} of the weight; the limit above Foundation is 0.3`);
+  if (!s.stakeholders.some((x) => ["ceo", "coo", "cso", "cfo", "chro", "cio"].includes(x.role)))
+    errors.push("scenario needs at least one executive stakeholder who owns the strategy");
   return errors;
 }

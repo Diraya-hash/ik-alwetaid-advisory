@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/components/i18n-provider";
+import { currentQuery } from "@/lib/location";
 import { cn } from "@/lib/utils";
 
 /** Switches language while keeping the current path, query string and all progress. */
@@ -15,7 +16,7 @@ export function useSwitchLocale() {
   return (target: "en" | "ar") => {
     if (target === locale) return;
     const rest = pathname.replace(/^\/(en|ar)(?=\/|$)/, "").replace(/\/+$/, "");
-    router.push(`/${target}${rest}/${window.location.search}`);
+    router.push(`/${target}${rest}/${currentQuery()}`);
   };
 }
 

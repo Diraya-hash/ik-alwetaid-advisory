@@ -104,6 +104,12 @@ export function SimulateView() {
         <p className="text-[13px] text-ink-muted">{t.stageDesc[shown]}</p>
       </header>
 
+      {attempt.scenarioVersion !== scenario.version && (
+        <p role="alert" className="rounded-xl border border-warning/30 bg-warning-soft p-3 text-[13px] text-warning">
+          {t.sim.versionMismatch}
+        </p>
+      )}
+
       <div className="flex gap-1 rounded-lg border border-line bg-surface p-1 lg:hidden" role="tablist">
         {(["work", "evidence"] as const).map((k) => (
           <button

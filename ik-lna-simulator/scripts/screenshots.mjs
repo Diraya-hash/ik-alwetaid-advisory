@@ -72,6 +72,8 @@ for (const locale of ["en", "ar"]) {
         await page.locator("form button[type=submit]").click();
       }
       await shot("stage1");
+      await page.locator("#framing-f-gap").check();
+      await page.getByRole("button", { name: locale === "en" ? "Record framing" : "سجّل التأطير" }).click();
       await page.getByRole("button", { name: locale === "en" ? /Proceed to stakeholder/ : /انتقل إلى استكشاف/ }).click();
       const pick = (name) => page.locator("nav button").filter({ hasText: name }).first().click();
       await pick(locale === "en" ? "Sara Al-Qahtani" : "سارة القحطاني");
