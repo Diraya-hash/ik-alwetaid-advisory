@@ -1,6 +1,6 @@
 # IK Strategic LNA Simulator — Discovery & Architecture Proposal
 
-> Status: **Awaiting approval.** No product code has been written yet.
+> Status: **Approved 2026-11-01 (all recommended options). Phase 1 implemented** in `/ik-lna-simulator`.
 > Tagline: *"Don't Start with Training. Start with the Strategy."*
 
 ---
@@ -310,3 +310,21 @@ harmful*.
 5. **Persistence:** approve local-first (no accounts) for Phases 1–4.
 6. **Scenario scope:** approve 3 flagship scenarios in Phase 2 and +6 in Phase 4, with the
    rest after that.
+
+---
+
+## 11. Implementation notes (Phase 1)
+
+Deviations from this proposal, made during Phase 1:
+
+- **i18n library:** a small typed in-house layer (`i18n/`) replaces `next-intl`. It works with
+  static export without middleware, the Arabic dictionary is type-checked against the English one,
+  and plurals use `Intl.PluralRules` (Arabic's six forms).
+- **Numeral setting dropped:** Arabic uses Arabic-Indic digits throughout. A Western-digits toggle
+  could only apply partly, because scenario prose already contains Arabic-Indic numbers.
+- **Found during testing:** `·` is indistinguishable from the Arabic-Indic zero `٠` (so
+  "اسأل · ١ س" read as "١٠"). Arabic now uses the Arabic comma as a separator, and a test
+  enforces it.
+- **Pilot scenario:** *The Accuracy Problem* (Foundation, Performance & Operations) is authored
+  in full for Stages 1–2. It becomes the Foundation flagship in Phase 2, when its intervention fit
+  matrix, KPI model and rubric are added.
