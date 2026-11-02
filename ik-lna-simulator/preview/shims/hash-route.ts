@@ -26,7 +26,8 @@ export function hashToPath(hash: string): { pathname: string; search: string } |
   const [, locale, rest] = m;
   const parts = rest!.split(SEP).map(fromHashSeg);
   if (parts[0] === "home") return { pathname: `/${locale}`, search: "" };
-  if (parts[0] === "simulate") return { pathname: `/${locale}/simulate`, search: parts[1] ? `?attempt=${parts[1]}` : "" };
+  if (parts[0] === "simulate" || parts[0] === "report")
+    return { pathname: `/${locale}/${parts[0]}`, search: parts[1] ? `?attempt=${parts[1]}` : "" };
   return { pathname: `/${locale}/${parts.join("/")}`, search: "" };
 }
 

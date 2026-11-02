@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Check, Crosshair, FileSearch, Quote } from "lucide-react";
+import { Check, Crosshair, FileSearch, Quote } from "lucide-react";
 import { useState } from "react";
 import type { ActionInput, Scenario, SimState } from "@/engine/types";
 import { useI18n } from "@/components/i18n-provider";
@@ -121,7 +121,7 @@ export function StageContext({ scenario, state, dispatch }: { scenario: Scenario
                   name="framing"
                   value={o.id}
                   checked={selected === o.id}
-                  disabled={state.stage > 2}
+                  disabled={state.stage > 2 || state.completed}
                   onChange={() => setChoice(o.id)}
                   className="mt-1 h-4 w-4 shrink-0 accent-[rgb(var(--primary))]"
                 />
@@ -148,15 +148,6 @@ export function StageContext({ scenario, state, dispatch }: { scenario: Scenario
         </div>
       </Card>
 
-      {state.stage === 1 && (
-        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-          <Button size="lg" disabled={!current} onClick={() => dispatch({ type: "ADVANCE_STAGE", to: 2 })}>
-            {t.sim.advance2}
-            <ArrowRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden />
-          </Button>
-          <p className="text-[12.5px] text-ink-subtle">{current ? t.sim.advance2Hint : t.sim.framingRequired}</p>
-        </div>
-      )}
     </div>
   );
 }

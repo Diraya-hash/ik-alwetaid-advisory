@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Lock, MessageSquare, Swords, UserRound } from "lucide-react";
+import { Eye, MessageSquare, Swords, UserRound } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { availableQuestions, findEvidence, findQuestion, opennessBand } from "@/engine/reducer";
 import type { ActionInput, QuestionNode, Scenario, SimState } from "@/engine/types";
@@ -184,10 +184,6 @@ export function StageInterviews({
         </section>
       )}
 
-      <div className="flex items-start gap-3 rounded-xl border border-dashed border-line-strong p-4 text-[13px] text-ink-muted xl:col-span-2">
-        <Lock className="mt-0.5 h-4 w-4 shrink-0 text-ink-subtle" aria-hidden />
-        {t.sim.unavailableNote}
-      </div>
     </div>
   );
 }

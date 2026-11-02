@@ -11,6 +11,9 @@ import { useI18n } from "@/components/i18n-provider";
 import { EvidenceBoard } from "@/components/sim/evidence-board";
 import { StageContext } from "@/components/sim/stage-context";
 import { StageInterviews } from "@/components/sim/stage-interviews";
+import { StageDiagnosis } from "@/components/sim/stage-diagnosis";
+import { StageCapability, StageMeasures, StageSolution } from "@/components/sim/stage-decisions";
+import { StageFooter } from "@/components/sim/stage-footer";
 import { Button } from "@/components/ui/button";
 import { EmptyState, Meter } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
@@ -131,6 +134,15 @@ export function SimulateView() {
         <div className={cn(tab !== "work" && "hidden lg:block")}>
           {shown === 1 && <StageContext scenario={scenario} state={state} dispatch={dispatch} />}
           {shown === 2 && <StageInterviews scenario={scenario} state={state} dispatch={dispatch} selected={selected} onSelect={setSelected} />}
+          {shown === 3 && <StageDiagnosis scenario={scenario} state={state} dispatch={dispatch} />}
+          {shown === 4 && <StageCapability scenario={scenario} state={state} dispatch={dispatch} />}
+          {shown === 5 && <StageSolution scenario={scenario} state={state} dispatch={dispatch} />}
+          {shown === 6 && <StageMeasures scenario={scenario} state={state} dispatch={dispatch} />}
+          {(shown === state.stage || state.completed) && (
+            <div className="mt-6">
+              <StageFooter scenario={scenario} state={state} attemptId={attempt.id} dispatch={dispatch} />
+            </div>
+          )}
         </div>
         <aside className={cn("lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto", tab !== "evidence" && "hidden lg:block")}>
           <EvidenceBoard scenario={scenario} state={state} dispatch={dispatch} />

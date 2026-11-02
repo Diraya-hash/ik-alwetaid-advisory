@@ -138,3 +138,17 @@ describe("scoring", () => {
     expect(expert.dimensions.solutionAppropriateness.cap).toBeUndefined();
   });
 });
+
+describe("report CSV", () => {
+  it("is Excel-safe UTF-8 with escaped fields and every decision", async () => {
+    const { reportCsv } = await import("@/lib/report-csv");
+    const st = run([...expertDiscovery, ...expertDiagnosis]);
+    const csv = reportCsv(s, st, score(s, st), "ar");
+    expect(csv.startsWith("﻿")).toBe(true);
+    const lines = csv.slice(1).split("\r\n");
+    expect(lines[0]).toBe("section,item,your_decision,expert_view,detail");
+    expect(lines.filter((x) => x.startsWith("root_cause,")).length).toBe(s.rootCauses.length);
+    expect(lines.filter((x) => x.startsWith("kpi,")).length).toBe(4);
+    expect(csv).toMatch(/[\u0600-\u06FF]/); // Arabic text survives
+  });
+});

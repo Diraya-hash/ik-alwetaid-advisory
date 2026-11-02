@@ -65,7 +65,12 @@ export const useSimStore = create<SimStore>()(
         set((s) => ({
           attempts: {
             ...s.attempts,
-            [attemptId]: { ...attempt, actions: [...attempt.actions, action], updatedAt: action.at },
+            [attemptId]: {
+              ...attempt,
+              actions: [...attempt.actions, action],
+              updatedAt: action.at,
+              status: action.type === "COMPLETE" ? "completed" : attempt.status,
+            },
           },
         }));
         return null;

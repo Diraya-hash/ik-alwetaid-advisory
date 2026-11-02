@@ -37,4 +37,10 @@
 
 @media print {
   .no-print { display: none !important; }
+  html, body { background: #fff !important; }
+  main { padding: 0 !important; }
+  main > div { max-width: none !important; padding: 0 !important; }
+  .report details > *:not(summary) { display: block !important; }
+  .report-section { break-inside: avoid-page; }
+  a { color: inherit !important; text-decoration: none !important; }
 }

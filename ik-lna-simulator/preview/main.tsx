@@ -18,6 +18,7 @@ import { AnalyticsView, DevelopmentView, InsightsView, MethodologyView } from "@
 import { LibraryView } from "@/components/views/library";
 import { SettingsView } from "@/components/views/settings";
 import { SimulateView } from "@/components/views/simulate";
+import { ReportView } from "@/components/views/report";
 import { SimulationsView } from "@/components/views/simulations";
 import { defaultHash, hashToPath, resolve, useHash } from "./shims/hash-route";
 
@@ -57,6 +58,8 @@ function View({ segments }: { segments: string[] }) {
       return getScenario(param) ? <BriefingView scenarioId={param} /> : <NotFound />;
     case "simulate":
       return <SimulateView />;
+    case "report":
+      return <ReportView />;
     case "simulations":
       return <SimulationsView />;
     case "insights":
