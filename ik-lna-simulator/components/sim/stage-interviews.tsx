@@ -14,7 +14,7 @@ function QuestionButton({ q, hoursRemaining, onAsk }: { q: QuestionNode; hoursRe
   const { t, l, f } = useI18n();
   const affordable = q.costHours <= hoursRemaining;
   return (
-    <li className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-3 sm:flex-row sm:items-center">
+    <li data-q={q.id} className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-3 sm:flex-row sm:items-center">
       <p className="flex-1 text-[13.5px] leading-snug">{l(q.text)}</p>
       <Button size="sm" variant={q.kind === "challenge" ? "primary" : "secondary"} disabled={!affordable} onClick={onAsk} className="self-end sm:self-auto">
         {affordable ? f(t.sim.ask, { n: q.costHours }) : t.sim.notEnoughHours}
@@ -61,6 +61,7 @@ export function StageInterviews({
               <li key={s.id}>
                 <button
                   type="button"
+                  data-stakeholder={s.id}
                   onClick={() => onSelect(s.id)}
                   aria-current={active ? "true" : undefined}
                   className={cn(

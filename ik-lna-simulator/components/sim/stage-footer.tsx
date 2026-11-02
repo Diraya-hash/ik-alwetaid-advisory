@@ -42,7 +42,7 @@ export function StageFooter({
   const gate = GATES.find((g) => g === rejection);
   return (
     <div className="flex flex-col items-start gap-2 border-t border-line pt-5 sm:flex-row sm:items-center">
-      <Button size="lg" disabled={!!rejection} onClick={() => dispatch(isLast ? { type: "COMPLETE" } : { type: "ADVANCE_STAGE", to: (state.stage + 1) as StageId })}>
+      <Button size="lg" data-testid="stage-advance" disabled={!!rejection} onClick={() => dispatch(isLast ? { type: "COMPLETE" } : { type: "ADVANCE_STAGE", to: (state.stage + 1) as StageId })}>
         {isLast ? <Send className="h-4 w-4 rtl:-scale-x-100" aria-hidden /> : null}
         {isLast ? t.stages.complete : t.stages.advance[(state.stage + 1) as 2 | 3 | 4 | 5 | 6]}
         {!isLast && <ArrowRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden />}

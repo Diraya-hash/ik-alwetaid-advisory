@@ -17,7 +17,7 @@ export default function RootPage() {
   }, []);
   return (
     <main style={{ fontFamily: "system-ui", padding: 32 }}>
-      <a href="/en/">English</a> · <a href="/ar/">العربية</a>
+      <a href="/en/">English</a> | <a href="/ar/">العربية</a>
     </main>
   );
 }

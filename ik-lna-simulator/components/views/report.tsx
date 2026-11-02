@@ -107,7 +107,7 @@ export function ReportView() {
         <div className="grid gap-6 md:grid-cols-[14rem_1fr]">
           <div className="rounded-2xl bg-navy p-5 text-navy-fg">
             <p className="text-[12px] text-navy-fg/70">{t.report.overall}</p>
-            <p className="num text-5xl font-semibold">{num(r.overall)}</p>
+            <p className="num text-5xl font-semibold" data-testid="overall-score" data-score={r.overall}>{num(r.overall)}</p>
             <p className="mt-1 font-medium">{t.report.band[r.band]}</p>
           </div>
           <p className="text-[14.5px] leading-relaxed">
@@ -148,7 +148,7 @@ export function ReportView() {
             const revealed = entries.flatMap((e) => e.revealed);
             return (
               <li key={s.id} className="rounded-xl border border-line p-4">
-                <p className="font-medium">{l(s.name)} <span className="text-[12.5px] font-normal text-ink-subtle">· {l(s.title)}</span></p>
+                <p className="font-medium">{l(s.name)} <span className="text-[12.5px] font-normal text-ink-subtle">{t.common.sep}{l(s.title)}</span></p>
                 <p className="mt-1 text-[12.5px] text-ink-muted">
                   {entries.length ? p(t.report.interviewed, entries.length) : t.report.notInterviewed}
                   {entries.length > 0 && <>{t.common.sep}{t.report.finalOpenness}: {t.openness[opennessBand(st.openness[s.id] ?? 0)]}</>}
@@ -392,7 +392,7 @@ export function ReportView() {
                 const fq = findQuestion(sc, stakeholderId, questionId)!;
                 return (
                   <li key={questionId} className="rounded-lg border border-line p-3 text-[13px]">
-                    <p className="font-medium">“{l(fq.question.text)}” <span className="font-normal text-ink-subtle">· {l(fq.stakeholder.name)}</span></p>
+                    <p className="font-medium">“{l(fq.question.text)}” <span className="font-normal text-ink-subtle">{t.common.sep}{l(fq.stakeholder.name)}</span></p>
                     <p className="mt-1 text-ink-muted">{l(fq.question.whyItMatters)}</p>
                   </li>
                 );

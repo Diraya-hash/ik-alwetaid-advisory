@@ -34,7 +34,7 @@ export function StageCapability({ scenario, state, dispatch }: Props) {
           const cur = state.gaps[g.id];
           const nature: CauseType = cur?.nature ?? "skill";
           return (
-            <li key={g.id} className={cn("rounded-xl border p-4", cur ? "border-line-strong" : "border-line")}>
+            <li key={g.id} data-gap={g.id} className={cn("rounded-xl border p-4", cur ? "border-line-strong" : "border-line")}>
               <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0">
                   <p className="text-[14px] font-medium">{l(g.title)}</p>
@@ -103,7 +103,7 @@ export function StageSolution({ scenario, state, dispatch }: Props) {
           const cur = state.interventions[iv.id];
           const id = `iv-${iv.id}`;
           return (
-            <li key={iv.id} className={cn("flex flex-col rounded-xl border p-4", cur ? "border-primary bg-primary-soft/40" : "border-line")}>
+            <li key={iv.id} data-iv={iv.id} className={cn("flex flex-col rounded-xl border p-4", cur ? "border-primary bg-primary-soft/40" : "border-line")}>
               <label htmlFor={id} className="flex cursor-pointer items-start gap-3">
                 <input
                   id={id}
@@ -135,6 +135,7 @@ export function StageSolution({ scenario, state, dispatch }: Props) {
                           <button
                             key={c.id}
                             type="button"
+                            data-chip={c.id}
                             aria-pressed={on}
                             disabled={locked}
                             onClick={() =>

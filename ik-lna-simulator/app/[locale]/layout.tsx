@@ -14,7 +14,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   const t = isLocale(params.locale) ? dictionaries[params.locale] : dictionaries.en;
-  return { title: { default: t.meta.title, template: `%s · ${t.brand.short}` }, description: t.meta.description };
+  return { title: { default: t.meta.title, template: `%s${t.common.sep}${t.brand.short}` }, description: t.meta.description };
 }
 
 export const viewport: Viewport = {

@@ -97,7 +97,7 @@ export function StageDiagnosis({ scenario, state, dispatch }: { scenario: Scenar
                 {g.causes.map((c) => {
                   const cur = state.causes[c.id];
                   return (
-                    <li key={c.id} className={cn("rounded-xl border p-4", cur?.verdict === "root" ? "border-primary bg-primary-soft/40" : "border-line")}>
+                    <li key={c.id} data-cause={c.id} className={cn("rounded-xl border p-4", cur?.verdict === "root" ? "border-primary bg-primary-soft/40" : "border-line")}>
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <p className="text-[14px] font-medium leading-snug">{l(c.title)}</p>
                         <SegmentedChoice<CauseVerdict>
@@ -113,10 +113,10 @@ export function StageDiagnosis({ scenario, state, dispatch }: { scenario: Scenar
                         />
                       </div>
                       {cur && (
-                        <details className="mt-3" open={cur.evidenceIds.length === 0 && !locked}>
-                          <summary className="cursor-pointer text-[12.5px] font-medium text-primary">
+                        <fieldset className="mt-3 border-t border-line pt-3">
+                          <legend className="text-[12.5px] font-medium text-primary">
                             {t.diagnosis.evidence}: {cur.evidenceIds.length ? p(t.diagnosis.linked, cur.evidenceIds.length) : t.diagnosis.unlinked}
-                          </summary>
+                          </legend>
                           {state.discovered.length === 0 ? (
                             <p className="mt-2 text-[12.5px] text-ink-subtle">{t.diagnosis.noEvidence}</p>
                           ) : (
@@ -145,7 +145,7 @@ export function StageDiagnosis({ scenario, state, dispatch }: { scenario: Scenar
                               })}
                             </ul>
                           )}
-                        </details>
+                        </fieldset>
                       )}
                     </li>
                   );

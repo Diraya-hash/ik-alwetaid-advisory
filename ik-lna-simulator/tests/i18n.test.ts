@@ -28,6 +28,11 @@ describe("bilingual & RTL hygiene", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("components never hard-code the '·' separator (use t.common.sep)", () => {
+    const offenders = ["components", "app"].flatMap((d) => walk(d)).filter((file) => readFileSync(file, "utf8").includes("·"));
+    expect(offenders).toEqual([]);
+  });
+
   it("selects Arabic plural forms correctly", () => {
     const rules = new Intl.PluralRules(intlLocale("ar"));
     const pick = (n: number) => format(ar.sim.askedCount[rules.select(n) as "one"] ?? ar.sim.askedCount.other, { n });

@@ -2,7 +2,7 @@
 
 import { BarChart3, Lightbulb, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { findQuestion } from "@/engine/reducer";
 import { DIMENSIONS, STAGES, type Dimension } from "@/engine/types";
 import { useI18n } from "@/components/i18n-provider";
@@ -43,15 +43,25 @@ export function RubricList() {
 /** Line chart of overall scores, drawn to one scale (0–100). Time runs left to right in both languages. */
 function ScoreChart({ results }: { results: CompletedResult[] }) {
   const { t, f, num, l } = useI18n();
-  const W = 640, H = 220, P = { l: 36, r: 16, t: 12, b: 28 };
+  // Draw at the container's real width so labels stay legible on phones.
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [W, setW] = useState(640);
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => e && setW(Math.max(280, Math.round(e.contentRect.width))));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const H = 220, P = { l: 36, r: 20, t: 24, b: 16 };
   const iw = W - P.l - P.r, ih = H - P.t - P.b;
   const x = (i: number) => P.l + (results.length === 1 ? iw / 2 : (i * iw) / (results.length - 1));
   const y = (v: number) => P.t + ih - (v / 100) * ih;
   const pts = results.map((r, i) => [x(i), y(r.result.overall)] as const);
   const path = pts.map(([a, b], i) => `${i ? "L" : "M"}${a},${b}`).join(" ");
   return (
-    <div dir="ltr" className="overflow-x-auto">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={f(t.progress.chartLabel, { n: results.length })} className="h-auto w-full min-w-[22rem]">
+    <div dir="ltr" ref={boxRef} className="w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label={f(t.progress.chartLabel, { n: results.length })} className="block max-w-full">
         {[0, 40, 60, 80, 100].map((v) => (
           <g key={v}>
             <line x1={P.l} x2={W - P.r} y1={y(v)} y2={y(v)} stroke="rgb(var(--border))" strokeDasharray={v === 0 ? undefined : "3 4"} />
@@ -66,7 +76,7 @@ function ScoreChart({ results }: { results: CompletedResult[] }) {
             <title>{`${l(results[i]!.scenario.title)}: ${results[i]!.result.overall}`}</title>
           </g>
         ))}
-        <text x={pts.at(-1)![0]} y={pts.at(-1)![1] - 10} textAnchor="middle" fontSize="12" fontWeight="600" fill="rgb(var(--primary))">{num(results.at(-1)!.result.overall)}</text>
+        <text x={pts.at(-1)![0]} y={pts.at(-1)![1] - 12} textAnchor="middle" fontSize="12" fontWeight="600" fill="rgb(var(--primary))">{num(results.at(-1)!.result.overall)}</text>
       </svg>
     </div>
   );
@@ -160,18 +170,18 @@ export function AnalyticsView() {
       {!hydrated ? <p className="text-ink-subtle">{t.common.loading}</p> : results.length === 0 ? (
         <EmptyState icon={BarChart3} body={t.analytics.empty} action={<Button href={href("/scenarios")}>{t.dashboard.ctaPrimary}</Button>} />
       ) : (
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <div className="grid gap-6 lg:grid-cols-5">
-            <Card className="lg:col-span-3">
+            <Card className="min-w-0 lg:col-span-3">
               <SectionTitle>{t.progress.chartTitle}</SectionTitle>
               <ScoreChart results={results} />
             </Card>
-            <Card className="lg:col-span-2">
+            <Card className="min-w-0 lg:col-span-2">
               <SectionTitle>{t.progress.dimTitle}</SectionTitle>
               <DimensionBars values={prof.dimensionAverages!} />
             </Card>
           </div>
-          <Card>
+          <Card className="min-w-0">
             <SectionTitle>{t.progress.compareTitle}</SectionTitle>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[36rem] text-[13px]">
