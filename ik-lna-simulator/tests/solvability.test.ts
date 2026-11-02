@@ -30,11 +30,20 @@ export function expertRun(sc: Scenario) {
       availableQuestions(sc, st, s.id)
         .filter((q) => (q.quality === "critical" || q.quality === "strong") && q.costHours <= st.hoursRemaining)
         .map((q) => {
+          const value = (from: SimState, to: SimState) => {
+            const fresh = to.discovered.filter((id) => !from.discovered.includes(id));
+            return fresh.filter((id) => sc.evidence.find((e) => e.id === id)!.critical).length * 10 + fresh.length * 3;
+          };
           const next = apply(sc, st, { type: "ASK", stakeholderId: s.id, questionId: q.id, at: 0 });
-          const newCritical = next.discovered.filter((id) => !st.discovered.includes(id) && sc.evidence.find((e) => e.id === id)!.critical).length;
-          const newAny = next.discovered.length - st.discovered.length;
-          const gain = newCritical * 10 + newAny * 3 + (next.openness[s.id]! - st.openness[s.id]!) / 5 + (q.kind === "challenge" ? 4 : 0) + (q.quality === "critical" ? 2 : 0);
-          return { s, q, gain: gain / q.costHours };
+          // One step of lookahead: rapport-building questions are valued by what they unlock next.
+          const followUp = Math.max(
+            0,
+            ...availableQuestions(sc, next, s.id)
+              .filter((f) => f.costHours <= next.hoursRemaining - 0 && f.costHours + q.costHours <= st.hoursRemaining)
+              .map((f) => value(next, apply(sc, next, { type: "ASK", stakeholderId: s.id, questionId: f.id, at: 0 })) / (q.costHours + f.costHours))
+          );
+          const gain = value(st, next) + (next.openness[s.id]! - st.openness[s.id]!) / 5 + (q.kind === "challenge" ? 4 : 0) + (q.quality === "critical" ? 2 : 0);
+          return { s, q, gain: Math.max(gain / q.costHours, followUp * 0.8) };
         })
     );
     if (!options.length) break;
