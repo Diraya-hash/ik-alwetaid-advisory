@@ -105,7 +105,7 @@ describe("every scenario is solvable and discriminating", () => {
       expect(r.dimensions.solutionAppropriateness.score).toBeLessThanOrEqual(40);
     });
     it(`${sc.id}: next scenarios exist`, () => {
-      for (const id of sc.debrief.nextScenarios) expect(scenarios.map((s) => s.id).concat(["platform-adoption", "strategy-stalled", "quiet-team", "merger-hangover", "empty-bench", "shared-services", "talent-cliff", "hospital-flow"])).toContain(id);
+      for (const id of sc.debrief.nextScenarios) expect(scenarios.map((s) => s.id)).toContain(id);
     });
   }
 });

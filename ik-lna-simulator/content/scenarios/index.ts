@@ -8,9 +8,10 @@ import { emptyBench } from "./empty-bench";
 import { sharedServices } from "./shared-services";
 import { strategyStalled } from "./strategy-stalled";
 import { talentCliff } from "./talent-cliff";
+import { hospitalFlow } from "./hospital-flow";
 
 /** Only fully authored, playable scenarios are registered here. */
-export const scenarios: Scenario[] = [claimsQuality, serviceCentre, quietTeam, platformAdoption, mergerHangover, emptyBench, sharedServices, strategyStalled, talentCliff];
+export const scenarios: Scenario[] = [claimsQuality, serviceCentre, quietTeam, platformAdoption, mergerHangover, emptyBench, sharedServices, strategyStalled, talentCliff, hospitalFlow];
 
 export function getScenario(id: string): Scenario | undefined {
   return scenarios.find((s) => s.id === id);
