@@ -33,6 +33,25 @@ describe("bilingual & RTL hygiene", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("every Arabic string, in the UI and in all scenarios, is actually Arabic", () => {
+    const ALLOW = /^[\d\s.,:;()%+\-–—/]*$|^(IK|CSV|JSON)$/;
+    const arUi = strings(ar);
+    const arScenario = scenarios.flatMap((sc) => {
+      const out: string[] = [];
+      const walkL = (v: unknown) => {
+        if (v && typeof v === "object") {
+          const o = v as Record<string, unknown>;
+          if (typeof o.en === "string" && typeof o.ar === "string") out.push(o.ar);
+          else Object.values(o).forEach(walkL);
+        }
+      };
+      walkL(sc);
+      return out;
+    });
+    const notArabic = [...arUi, ...arScenario].filter((x) => !/[\u0600-\u06FF]/.test(x) && !ALLOW.test(x.trim()) && !/^\{n\}/.test(x));
+    expect(notArabic).toEqual([]);
+  });
+
   it("selects Arabic plural forms correctly", () => {
     const rules = new Intl.PluralRules(intlLocale("ar"));
     const pick = (n: number) => format(ar.sim.askedCount[rules.select(n) as "one"] ?? ar.sim.askedCount.other, { n });

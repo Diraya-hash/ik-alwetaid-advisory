@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, Check, Copy, Download, Eye, EyeOff, Trash2, Upload } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/components/i18n-provider";
 import { LanguageToggle, ThemeSwitch } from "@/components/layout/controls";
@@ -14,7 +15,7 @@ import { storageAvailable } from "@/store/storage";
 const CAN_DOWNLOAD = process.env.NEXT_PUBLIC_PREVIEW !== "1";
 
 export function SettingsView() {
-  const { t, p } = useI18n();
+  const { t, p, href } = useI18n();
   const importAttempts = useSimStore((s) => s.importAttempts);
   const [importMsg, setImportMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +68,7 @@ export function SettingsView() {
         </Card>
         <Card>
           <SectionTitle hint={t.settings.dataBody}>{t.settings.data}</SectionTitle>
+          <Link href={href("/privacy")} className="-mt-2 mb-4 inline-block text-[13px] text-primary underline">{t.privacy.link}</Link>
           {!canStore && (
             <p role="alert" className="mb-4 flex items-start gap-2 rounded-lg bg-warning-soft p-3 text-[13px] text-warning">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />

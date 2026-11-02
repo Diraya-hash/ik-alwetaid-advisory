@@ -95,12 +95,14 @@ describe("every scenario is solvable and discriminating", () => {
   for (const sc of scenarios) {
     it(`${sc.id}: an expert finds evidence for every true cause within budget and scores 75+`, () => {
       const { st, result } = expertRun(sc);
+      if (process.env.CALIBRATE) console.log(`CAL ${sc.id} expert=${result.overall} hours=${st.hoursUsed}/${sc.budgetHours}`);
       const unsupported = sc.rootCauses.filter((c) => c.isTrue && !st.causes[c.id]!.evidenceIds.length).map((c) => c.id);
       expect(unsupported, "true causes without discoverable evidence").toEqual([]);
       expect(result.overall).toBeGreaterThanOrEqual(75);
     });
     it(`${sc.id}: a training-first order-taker scores below 40`, () => {
       const r = orderTakerRun(sc);
+      if (process.env.CALIBRATE) console.log(`CAL ${sc.id} orderTaker=${r.overall}`);
       expect(r.overall).toBeLessThan(40);
       expect(r.dimensions.solutionAppropriateness.score).toBeLessThanOrEqual(40);
     });

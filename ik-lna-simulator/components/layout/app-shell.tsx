@@ -63,7 +63,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { t } = useI18n();
+  const { t, href } = useI18n();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   useEffect(() => setOpen(false), [pathname]);
@@ -87,6 +87,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
         <nav aria-label={t.nav.primary} className="flex-1 overflow-y-auto px-3">
           <NavLinks />
+          <Link href={href("/privacy")} className="mt-4 block px-3 text-[12px] text-ink-subtle hover:text-primary">{t.privacy.link}</Link>
         </nav>
         <div className="flex items-center justify-between gap-2 border-t border-line p-4">
           <LanguageToggle />

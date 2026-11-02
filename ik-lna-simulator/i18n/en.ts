@@ -440,6 +440,19 @@ export const en = {
     avgHint: { one: "Your latest engagement", other: "Average of your last {n} engagements" },
     completedOf: "{done} of {total} scenarios completed",
   },
+  privacy: {
+    eyebrow: "Privacy",
+    title: "How your data is handled",
+    lead: "The simulator is designed to work without collecting personal information.",
+    items: [
+      { h: "What is stored", b: "Your engagements (the actions you take in each scenario), your language and theme preferences. Nothing else." },
+      { h: "Where it is stored", b: "Only in this browser's local storage, on this device. It is not sent to any server, and nobody else can see it." },
+      { h: "What is not collected", b: "No account, name, email, analytics, advertising trackers or cookies. The app makes no network requests for your data." },
+      { h: "Your control", b: "Show, copy or download your data from Settings at any time, restore it from a saved file, or delete it all permanently." },
+      { h: "Shared devices", b: "Anyone using this browser profile can see your progress. Use a private profile, or delete your data from Settings, on shared computers." },
+    ],
+    link: "Privacy notice",
+  },
   simulations: {
     eyebrow: "My Simulations",
     title: "Your engagements",

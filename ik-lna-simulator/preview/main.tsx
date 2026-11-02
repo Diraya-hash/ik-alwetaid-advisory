@@ -17,6 +17,7 @@ import { DashboardView } from "@/components/views/dashboard";
 import { AnalyticsView, DevelopmentView, InsightsView, MethodologyView } from "@/components/views/info-pages";
 import { LibraryView } from "@/components/views/library";
 import { SettingsView } from "@/components/views/settings";
+import { PrivacyView } from "@/components/views/privacy";
 import { SimulateView } from "@/components/views/simulate";
 import { ReportView } from "@/components/views/report";
 import { SimulationsView } from "@/components/views/simulations";
@@ -72,6 +73,8 @@ function View({ segments }: { segments: string[] }) {
       return <MethodologyView />;
     case "settings":
       return <SettingsView />;
+    case "privacy":
+      return <PrivacyView />;
     default:
       return <NotFound />;
   }

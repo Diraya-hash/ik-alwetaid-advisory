@@ -41,7 +41,7 @@ for (const locale of ["en", "ar"]) {
       page.on("pageerror", (e) => problems.push(`[pageerror ${tag}] ${e.message}`));
       const shot = async (name) => { await page.waitForTimeout(250); await page.screenshot({ path: `${SHOTS}/${tag}-${name}.png`, fullPage: vp.name === "desktop" }); };
 
-      for (const route of ["", "scenarios", "methodology", "settings", "simulations", "analytics", "development", "insights"]) {
+      for (const route of ["", "scenarios", "methodology", "settings", "simulations", "analytics", "development", "insights", "privacy"]) {
         await page.goto(`${base}/${locale}/${route}${route ? "/" : ""}`);
         await page.waitForLoadState("networkidle");
         const dir = await page.evaluate(() => document.documentElement.dir);

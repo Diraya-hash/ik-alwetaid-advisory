@@ -10,10 +10,12 @@ const OUT = path.resolve("out");
 const SHOTS = process.env.SHOTS_DIR ?? "screenshots-full";
 const AXE = await readFile(require.resolve("axe-core/axe.min.js"), "utf8");
 const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2", ".woff": "font/woff", ".json": "application/json", ".txt": "text/plain" };
+// Serve with the production security headers from vercel.json so CSP violations fail the run.
+const prodHeaders = Object.fromEntries(JSON.parse(await readFile("vercel.json", "utf8")).headers[0].headers.filter((h) => h.key !== "Strict-Transport-Security").map((h) => [h.key, h.value.replace("; upgrade-insecure-requests", "")]));
 const server = createServer(async (req, res) => {
   let p = path.join(OUT, decodeURIComponent(new URL(req.url, "http://x").pathname));
   try { if ((await stat(p)).isDirectory()) p = path.join(p, "index.html"); } catch {}
-  try { res.writeHead(200, { "content-type": types[path.extname(p)] ?? "application/octet-stream" }); res.end(await readFile(p)); }
+  try { res.writeHead(200, { ...prodHeaders, "content-type": types[path.extname(p)] ?? "application/octet-stream" }); res.end(await readFile(p)); }
   catch { res.writeHead(404); res.end("nf"); }
 }).listen(0);
 const base = `http://localhost:${server.address().port}`;
