@@ -4,9 +4,10 @@ import { serviceCentre } from "./service-centre";
 import { quietTeam } from "./quiet-team";
 import { platformAdoption } from "./platform-adoption";
 import { mergerHangover } from "./merger-hangover";
+import { emptyBench } from "./empty-bench";
 
 /** Only fully authored, playable scenarios are registered here. */
-export const scenarios: Scenario[] = [claimsQuality, serviceCentre, quietTeam, platformAdoption, mergerHangover];
+export const scenarios: Scenario[] = [claimsQuality, serviceCentre, quietTeam, platformAdoption, mergerHangover, emptyBench];
 
 export function getScenario(id: string): Scenario | undefined {
   return scenarios.find((s) => s.id === id);
