@@ -10,6 +10,7 @@ import { ScenarioCard } from "@/components/scenario-card";
 import { Button } from "@/components/ui/button";
 import { Card, EmptyState, SectionTitle, Stat } from "@/components/ui/primitives";
 import { useHydrated, useSimStore } from "@/store/sim-store";
+import { useProgress } from "@/components/views/info-pages";
 
 export function DashboardView() {
   const { t, f, l, p, num, date, href } = useI18n();
@@ -19,7 +20,8 @@ export function DashboardView() {
   const completed = attempts.filter((a) => a.status === "completed");
   const latest = inProgress.find((a) => getScenario(a.scenarioId));
   const attempted = new Set(attempts.map((a) => a.scenarioId));
-  const recommended = scenarios.filter((s) => !attempted.has(s.id)).concat(scenarios.filter((s) => attempted.has(s.id)))[0];
+  const progress = useProgress();
+  const recommended = progress.next ?? scenarios.filter((s) => !attempted.has(s.id)).concat(scenarios.filter((s) => attempted.has(s.id)))[0];
 
   return (
     <div className="space-y-8">
@@ -50,7 +52,11 @@ export function DashboardView() {
         <Stat label={t.dashboard.statAvailable} value={num(scenarios.length)} />
         <Stat label={t.dashboard.statInProgress} value={hydrated ? num(inProgress.length) : "–"} />
         <Stat label={t.dashboard.statCompleted} value={hydrated ? num(completed.length) : "–"} />
-        <Stat label={t.dashboard.statAverage} value="–" hint={t.dashboard.noScore} />
+        <Stat
+          label={t.dashboard.statAverage}
+          value={progress.prof.average !== null ? num(progress.prof.average) : "–"}
+          hint={progress.prof.average !== null ? `${t.report.band[progress.prof.band!]}${t.common.sep}${p(t.progress.avgHint, Math.min(3, progress.results.length))}` : t.dashboard.noScore}
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-5">
@@ -83,7 +89,13 @@ export function DashboardView() {
         </Card>
         <div className="lg:col-span-2">
           <SectionTitle
-            hint={recommended ? f(t.dashboard.recommendedReason, { difficulty: t.difficulty[recommended.difficulty], focus: t.dimension[recommended.competencyFocus[0]!] }) : undefined}
+            hint={
+              recommended
+                ? progress.prof.focus.length
+                  ? f(t.progress.nextReason, { focus: t.dimension[progress.prof.focus[0]!] })
+                  : f(t.dashboard.recommendedReason, { difficulty: t.difficulty[recommended.difficulty], focus: t.dimension[recommended.competencyFocus[0]!] })
+                : undefined
+            }
           >
             {t.dashboard.recommendedTitle}
           </SectionTitle>
@@ -92,13 +104,17 @@ export function DashboardView() {
       </div>
 
       <Card>
-        <SectionTitle hint={t.dashboard.profileEmpty}>{t.dashboard.profileTitle}</SectionTitle>
+        <SectionTitle hint={progress.prof.dimensionAverages ? f(t.progress.completedOf, { done: new Set(progress.results.map((r) => r.scenario.id)).size, total: scenarios.length }) : t.dashboard.profileEmpty}>
+          {t.dashboard.profileTitle}
+        </SectionTitle>
         <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2">
           {DIMENSIONS.map((d) => (
             <li key={d} className="flex items-center gap-3 text-[13.5px]">
               <Target className="h-4 w-4 shrink-0 text-ink-subtle" aria-hidden />
               <span className="flex-1 text-ink-muted">{t.dimension[d]}</span>
-              <span className="num text-ink-subtle">–</span>
+              <span className={progress.prof.dimensionAverages ? "num font-semibold text-ink" : "num text-ink-subtle"}>
+                {progress.prof.dimensionAverages ? num(progress.prof.dimensionAverages[d]) : "–"}
+              </span>
             </li>
           ))}
         </ul>

@@ -152,3 +152,15 @@ describe("report CSV", () => {
     expect(csv).toMatch(/[\u0600-\u06FF]/); // Arabic text survives
   });
 });
+
+describe("data recovery", () => {
+  it("accepts an exported file and rejects anything else", async () => {
+    const { parseImport } = await import("@/store/sim-store");
+    const attempt = { id: "a1", scenarioId: s.id, scenarioVersion: s.version, createdAt: 1, updatedAt: 2, status: "in_progress", actions: [{ type: "FRAME_PROBLEM", optionId: "f-gap", at: 1 }] };
+    expect(Object.keys(parseImport(JSON.stringify({ app: "ik-lna-simulator", attempts: { a1: attempt } }))!)).toEqual(["a1"]);
+    expect(parseImport("not json")).toBeNull();
+    expect(parseImport(JSON.stringify({ app: "other", attempts: {} }))).toBeNull();
+    const unknown = parseImport(JSON.stringify({ app: "ik-lna-simulator", attempts: { a1: { ...attempt, scenarioId: "nope" } } }));
+    expect(unknown).toEqual({});
+  });
+});

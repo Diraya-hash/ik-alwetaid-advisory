@@ -1,20 +1,30 @@
 "use client";
 
-import { AlertTriangle, Check, Copy, Download, Eye, EyeOff, Trash2 } from "lucide-react";
+import { AlertTriangle, Check, Copy, Download, Eye, EyeOff, Trash2, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/components/i18n-provider";
 import { LanguageToggle, ThemeSwitch } from "@/components/layout/controls";
 import { Button } from "@/components/ui/button";
 import { ConfirmButton } from "@/components/ui/confirm-button";
 import { Card, PageHeader, SectionTitle } from "@/components/ui/primitives";
-import { useSimStore } from "@/store/sim-store";
+import { parseImport, useSimStore } from "@/store/sim-store";
 import { storageAvailable } from "@/store/storage";
 
 /** Sandboxed preview hosts block page-initiated downloads, so only offer one where it works. */
 const CAN_DOWNLOAD = process.env.NEXT_PUBLIC_PREVIEW !== "1";
 
 export function SettingsView() {
-  const { t } = useI18n();
+  const { t, p } = useI18n();
+  const importAttempts = useSimStore((s) => s.importAttempts);
+  const [importMsg, setImportMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const parsed = file.size < 5_000_000 ? parseImport(await file.text()) : null;
+    if (!parsed) return setImportMsg({ ok: false, text: t.settings.importError });
+    setImportMsg({ ok: true, text: p(t.settings.importOk, importAttempts(parsed)) });
+  };
   const attempts = useSimStore((s) => s.attempts);
   const resetAll = useSimStore((s) => s.resetAll);
   const [done, setDone] = useState(false);
@@ -99,6 +109,17 @@ export function SettingsView() {
             </div>
           )}
           {done && <p role="status" className="mt-3 text-[13px] text-ink-muted">{t.settings.resetDone}</p>}
+          <div className="mt-5 border-t border-line pt-4">
+            <p className="mb-2 text-[12.5px] text-ink-subtle">{t.settings.importHint}</p>
+            <label htmlFor="import-file" className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-line-strong bg-surface px-4 text-sm font-medium text-ink hover:bg-surface-2 focus-within:ring-2 focus-within:ring-primary">
+              <Upload className="h-4 w-4" aria-hidden />
+              {t.settings.import}
+              <input id="import-file" type="file" accept="application/json,.json" onChange={onImport} className="sr-only" />
+            </label>
+            {importMsg && (
+              <p role="status" className={importMsg.ok ? "mt-2 text-[13px] text-primary" : "mt-2 text-[13px] text-danger"}>{importMsg.text}</p>
+            )}
+          </div>
         </Card>
       </div>
     </>

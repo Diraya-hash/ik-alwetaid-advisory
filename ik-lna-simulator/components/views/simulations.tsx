@@ -8,13 +8,16 @@ import { Button } from "@/components/ui/button";
 import { ConfirmButton } from "@/components/ui/confirm-button";
 import { Badge, EmptyState, Meter, PageHeader } from "@/components/ui/primitives";
 import { useHydrated, useSimStore } from "@/store/sim-store";
+import { useProgress } from "@/components/views/info-pages";
 
 export function SimulationsView() {
-  const { t, l, f, p, date, href } = useI18n();
+  const { t, l, f, p, num, date, href } = useI18n();
   const hydrated = useHydrated();
   const attempts = useSimStore((s) => s.attempts);
   const deleteAttempt = useSimStore((s) => s.deleteAttempt);
   const list = Object.values(attempts).sort((a, b) => b.updatedAt - a.updatedAt);
+  const { results } = useProgress();
+  const resultOf = (id: string) => results.find((r) => r.attempt.id === id);
 
   // Attempt numbers are per scenario, in creation order.
   const numberOf = (id: string, scenarioId: string) =>
@@ -55,7 +58,21 @@ export function SimulationsView() {
                   <p className="mt-2 text-[11.5px] text-ink-subtle">{f(t.common.started, { date: date(a.createdAt) })}{t.common.sep}{f(t.common.updated, { date: date(a.updatedAt) })}</p>
                 </div>
                 <div className="flex shrink-0 flex-wrap items-center gap-2">
-                  <Button href={href(`/simulate?attempt=${a.id}`)}>{t.common.resume}</Button>
+                  {resultOf(a.id) ? (
+                    <>
+                      <span className="me-2 text-end">
+                        <span className="num block text-2xl font-semibold text-primary">{num(resultOf(a.id)!.result.overall)}</span>
+                        {resultOf(a.id)!.delta !== null && (
+                          <span className="num block text-[11.5px] text-ink-subtle">
+                            {f(t.progress.vsPrevious, { delta: `${resultOf(a.id)!.delta! >= 0 ? "+" : "−"}${num(Math.abs(resultOf(a.id)!.delta!))}` })}
+                          </span>
+                        )}
+                      </span>
+                      <Button href={href(`/report?attempt=${a.id}`)}>{t.progress.viewReport}</Button>
+                    </>
+                  ) : (
+                    <Button href={href(`/simulate?attempt=${a.id}`)}>{t.common.resume}</Button>
+                  )}
                   <ConfirmButton question={t.simulations.deleteConfirm} onConfirm={() => deleteAttempt(a.id)} label={`${t.common.delete}: ${l(sc.title)}`}>
                     <Trash2 className="h-4 w-4" aria-hidden />
                   </ConfirmButton>
