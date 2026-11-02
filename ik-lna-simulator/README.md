@@ -7,21 +7,22 @@ professionals practise diagnosing organisational performance problems before rec
 interventions. The architecture and roadmap are in
 [`../docs/ik-lna-simulator/00-proposal.md`](../docs/ik-lna-simulator/00-proposal.md).
 
-## Status: Phase 1
+## Status: feature-complete release candidate
 
 | Area | State |
 |---|---|
-| IK-branded shell, 8-section navigation | ✅ |
-| Arabic (RTL) & English (LTR), language switch preserves page and progress | ✅ |
-| Light / Dark / System theme, persisted | ✅ |
-| Scenario Library with filters (difficulty, category, complexity, duration, competency) | ✅ |
-| Simulation engine: event-sourced reducer, conditions, hours budget, openness, challenge-with-evidence | ✅ |
-| Stage 1 (Strategic Context, ending in a required problem-framing decision) and Stage 2 (Stakeholder Discovery) playable | ✅ |
-| Evidence board with provenance labels; user hypotheses | ✅ |
-| Local-first persistence, versioned, with JSON export and reset | ✅ |
-| Stages 3–6, scoring, debriefs, reports, analytics | ⏳ Phases 3–4 (shown as unavailable in the UI, never faked) |
-| Scenario library | 1 pilot scenario (Foundation, *The Accuracy Problem* v2): 6 stakeholders incl. COO, 4 true causes across technology, governance, structure and skill |
-| Single-file preview build for sandboxed hosting (hash routing, same components) | ✅ `npm run build:preview` |
+| IK-branded shell, 8-section navigation, Light / Dark / System theme | ✅ |
+| Arabic (RTL) and English (LTR) at parity; language switch keeps page and progress | ✅ |
+| All six stages playable: context and framing, stakeholder discovery, diagnosis, capability assessment, solution architecture, impact measurement | ✅ |
+| Transparent 8-dimension scoring with named criteria, anti-gaming rules and bands | ✅ |
+| 13-section executive report, print-to-PDF, CSV export, replay | ✅ |
+| Insights, analytics (score history chart), development profile and next-scenario recommendations | ✅ |
+| 10 scenarios: 3 Foundation, 4 Intermediate, 3 Advanced | ✅ |
+| Local-first persistence with validated import/export, reset and privacy page | ✅ (single browser; not multi-user) |
+| Security headers and CSP via `vercel.json` | ✅ |
+
+Full report: [`../docs/ik-lna-simulator/05-production-readiness.md`](../docs/ik-lna-simulator/05-production-readiness.md).
+Adding scenarios: [`../docs/ik-lna-simulator/06-scenario-authoring-guide.md`](../docs/ik-lna-simulator/06-scenario-authoring-guide.md).
 
 **Brand:** colours follow the approved IK palette (`styles/tokens.css`). The `IK` mark in
 `components/layout/logo.tsx` is typographic until a final logo is approved; the Canva
@@ -33,6 +34,7 @@ interventions. The architecture and roadmap are in
 npm install
 npm run dev          # http://localhost:3000 → redirects to /en or /ar
 npm run verify       # typecheck, unit tests, contrast audit, static build, end-to-end checks
+node scripts/e2e-full.mjs   # six-stage playthrough, report, CSV, axe, all 10 scenarios, production CSP
 npm run build:preview && node scripts/test-preview.mjs   # single-file preview + its checks
 ```
 
@@ -44,7 +46,7 @@ npm run build:preview && node scripts/test-preview.mjs   # single-file preview +
 app/[locale]/…            routes (en | ar); html lang/dir set per locale
 components/views/         one view per page; no scenario logic in components
 components/sim/           simulation workspace (stages, interviews, evidence board)
-engine/                   pure TypeScript: types, Zod schema + integrity checks, conditions, reducer
+engine/                   pure TypeScript: types, Zod schema + integrity checks, conditions, reducer, scoring
 content/scenarios/        bilingual scenario data, the single source of scenario facts
 i18n/                     typed UI dictionaries (ar must match en's shape) with plural support
 store/                    Zustand store + safe storage adapter (falls back to memory)
@@ -57,9 +59,9 @@ scripts/                  contrast audit; end-to-end checks across ar/en × ligh
 so it is deterministic, replayable and testable without the UI. `check()` explains why an action
 is rejected (insufficient hours, locked stage, unavailable question…).
 
-**Scenario authoring.** Add a file under `content/scenarios/` and register it in `index.ts`.
-`npm test` validates every scenario: both languages present, every referenced id exists, every
-evidence item is reachable, and the budget forces prioritisation.
+**Scenario authoring.** See the authoring guide. `npm test` validates every scenario (both languages,
+referential integrity, reachability, budget pressure) and plays it with a simulated expert and a
+training-first order-taker to prove it is solvable and that shortcuts score low.
 
 **Bilingual rules.** Use logical Tailwind utilities (`ms-`, `pe-`, `start-`…); a test rejects
 physical `ml-`/`left-` classes. Counts use `p()` (Intl plural rules: Arabic has six forms).
