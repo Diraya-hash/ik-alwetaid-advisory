@@ -1,0 +1,71 @@
+/*
+ * IK design tokens, built from the approved IK palette:
+ * Deep Navy #0B1F3A · Dark Navy #071426 · Primary Blue #1464F4 · Bright Blue #2F80FF
+ * Light Blue #5BA7FF · Soft Blue #B9DDFF · Background #EAF4FF · White #FFFFFF.
+ * Intermediate shades are mixes of these colours only (for borders and secondary text).
+ * Bright Blue is decorative only (below AA for text on white). Semantic colours
+ * (claim, assumption, danger, warning) are functional, not brand.
+ * Values are RGB channels so Tailwind can apply alpha.
+ */
+:root {
+  --bg: 234 244 255; /* #EAF4FF */
+  --surface: 255 255 255; /* #FFFFFF */
+  --surface-2: 244 250 255; /* #F4FAFF */
+  --surface-3: 234 244 255; /* #EAF4FF */
+  --border: 216 236 255; /* #D8ECFF */
+  --border-strong: 156 200 248; /* #9CC8F8 */
+  --text: 11 31 58; /* #0B1F3A */
+  --text-muted: 60 76 97; /* #3C4C61 */
+  --text-subtle: 89 103 121; /* #596779 */
+  --primary: 20 100 244; /* #1464F4 */
+  --primary-hover: 18 83 198; /* #1253C6 */
+  --primary-fg: 255 255 255; /* #FFFFFF */
+  --primary-soft: 234 244 255; /* #EAF4FF */
+  --primary-soft-fg: 16 69 160; /* #1045A0 */
+  --navy: 11 31 58; /* #0B1F3A */
+  --navy-fg: 234 244 255; /* #EAF4FF */
+  --fact: 20 100 244; /* #1464F4 */            --fact-soft: 234 244 255; /* #EAF4FF */
+  --claim: 154 88 8;            --claim-soft: 253 241 222;
+  --assumption: 109 64 191;     --assumption-soft: 239 232 252;
+  --system: 71 85 105;          --system-soft: 234 238 244;
+
+  --danger: 185 28 28;          --danger-soft: 253 230 230;
+  --warning: 154 88 8;          --warning-soft: 253 241 222;
+  --accent: 47 128 255; /* #2F80FF */
+  --shadow: 11 31 58;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 7 20 38; /* #071426 */
+  --surface: 11 31 58; /* #0B1F3A */
+  --surface-2: 12 39 80; /* #0C2750 */
+  --surface-3: 13 46 99; /* #0D2E63 */
+  --border: 27 58 97; /* #1B3A61 */
+  --border-strong: 37 75 121; /* #254B79 */
+  --text: 234 244 255; /* #EAF4FF */
+  --text-muted: 185 221 255; /* #B9DDFF */
+  --text-subtle: 136 168 200; /* #88A8C8 */
+  --primary: 91 167 255; /* #5BA7FF */
+  --primary-hover: 185 221 255; /* #B9DDFF */
+  --primary-fg: 7 20 38; /* #071426 */
+  --primary-soft: 14 52 114; /* #0E3472 */
+  --primary-soft-fg: 185 221 255; /* #B9DDFF */
+  --navy: 11 31 58; /* #0B1F3A */
+  --navy-fg: 234 244 255; /* #EAF4FF */
+
+  --fact: 91 167 255; /* #5BA7FF */          --fact-soft: 14 52 114; /* #0E3472 */
+  --claim: 240 184 102;         --claim-soft: 62 44 16;
+  --assumption: 186 160 247;    --assumption-soft: 46 34 82;
+  --system: 160 176 200;        --system-soft: 30 42 62;
+
+  --danger: 248 136 136;        --danger-soft: 72 22 28;
+  --warning: 240 184 102;       --warning-soft: 62 44 16;
+  --accent: 47 128 255; /* #2F80FF */
+  --shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+/* Typography per script */
+html[lang="en"] { --font-sans: "Inter Variable", "Inter", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif; --tracking-tight: -0.022em; }
+html[lang="ar"] { --font-sans: "IBM Plex Sans Arabic", "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif; --tracking-tight: 0; }

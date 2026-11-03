@@ -1,0 +1,4 @@
+# Static export. In Netlify, set the site's base directory to `ik-lna-simulator`.
+[build]
+  command = "npm run build"
+  publish = "out"
