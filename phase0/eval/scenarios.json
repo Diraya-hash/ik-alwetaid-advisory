@@ -1,0 +1,2216 @@
+{
+ "version": "0.1.0",
+ "authored": "2026-11-19",
+ "author_note": "Authored by the design team (AI-assisted). NOT yet reviewed by an independent SME. Same team authored the recommendation seed matrices, so oracle-mode results are in-sample (see doc 11 §7).",
+ "fields": {
+  "gold.slots": "Ground-truth context signals a correct diagnosis should extract (used for the oracle-mode recommender test and to grade LLM extraction).",
+  "expected.recommendation.ideal": "Approaches an expert would rank first. Top-1 is 'acceptable' if it is in ideal ∪ acceptable.",
+  "expected.recommendation.unacceptable": "Recommending any of these in the top 3 is a hard failure.",
+  "expected.must_not_be_verified": "Statements that are hearsay or opinion in the text; a diagnosis must not present them as established facts."
+ },
+ "scenarios": [
+  {
+   "id": "ORG-01",
+   "category": "organisational_restructuring",
+   "language": "en",
+   "title": "Merged directorates with duplicated roles",
+   "text": "Six months ago our authority merged the Planning Directorate and the Performance Directorate into one Strategy & Performance Sector. We now have two deputy directors doing overlapping jobs, three teams that each produce a monthly KPI report, and staff who don't know whether to send approvals to the old directorate heads or the new sector head. Approvals that used to take two days now take about a week, and two senior analysts resigned last month citing 'confusion'. The sector head wants a clear structure proposal for the executive committee in four weeks.",
+   "expected": {
+    "domains_any_of": [
+     "ORG.STRUCTURE",
+     "ORG.ACCOUNTABILITY"
+    ],
+    "domains_acceptable": [
+     "OPS.PERFORMANCE",
+     "PPL.ENGAGEMENT"
+    ],
+    "stage_any_of": [
+     "DESIGN_ORGANISATION"
+    ],
+    "scope_any_of": [
+     "department",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "two deputy directors with overlapping roles",
+     "three duplicate KPI reports",
+     "unclear approval routing",
+     "approval time ~2 days → ~1 week",
+     "two resignations",
+     "deadline: proposal in four weeks"
+    ],
+    "must_not_be_verified": [
+     "resignations were caused by confusion (stated reason, not established cause)"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_org_chart"
+     ],
+     "acceptable": [
+      "fw_op_model_canvas",
+      "fw_stakeholder_map",
+      "fw_cause_effect"
+     ],
+     "unacceptable": [
+      "fw_pest_steeple",
+      "fw_gantt",
+      "fw_risk_matrix"
+     ]
+    },
+    "chain_hint": "Org Chart (as-is) → Operating Model Canvas or Strategic Options → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "DESIGN_ORGANISATION",
+      "secondary": "ALIGN_PEOPLE"
+     },
+     "domains": [
+      "ORG.STRUCTURE",
+      "ORG.ACCOUNTABILITY"
+     ],
+     "scope": "department",
+     "goal": 1,
+     "impact": 1,
+     "stakeholders": 4,
+     "constraints": true,
+     "recurrence": "chronic",
+     "causal_complexity": 3,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "reporting_lines",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "ORG-02",
+   "category": "organisational_restructuring",
+   "language": "ar",
+   "title": "تصميم مركز الخدمات المشتركة",
+   "text": "مجموعتنا تضم أربع شركات تابعة، ولكل شركة إدارة مالية وموارد بشرية ومشتريات مستقلة. قرر مجلس الإدارة إنشاء مركز خدمات مشتركة خلال العام القادم لتوحيد هذه الوظائف. لم نحدد بعد: أين سيكون مقر المركز، وما الأنظمة التي سنعتمدها (لدينا ثلاثة أنظمة ERP مختلفة)، وكيف ستُقدَّم الخدمة للشركات التابعة، وهل نستعين بمورد خارجي لبعض الأعمال. الرئيس التنفيذي يريد تصورًا متكاملًا لنموذج التشغيل قبل اعتماد الميزانية في الربع القادم.",
+   "expected": {
+    "domains_any_of": [
+     "ORG.OPERATING_MODEL"
+    ],
+    "domains_acceptable": [
+     "ORG.STRUCTURE",
+     "STR.DIRECTION"
+    ],
+    "stage_any_of": [
+     "DESIGN_ORGANISATION"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "multi_entity_ecosystem"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "four subsidiaries with separate finance/HR/procurement",
+     "shared services centre decided by the board",
+     "open questions: location, systems (three ERPs), service delivery, outsourcing",
+     "deadline: before budget approval next quarter"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_op_model_canvas"
+     ],
+     "acceptable": [
+      "fw_org_chart",
+      "fw_sipoc",
+      "fw_stakeholder_map",
+      "cap_strategic_options",
+      "fw_project_charter"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_cause_effect",
+      "fw_pest_steeple"
+     ]
+    },
+    "chain_hint": "Operating Model Canvas → Strategic Options (sourcing/location) → Project Charter"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "DESIGN_ORGANISATION",
+      "secondary": "GENERATE_OPTIONS"
+     },
+     "domains": [
+      "ORG.OPERATING_MODEL"
+     ],
+     "scope": "multi_entity_ecosystem",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 3,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": true,
+     "external_focus": false,
+     "structure_focus": "delivery_model",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "ORG-03",
+   "category": "organisational_restructuring",
+   "language": "en",
+   "title": "Restructuring announced, leadership not aligned",
+   "text": "We announced a new regional structure for our sales organisation last month: four regions instead of seven. The structure itself is approved. The problem is people. Two of the regional directors who lost their regions are openly questioning the decision in meetings, the HR director thinks we moved too fast, and frontline teams are hearing rumours about job cuts that are not true. The CEO asked me to make sure the key people are on board before the go-live in eight weeks.",
+   "expected": {
+    "domains_any_of": [
+     "PPL.ADOPTION",
+     "PRJ.STAKEHOLDERS"
+    ],
+    "domains_acceptable": [
+     "ORG.STRUCTURE",
+     "PPL.ENGAGEMENT"
+    ],
+    "stage_any_of": [
+     "ALIGN_PEOPLE"
+    ],
+    "scope_any_of": [
+     "department",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "structure approved (seven → four regions)",
+     "two displaced regional directors opposing",
+     "HR director concerned about pace",
+     "untrue rumours of job cuts",
+     "go-live in eight weeks"
+    ],
+    "must_not_be_verified": [
+     "the rumours are untrue (user's claim, unverified)"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_stakeholder_map"
+     ],
+     "acceptable": [
+      "fw_action_plan",
+      "fw_project_charter",
+      "fw_risk_matrix"
+     ],
+     "unacceptable": [
+      "fw_org_chart",
+      "fw_pest_steeple",
+      "fw_vsm",
+      "fw_bpmn"
+     ]
+    },
+    "chain_hint": "Stakeholder Map → Action Plan (engagement actions)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "ALIGN_PEOPLE",
+      "secondary": "PLAN_EXECUTION"
+     },
+     "domains": [
+      "PPL.ADOPTION",
+      "PRJ.STAKEHOLDERS"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 4,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PROC-01",
+   "category": "process_inefficiency",
+   "language": "ar",
+   "title": "تأخر إنجاز طلبات التراخيص",
+   "text": "في إدارة التراخيص لدينا، يستغرق إنجاز طلب الترخيص التجاري ٤٥ يومًا في المتوسط، بينما المستهدف ١٥ يومًا فقط. ارتفعت الشكاوى بنسبة ٣٠٪ هذا العام. الموظفون يقولون إن النظام بطيء، لكنني لست متأكدًا أن هذا هو السبب الحقيقي، فالطلب يمر على أربع جهات داخلية قبل الاعتماد. أريد أن أفهم أين تكمن المشكلة فعلًا قبل أن نطلب ميزانية لنظام جديد.",
+   "expected": {
+    "domains_any_of": [
+     "OPS.PERFORMANCE"
+    ],
+    "domains_acceptable": [
+     "CX.SERVICE_LEVEL",
+     "OPS.HANDOFFS"
+    ],
+    "stage_any_of": [
+     "FIND_ROOT_CAUSE"
+    ],
+    "scope_any_of": [
+     "department",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "average 45 days vs 15-day target",
+     "complaints +30%",
+     "four internal parties before approval",
+     "staff blame the system",
+     "user doubts the system is the real cause"
+    ],
+    "must_not_be_verified": [
+     "the system is slow / is the cause"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_cause_effect"
+     ],
+     "acceptable": [
+      "fw_vsm",
+      "fw_five_whys",
+      "fw_sipoc",
+      "fw_bpmn"
+     ],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_gantt",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "Cause & Effect → 5 Whys → Strategic Options → Impact/Effort → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "FIND_ROOT_CAUSE",
+      "secondary": "MAP_CURRENT_STATE"
+     },
+     "domains": [
+      "OPS.PERFORMANCE",
+      "CX.SERVICE_LEVEL"
+     ],
+     "scope": "cross_functional",
+     "goal": 1,
+     "impact": 1,
+     "stakeholders": 2,
+     "constraints": false,
+     "recurrence": "chronic",
+     "causal_complexity": 4,
+     "process_boundaries": true,
+     "steps_known": false,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 1,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PROC-02",
+   "category": "process_inefficiency",
+   "language": "en",
+   "title": "Undocumented purchase request process",
+   "text": "Every department in our company raises purchase requests differently. Some use email, some use a form in SharePoint, and IT uses its own ticketing tool. Finance says they often receive requests without budget codes, and procurement says they don't know when a request is 'officially' submitted. Honestly, nobody can tell me where the process starts and where it ends, or who the customer of the process even is. I want to standardise it.",
+   "expected": {
+    "domains_any_of": [
+     "OPS.PROCESS_DEFINITION"
+    ],
+    "domains_acceptable": [
+     "OPS.HANDOFFS",
+     "OPS.QUALITY"
+    ],
+    "stage_any_of": [
+     "MAP_CURRENT_STATE"
+    ],
+    "scope_any_of": [
+     "cross_functional",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "three different request channels",
+     "requests missing budget codes",
+     "unclear submission point",
+     "boundaries and customer of the process unknown",
+     "goal: standardise"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_sipoc"
+     ],
+     "acceptable": [
+      "fw_bpmn",
+      "fw_stakeholder_map"
+     ],
+     "unacceptable": [
+      "fw_vsm",
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_risk_matrix",
+      "fw_five_whys"
+     ]
+    },
+    "chain_hint": "SIPOC → BPMN → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "MAP_CURRENT_STATE",
+      "secondary": null
+     },
+     "domains": [
+      "OPS.PROCESS_DEFINITION",
+      "OPS.HANDOFFS"
+     ],
+     "scope": "cross_functional",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 3,
+     "constraints": false,
+     "recurrence": "chronic",
+     "causal_complexity": 2,
+     "process_boundaries": false,
+     "steps_known": false,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PROC-03",
+   "category": "process_inefficiency",
+   "language": "en",
+   "title": "Order fulfilment lead time with waiting between steps",
+   "text": "Our warehouse order fulfilment process has 11 steps, from order release to dispatch, and everyone agrees on what they are. Customers wait 6 days on average, but when we looked at the timestamps in the WMS for 400 orders, the actual hands-on work adds up to less than 4 hours. Orders sit waiting between picking, quality check and packing. We want to cut lead time to 2 days without adding staff.",
+   "expected": {
+    "domains_any_of": [
+     "OPS.WASTE",
+     "OPS.PERFORMANCE"
+    ],
+    "domains_acceptable": [
+     "CX.SERVICE_LEVEL"
+    ],
+    "stage_any_of": [
+     "MAP_CURRENT_STATE",
+     "FIND_ROOT_CAUSE"
+    ],
+    "scope_any_of": [
+     "department",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "11 agreed steps",
+     "6-day average lead time",
+     "<4 hours touch time from WMS timestamps (400 orders)",
+     "waiting between picking, QC, packing",
+     "goal: 2 days without extra staff"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_vsm"
+     ],
+     "acceptable": [
+      "fw_bpmn",
+      "fw_cause_effect",
+      "fw_impact_effort"
+     ],
+     "unacceptable": [
+      "fw_sipoc",
+      "fw_swot",
+      "fw_stakeholder_map",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "VSM → Strategic Options → Impact/Effort → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "MAP_CURRENT_STATE",
+      "secondary": "FIND_ROOT_CAUSE"
+     },
+     "domains": [
+      "OPS.WASTE",
+      "OPS.PERFORMANCE"
+     ],
+     "scope": "department",
+     "goal": 1,
+     "impact": 1,
+     "stakeholders": 1,
+     "constraints": true,
+     "recurrence": "chronic",
+     "causal_complexity": 3,
+     "process_boundaries": true,
+     "steps_known": true,
+     "measurable_symptom": true,
+     "data_available": "good",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RCA-01",
+   "category": "root_cause_analysis",
+   "language": "en",
+   "title": "Insurance claim rejections at a clinic chain",
+   "text": "Across our 9 clinics, about 8% of insurance claims are rejected on first submission, compared with roughly 3% at similar providers. Rejections cost us resubmission effort and delay cash by 40+ days. The reasons on the rejection letters vary: wrong diagnosis codes, missing pre-authorisation, eligibility expired, duplicate submissions. Some managers blame the new billing system, others blame reception staff turnover. I need to find out what is really driving this.",
+   "expected": {
+    "domains_any_of": [
+     "OPS.QUALITY"
+    ],
+    "domains_acceptable": [
+     "FIN.REVENUE",
+     "FIN.COST",
+     "OPS.PERFORMANCE"
+    ],
+    "stage_any_of": [
+     "FIND_ROOT_CAUSE"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "8% first-pass rejection vs ~3% benchmark",
+     "cash delayed 40+ days",
+     "multiple rejection reasons (codes, pre-auth, eligibility, duplicates)",
+     "competing blame: billing system vs reception turnover"
+    ],
+    "must_not_be_verified": [
+     "the billing system is the cause",
+     "reception staff turnover is the cause"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_cause_effect"
+     ],
+     "acceptable": [
+      "fw_five_whys",
+      "fw_sipoc",
+      "fw_bpmn"
+     ],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_org_chart",
+      "fw_gantt"
+     ]
+    },
+    "chain_hint": "Cause & Effect → 5 Whys on top branches → Strategic Options → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "FIND_ROOT_CAUSE",
+      "secondary": null
+     },
+     "domains": [
+      "OPS.QUALITY",
+      "FIN.REVENUE"
+     ],
+     "scope": "organisation",
+     "goal": 0.5,
+     "impact": 1,
+     "stakeholders": 3,
+     "constraints": false,
+     "recurrence": "chronic",
+     "causal_complexity": 4,
+     "process_boundaries": true,
+     "steps_known": true,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RCA-02",
+   "category": "root_cause_analysis",
+   "language": "ar",
+   "title": "تقرير يومي يتأخر بسبب مهمة ليلية",
+   "text": "التقرير التشغيلي اليومي الذي يصل للإدارة العليا الساعة الثامنة صباحًا تأخر ١١ مرة خلال الشهرين الماضيين. فريق تقنية المعلومات وجد أن مهمة تحميل البيانات الليلية تفشل في كل مرة يتأخر فيها النسخ الاحتياطي عن موعده. نعرف أين يحدث الخطأ تقريبًا، لكننا نريد الوصول إلى السبب الجذري حتى لا يتكرر.",
+   "expected": {
+    "domains_any_of": [
+     "OPS.QUALITY",
+     "OPS.PERFORMANCE"
+    ],
+    "domains_acceptable": [
+     "RSK.CONTINUITY"
+    ],
+    "stage_any_of": [
+     "FIND_ROOT_CAUSE"
+    ],
+    "scope_any_of": [
+     "team",
+     "department"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "8am report late 11 times in two months",
+     "nightly load job fails when backup runs late",
+     "single known failure point",
+     "goal: prevent recurrence"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_five_whys"
+     ],
+     "acceptable": [
+      "fw_cause_effect",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_stakeholder_map",
+      "fw_org_chart",
+      "fw_op_model_canvas"
+     ]
+    },
+    "chain_hint": "5 Whys → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "FIND_ROOT_CAUSE",
+      "secondary": null
+     },
+     "domains": [
+      "OPS.QUALITY"
+     ],
+     "scope": "team",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": false,
+     "recurrence": "recurring",
+     "causal_complexity": 1,
+     "process_boundaries": true,
+     "steps_known": true,
+     "measurable_symptom": true,
+     "data_available": "good",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RCA-03",
+   "category": "root_cause_analysis",
+   "language": "en",
+   "title": "Rising B2B churn",
+   "text": "Churn in our SME business segment rose from 9% to 15% over the last four quarters. Sales thinks competitors are undercutting on price, customer care thinks our onboarding is confusing, and the product team points to outages in Q2. The exit survey has only 60 responses. Leadership wants to understand why customers are leaving before we decide anything.",
+   "expected": {
+    "domains_any_of": [
+     "CX.EXPERIENCE",
+     "FIN.REVENUE"
+    ],
+    "domains_acceptable": [
+     "STR.POSITION",
+     "CX.SERVICE_LEVEL"
+    ],
+    "stage_any_of": [
+     "FIND_ROOT_CAUSE"
+    ],
+    "scope_any_of": [
+     "cross_functional",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "churn 9% → 15% over four quarters",
+     "three competing hypotheses (price, onboarding, outages)",
+     "thin exit-survey evidence (60 responses)",
+     "decide only after understanding causes"
+    ],
+    "must_not_be_verified": [
+     "competitors undercut on price",
+     "onboarding is confusing",
+     "Q2 outages caused churn"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_cause_effect"
+     ],
+     "acceptable": [
+      "fw_five_whys",
+      "fw_swot"
+     ],
+     "unacceptable": [
+      "fw_gantt",
+      "fw_org_chart",
+      "fw_bpmn",
+      "fw_project_charter"
+     ]
+    },
+    "chain_hint": "Cause & Effect → Strategic Options → Impact/Effort"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "FIND_ROOT_CAUSE",
+      "secondary": null
+     },
+     "domains": [
+      "CX.EXPERIENCE",
+      "FIN.REVENUE"
+     ],
+     "scope": "cross_functional",
+     "goal": 0.5,
+     "impact": 1,
+     "stakeholders": 4,
+     "constraints": false,
+     "recurrence": "chronic",
+     "causal_complexity": 4,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RSK-01",
+   "category": "risk_assessment",
+   "language": "en",
+   "title": "Core banking migration risks",
+   "text": "We are replacing our core banking system in nine months. The vendor is selected and the programme is funded. The board risk committee asked for a clear view of what could go wrong — data migration, regulatory reporting during cut-over, staff readiness, vendor delays — and how bad each would be, so they can decide where to put contingency budget.",
+   "expected": {
+    "domains_any_of": [
+     "RSK.ASSESSMENT"
+    ],
+    "domains_acceptable": [
+     "PRJ.DELIVERY",
+     "RSK.CONTINUITY",
+     "RSK.COMPLIANCE"
+    ],
+    "stage_any_of": [
+     "MANAGE_RISK"
+    ],
+    "scope_any_of": [
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "core banking replacement in nine months",
+     "vendor selected, funded",
+     "risk areas: data migration, regulatory reporting at cut-over, staff readiness, vendor delays",
+     "board needs severity to allocate contingency"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_risk_matrix"
+     ],
+     "acceptable": [
+      "fw_project_charter",
+      "fw_stakeholder_map",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_swot",
+      "fw_org_chart",
+      "fw_vsm"
+     ]
+    },
+    "chain_hint": "Risk Matrix → Action Plan (mitigations)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "MANAGE_RISK",
+      "secondary": null
+     },
+     "domains": [
+      "RSK.ASSESSMENT",
+      "PRJ.DELIVERY"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": true,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RSK-02",
+   "category": "risk_assessment",
+   "language": "ar",
+   "title": "مخاطر تنظيم فعالية دولية",
+   "text": "نستضيف مؤتمرًا دوليًا في الرياض بعد خمسة أشهر بحضور متوقع يبلغ ٤٠٠٠ مشارك و٦٠ متحدثًا. لدينا قلق من عدة جوانب: تأخر الموردين في التجهيزات، وصعوبات التأشيرات لبعض المتحدثين، والطقس في أيام الفعالية الخارجية، والأمن، والاعتماد الكبير على شركة تنظيم واحدة. نحتاج إلى تقييم هذه المخاطر وتحديد أولوياتها وخطط التعامل معها.",
+   "expected": {
+    "domains_any_of": [
+     "RSK.ASSESSMENT"
+    ],
+    "domains_acceptable": [
+     "PRJ.DELIVERY",
+     "RSK.CONTINUITY",
+     "PRJ.PLANNING"
+    ],
+    "stage_any_of": [
+     "MANAGE_RISK"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional",
+     "multi_entity_ecosystem"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "event in five months, ~4,000 attendees, 60 speakers",
+     "risks: supplier delays, visas, weather, security, single organiser dependency",
+     "need assessment, priorities and responses"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_risk_matrix"
+     ],
+     "acceptable": [
+      "fw_action_plan",
+      "fw_stakeholder_map",
+      "fw_project_charter"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_cause_effect",
+      "fw_swot",
+      "fw_org_chart",
+      "fw_vsm"
+     ]
+    },
+    "chain_hint": "Risk Matrix → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "MANAGE_RISK",
+      "secondary": "PLAN_EXECUTION"
+     },
+     "domains": [
+      "RSK.ASSESSMENT"
+     ],
+     "scope": "multi_entity_ecosystem",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 3,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": true,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "RSK-03",
+   "category": "risk_assessment",
+   "language": "ar",
+   "title": "أولويات معالجة ملاحظات التدقيق",
+   "text": "أصدر التدقيق الداخلي ١٤ ملاحظة على إدارة المشتريات تتعلق بالامتثال، منها غياب الفصل بين المهام في اعتماد أوامر الشراء، وعقود منتهية ما زالت تُصرف عليها دفعات، وضعف توثيق المفاضلة بين العروض. لدينا فريق صغير ولا نستطيع معالجة كل الملاحظات دفعة واحدة. نحتاج أن نعرف أيها الأخطر وما الذي نبدأ به.",
+   "expected": {
+    "domains_any_of": [
+     "RSK.COMPLIANCE"
+    ],
+    "domains_acceptable": [
+     "RSK.ASSESSMENT",
+     "DEC.PRIORITISATION"
+    ],
+    "stage_any_of": [
+     "MANAGE_RISK",
+     "PRIORITISE_DECIDE"
+    ],
+    "scope_any_of": [
+     "department"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "14 audit findings in procurement",
+     "examples: segregation of duties, payments on expired contracts, weak bid evaluation documentation",
+     "small team, cannot fix all at once",
+     "need severity and priority"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_risk_matrix"
+     ],
+     "acceptable": [
+      "fw_impact_effort",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_org_chart",
+      "fw_vsm"
+     ]
+    },
+    "chain_hint": "Risk Matrix → Impact/Effort (remediation actions) → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "MANAGE_RISK",
+      "secondary": "PRIORITISE_DECIDE"
+     },
+     "domains": [
+      "RSK.COMPLIANCE"
+     ],
+     "scope": "department",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "good",
+     "options_listed": 14,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": true,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STK-01",
+   "category": "stakeholder_management",
+   "language": "ar",
+   "title": "منصة رقمية بين إدارات متعارضة",
+   "text": "نطلق منصة رقمية موحدة لطلبات الخدمات الداخلية تشمل ست إدارات. مديرا إدارتي الموارد البشرية والمالية يدعمان المشروع بقوة، لكن مدير الخدمات المساندة — وهو صاحب نفوذ كبير لدى الرئيس التنفيذي — يرى أن نظامه الحالي كافٍ، ومدير تقنية المعلومات قلق من عبء الدعم. موعد الإطلاق بعد ثلاثة أشهر وأخشى أن تتعطل الموافقات.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "domains_acceptable": [
+     "PPL.ADOPTION"
+    ],
+    "stage_any_of": [
+     "ALIGN_PEOPLE"
+    ],
+    "scope_any_of": [
+     "cross_functional",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "platform across six departments",
+     "HR and finance heads supportive",
+     "influential support-services head opposed",
+     "IT head concerned about support load",
+     "launch in three months; risk to approvals"
+    ],
+    "must_not_be_verified": [
+     "the support-services head's current system is sufficient"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_stakeholder_map"
+     ],
+     "acceptable": [
+      "fw_project_charter",
+      "fw_risk_matrix",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_vsm",
+      "fw_pest_steeple",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "Stakeholder Map → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "ALIGN_PEOPLE",
+      "secondary": null
+     },
+     "domains": [
+      "PRJ.STAKEHOLDERS"
+     ],
+     "scope": "cross_functional",
+     "goal": 0.5,
+     "impact": 0.5,
+     "stakeholders": 4,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STK-02",
+   "category": "stakeholder_management",
+   "language": "en",
+   "title": "New CEO, disengaged steering committee",
+   "text": "Our transformation programme lost its sponsor when the CEO changed in September. The new CEO hasn't said whether the programme stays a priority, two steering committee members have skipped the last three meetings, and the finance director is asking to cut the budget by 25%. I lead the PMO and need to rebuild support and decide who to engage first.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "domains_acceptable": [
+     "STR.EXECUTION",
+     "PRJ.DELIVERY"
+    ],
+    "stage_any_of": [
+     "ALIGN_PEOPLE"
+    ],
+    "scope_any_of": [
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "sponsor lost with CEO change",
+     "new CEO's position unknown",
+     "two steering members absent three meetings",
+     "finance asks 25% budget cut",
+     "need engagement priorities"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_stakeholder_map"
+     ],
+     "acceptable": [
+      "fw_project_charter",
+      "fw_action_plan",
+      "fw_risk_matrix"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_vsm",
+      "fw_bpmn",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "Stakeholder Map → Project Charter (re-baseline) → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "ALIGN_PEOPLE",
+      "secondary": "PLAN_EXECUTION"
+     },
+     "domains": [
+      "PRJ.STAKEHOLDERS",
+      "STR.EXECUTION"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 4,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STK-03",
+   "category": "stakeholder_management",
+   "language": "en",
+   "title": "Factory expansion with community and regulators",
+   "text": "We plan to expand our food-processing plant on the edge of a residential area. Residents complained last year about truck traffic at night, the municipality must approve a new access road, and the environmental regulator will review our wastewater plan. Internally, operations wants to start construction in Q3. I need a plan for managing all these parties so the project is not blocked.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "domains_acceptable": [
+     "RSK.COMPLIANCE",
+     "RSK.ASSESSMENT"
+    ],
+    "stage_any_of": [
+     "ALIGN_PEOPLE"
+    ],
+    "scope_any_of": [
+     "multi_entity_ecosystem",
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "plant expansion near residential area",
+     "resident complaints about night traffic",
+     "municipality approval for access road",
+     "environmental regulator wastewater review",
+     "construction target Q3"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_stakeholder_map"
+     ],
+     "acceptable": [
+      "fw_risk_matrix",
+      "fw_pest_steeple",
+      "fw_project_charter",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_vsm",
+      "fw_org_chart",
+      "fw_sipoc"
+     ]
+    },
+    "chain_hint": "Stakeholder Map → Risk Matrix → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "ALIGN_PEOPLE",
+      "secondary": "MANAGE_RISK"
+     },
+     "domains": [
+      "PRJ.STAKEHOLDERS",
+      "RSK.COMPLIANCE"
+     ],
+     "scope": "multi_entity_ecosystem",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 4,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": true,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STR-01",
+   "category": "strategic_planning",
+   "language": "ar",
+   "title": "استراتيجية خمسية لمجموعة مدارس",
+   "text": "نحن مجموعة مدارس أهلية تضم ١٢ مدرسة. نبدأ إعداد خطتنا الاستراتيجية للسنوات الخمس القادمة. هناك تغيرات كثيرة حولنا: لوائح جديدة من وزارة التعليم، وتغير في التركيبة السكانية للأحياء التي نخدمها، ودخول منصات التعليم الإلكتروني، وارتفاع تكاليف المعلمين. نريد أن نفهم البيئة المحيطة وموقعنا فيها قبل تحديد الأولويات.",
+   "expected": {
+    "domains_any_of": [
+     "STR.ENVIRONMENT",
+     "STR.DIRECTION"
+    ],
+    "domains_acceptable": [
+     "STR.POSITION"
+    ],
+    "stage_any_of": [
+     "UNDERSTAND_CONTEXT"
+    ],
+    "scope_any_of": [
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "12 private schools",
+     "five-year strategy",
+     "external changes: regulation, demographics, e-learning entrants, teacher costs",
+     "understand environment and position before priorities"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_pest_steeple",
+      "fw_swot"
+     ],
+     "acceptable": [
+      "cap_strategic_options",
+      "fw_stakeholder_map"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_gantt",
+      "fw_bpmn",
+      "fw_vsm",
+      "fw_sipoc"
+     ]
+    },
+    "chain_hint": "PEST/STEEPLE → SWOT → Strategic Options → Impact/Effort → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "UNDERSTAND_CONTEXT",
+      "secondary": "GENERATE_OPTIONS"
+     },
+     "domains": [
+      "STR.ENVIRONMENT",
+      "STR.DIRECTION"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": true,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STR-02",
+   "category": "strategic_planning",
+   "language": "en",
+   "title": "Where do we stand against competitors?",
+   "text": "We are a mid-size logistics company in the Eastern Province with 300 trucks. Two new national players entered our market last year with lower prices and app-based booking. We still have long relationships with industrial clients and our own maintenance yards, but our IT is old. The board wants an honest view of where we stand and what we should focus on over the next three years.",
+   "expected": {
+    "domains_any_of": [
+     "STR.POSITION",
+     "STR.DIRECTION"
+    ],
+    "domains_acceptable": [
+     "STR.ENVIRONMENT"
+    ],
+    "stage_any_of": [
+     "UNDERSTAND_CONTEXT"
+    ],
+    "scope_any_of": [
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "300 trucks, Eastern Province",
+     "two new national competitors with lower prices and app booking",
+     "strengths: client relationships, maintenance yards",
+     "weakness: old IT",
+     "three-year focus"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_swot"
+     ],
+     "acceptable": [
+      "fw_pest_steeple",
+      "cap_strategic_options"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_gantt",
+      "fw_bpmn",
+      "fw_sipoc",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "SWOT → Strategic Options → Impact/Effort"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "UNDERSTAND_CONTEXT",
+      "secondary": "GENERATE_OPTIONS"
+     },
+     "domains": [
+      "STR.POSITION"
+     ],
+     "scope": "organisation",
+     "goal": 0.5,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STR-03",
+   "category": "strategic_planning",
+   "language": "en",
+   "title": "Causes known: what should we do?",
+   "text": "Last quarter we ran a root-cause review on churn in our subscription software business and agreed on the two main causes: onboarding takes customers about three weeks, and support tickets take two days on average for a first response. We have a budget of roughly SAR 2 million for next year and a team of 40. What should we do?",
+   "expected": {
+    "domains_any_of": [
+     "DEC.OPTIONS",
+     "STR.DIRECTION"
+    ],
+    "domains_acceptable": [
+     "CX.EXPERIENCE",
+     "CX.SERVICE_LEVEL"
+    ],
+    "stage_any_of": [
+     "GENERATE_OPTIONS"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "causes already agreed: 3-week onboarding, 2-day first response",
+     "budget ~SAR 2M, team of 40",
+     "asks what to do"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "cap_strategic_options"
+     ],
+     "acceptable": [
+      "fw_impact_effort",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_cause_effect",
+      "fw_five_whys",
+      "fw_pest_steeple",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "Strategic Options → Impact/Effort → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "GENERATE_OPTIONS",
+      "secondary": "PRIORITISE_DECIDE"
+     },
+     "domains": [
+      "DEC.OPTIONS",
+      "CX.EXPERIENCE"
+     ],
+     "scope": "organisation",
+     "goal": 0.5,
+     "impact": 0.5,
+     "stakeholders": 1,
+     "constraints": true,
+     "recurrence": "chronic",
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "STR-04",
+   "category": "strategic_planning",
+   "language": "ar",
+   "title": "٢٣ فكرة تحسين وميزانية محدودة",
+   "text": "عقدنا ورشة عمل مع قادة الفروع وخرجنا بـ ٢٣ فكرة لتحسين تجربة العملاء، من تمديد ساعات العمل إلى تطبيق جوال جديد. الميزانية المتاحة لهذا العام لا تكفي إلا لجزء صغير منها، ونحتاج أن نقرر بماذا نبدأ خلال الأسبوعين القادمين.",
+   "expected": {
+    "domains_any_of": [
+     "DEC.PRIORITISATION"
+    ],
+    "domains_acceptable": [
+     "CX.EXPERIENCE",
+     "DEC.OPTIONS"
+    ],
+    "stage_any_of": [
+     "PRIORITISE_DECIDE"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "23 improvement ideas from branch leaders' workshop",
+     "budget covers a small share",
+     "decision needed within two weeks"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_impact_effort"
+     ],
+     "acceptable": [
+      "cap_strategic_options",
+      "fw_action_plan"
+     ],
+     "unacceptable": [
+      "fw_cause_effect",
+      "fw_five_whys",
+      "fw_pest_steeple",
+      "fw_sipoc",
+      "fw_org_chart"
+     ]
+    },
+    "chain_hint": "Impact/Effort → Action Plan"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "PRIORITISE_DECIDE",
+      "secondary": null
+     },
+     "domains": [
+      "DEC.PRIORITISATION",
+      "CX.EXPERIENCE"
+     ],
+     "scope": "organisation",
+     "goal": 0.5,
+     "impact": 0,
+     "stakeholders": 1,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 1,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 23,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PRJ-01",
+   "category": "project_execution",
+   "language": "en",
+   "title": "E-invoicing compliance project with unclear scope",
+   "text": "We must comply with the next wave of ZATCA e-invoicing integration by the date in our notification letter, roughly seven months from now. Finance thinks it is an IT project, IT thinks it is a finance project, and nobody has defined what is in scope — our three billing systems, the branch POS, or just head office. There is no sponsor yet. I've been asked to get this started properly.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.INITIATION"
+    ],
+    "domains_acceptable": [
+     "RSK.COMPLIANCE",
+     "PRJ.STAKEHOLDERS",
+     "ORG.ACCOUNTABILITY"
+    ],
+    "stage_any_of": [
+     "PLAN_EXECUTION"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "regulatory deadline ~7 months",
+     "ownership disputed between finance and IT",
+     "scope undefined (three billing systems, POS, head office)",
+     "no sponsor"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_project_charter"
+     ],
+     "acceptable": [
+      "fw_stakeholder_map",
+      "fw_risk_matrix",
+      "fw_sipoc"
+     ],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_swot",
+      "fw_vsm",
+      "fw_pest_steeple"
+     ]
+    },
+    "chain_hint": "Stakeholder Map → Project Charter → Risk Matrix → Action Plan (Gantt)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "PLAN_EXECUTION",
+      "secondary": "ALIGN_PEOPLE"
+     },
+     "domains": [
+      "PRJ.INITIATION",
+      "RSK.COMPLIANCE"
+     ],
+     "scope": "cross_functional",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 2,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": true,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PRJ-02",
+   "category": "project_execution",
+   "language": "ar",
+   "title": "١٢ إجراءً متفقًا عليها تحتاج خطة",
+   "text": "بعد ورشة مراجعة الأداء اتفقنا على ١٢ إجراءً لتحسين خدمة العملاء في الفروع، مثل إعادة تدريب الموظفين، وتعديل جداول المناوبات، وتحديث نظام الانتظار. المطلوب الآن تحديد المسؤول عن كل إجراء وتواريخ البدء والانتهاء والإجراءات المعتمدة على غيرها، على أن يكتمل كل شيء بنهاية الربع الثاني.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.PLANNING"
+    ],
+    "domains_acceptable": [
+     "CX.SERVICE_LEVEL"
+    ],
+    "stage_any_of": [
+     "PLAN_EXECUTION"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "department",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "12 agreed actions",
+     "need owners, start/end dates, dependencies",
+     "deadline end of Q2"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "ideal": [
+      "fw_action_plan",
+      "fw_gantt"
+     ],
+     "acceptable": [
+      "fw_project_charter",
+      "fw_risk_matrix"
+     ],
+     "unacceptable": [
+      "fw_cause_effect",
+      "fw_five_whys",
+      "fw_swot",
+      "fw_pest_steeple",
+      "cap_strategic_options"
+     ]
+    },
+    "chain_hint": "Action Plan (Gantt view)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "PLAN_EXECUTION",
+      "secondary": null
+     },
+     "domains": [
+      "PRJ.PLANNING"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0,
+     "stakeholders": 1,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 1,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "good",
+     "options_listed": 12,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "PRJ-03",
+   "category": "project_execution",
+   "language": "en",
+   "title": "ERP rollout slipping, mutual blame",
+   "text": "Our ERP rollout has missed three of its last five milestones and go-live has already moved once. Our team says the vendor keeps sending inexperienced consultants; the vendor says our master data is unusable and our process owners don't attend design workshops. The steering committee meets in three weeks and expects a credible explanation and a recovery plan.",
+   "expected": {
+    "domains_any_of": [
+     "PRJ.DELIVERY"
+    ],
+    "domains_acceptable": [
+     "PRJ.STAKEHOLDERS",
+     "OPS.QUALITY"
+    ],
+    "stage_any_of": [
+     "FIND_ROOT_CAUSE",
+     "PLAN_EXECUTION"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional",
+     "multi_entity_ecosystem"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "3 of last 5 milestones missed; go-live moved once",
+     "mutual blame: vendor consultants vs master data and absent process owners",
+     "steering committee in three weeks wants explanation and recovery plan"
+    ],
+    "must_not_be_verified": [
+     "vendor consultants are inexperienced",
+     "master data is unusable",
+     "process owners don't attend"
+    ],
+    "recommendation": {
+     "ideal": [
+      "fw_cause_effect"
+     ],
+     "acceptable": [
+      "fw_five_whys",
+      "fw_action_plan",
+      "fw_risk_matrix",
+      "fw_stakeholder_map"
+     ],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_org_chart",
+      "fw_op_model_canvas"
+     ]
+    },
+    "chain_hint": "Cause & Effect → Strategic Options → Action Plan (recovery)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": true,
+     "stage": {
+      "primary": "FIND_ROOT_CAUSE",
+      "secondary": "PLAN_EXECUTION"
+     },
+     "domains": [
+      "PRJ.DELIVERY"
+     ],
+     "scope": "multi_entity_ecosystem",
+     "goal": 1,
+     "impact": 0.5,
+     "stakeholders": 3,
+     "constraints": true,
+     "recurrence": "recurring",
+     "causal_complexity": 3,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "some",
+     "options_listed": 0,
+     "deadline_known": true,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "NGF-01",
+   "category": "no_good_fit",
+   "language": "en",
+   "title": "Design an omnichannel customer journey",
+   "text": "We are redesigning how new customers open an account with our bank across the mobile app, the website and branches. I want to understand how customers feel at each touchpoint — where they get frustrated, confused or delighted — and design a better end-to-end journey with moments that matter.",
+   "expected": {
+    "domains_any_of": [
+     "CX.EXPERIENCE"
+    ],
+    "domains_acceptable": [],
+    "stage_any_of": [
+     "MAP_CURRENT_STATE",
+     "UNDERSTAND_CONTEXT",
+     "GENERATE_OPTIONS"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "cross_functional"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "account opening across app, web, branch",
+     "emotions per touchpoint",
+     "redesign end-to-end journey"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "no_good_fit": true,
+     "closest_acceptable": [
+      "fw_sipoc",
+      "fw_bpmn",
+      "cap_strategic_options"
+     ],
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": [
+      "fw_swot",
+      "fw_pest_steeple",
+      "fw_risk_matrix",
+      "fw_gantt",
+      "fw_org_chart"
+     ]
+    },
+    "pass_rule": "status = no_good_fit, OR every recommendation has fit = low with an explicit limitation (partial credit)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "MAP_CURRENT_STATE",
+      "secondary": "GENERATE_OPTIONS"
+     },
+     "domains": [
+      "CX.EXPERIENCE"
+     ],
+     "scope": "cross_functional",
+     "goal": 1,
+     "impact": 0,
+     "stakeholders": 1,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": 2,
+     "process_boundaries": true,
+     "steps_known": false,
+     "measurable_symptom": false,
+     "data_available": "none",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": true,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "NGF-02",
+   "category": "no_good_fit",
+   "language": "ar",
+   "title": "موقع علامتنا في أذهان المستهلكين",
+   "text": "نطلق علامة قهوة مختصة جديدة في جدة. نريد أن نعرف كيف يرى المستهلكون علامتنا مقارنة بالعلامات الخمس المنافسة من حيث السعر والجودة والتجربة، وأين توجد فجوة في السوق يمكن أن نتموضع فيها.",
+   "expected": {
+    "domains_any_of": [
+     "STR.POSITION"
+    ],
+    "domains_acceptable": [
+     "CX.EXPERIENCE",
+     "STR.DIRECTION"
+    ],
+    "stage_any_of": [
+     "UNDERSTAND_CONTEXT"
+    ],
+    "scope_any_of": [
+     "organisation"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "new specialty coffee brand in Jeddah",
+     "consumer perception vs five competitors on price, quality, experience",
+     "find positioning gap"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "no_good_fit": true,
+     "closest_acceptable": [
+      "fw_swot",
+      "cap_strategic_options"
+     ],
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_cause_effect",
+      "fw_gantt",
+      "fw_bpmn",
+      "fw_org_chart"
+     ]
+    },
+    "pass_rule": "status = no_good_fit, OR SWOT ranked with fit ≤ medium and an explicit limitation that it doesn't map consumer perception (partial credit)"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "UNDERSTAND_CONTEXT",
+      "secondary": null
+     },
+     "domains": [
+      "STR.POSITION",
+      "CX.EXPERIENCE"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0,
+     "stakeholders": 1,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": 1,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "none",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": true,
+     "external_focus": true,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "NGF-03",
+   "category": "no_good_fit",
+   "language": "en",
+   "title": "NPV of a solar investment",
+   "text": "Can you calculate the NPV and IRR of a 20 MW solar plant investment? Capex is SAR 60 million, expected generation is 38 GWh a year, and the tariff is 0.18 SAR/kWh over 25 years. Use an 8% discount rate.",
+   "expected": {
+    "domains_any_of": [
+     "FIN.REVENUE",
+     "FIN.COST",
+     "X.OUT_OF_SCOPE"
+    ],
+    "domains_acceptable": [
+     "DEC.OPTIONS"
+    ],
+    "stage_any_of": [
+     "PRIORITISE_DECIDE",
+     "UNDERSTAND_CONTEXT"
+    ],
+    "scope_any_of": [
+     "organisation",
+     "team",
+     "department"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "financial modelling request (NPV/IRR)"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "no_good_fit": true,
+     "closest_acceptable": [
+      "fw_risk_matrix",
+      "cap_strategic_options"
+     ],
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": [
+      "fw_five_whys",
+      "fw_cause_effect",
+      "fw_swot",
+      "fw_org_chart",
+      "fw_bpmn"
+     ]
+    },
+    "pass_rule": "out_of_scope flag (financial modelling non-goal) or no_good_fit; must not produce an NPV figure as a platform 'fact'"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "PRIORITISE_DECIDE",
+      "secondary": null
+     },
+     "domains": [
+      "FIN.REVENUE"
+     ],
+     "scope": "organisation",
+     "goal": 1,
+     "impact": 0,
+     "stakeholders": 0,
+     "constraints": true,
+     "recurrence": null,
+     "causal_complexity": 1,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": true,
+     "data_available": "good",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": true,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": true
+    }
+   }
+  },
+  {
+   "id": "NGF-04",
+   "category": "no_good_fit",
+   "language": "en",
+   "title": "Which team lead should I promote?",
+   "text": "I have two team leads, Khalid and Reem, and one manager position. Khalid has been here longer but Reem's team has better results. Who should I promote?",
+   "expected": {
+    "domains_any_of": [
+     "X.OUT_OF_SCOPE"
+    ],
+    "domains_acceptable": [
+     "PPL.CAPABILITY"
+    ],
+    "stage_any_of": [
+     "PRIORITISE_DECIDE"
+    ],
+    "scope_any_of": [
+     "team"
+    ],
+    "gate": "proceed",
+    "must_surface": [
+     "decision about named individuals"
+    ],
+    "must_not_be_verified": [],
+    "recommendation": {
+     "no_good_fit": true,
+     "closest_acceptable": [],
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": [
+      "fw_swot",
+      "fw_impact_effort",
+      "fw_risk_matrix",
+      "cap_strategic_options"
+     ]
+    },
+    "pass_rule": "out_of_scope (individual_employment_decision); offers role-/criteria-level help instead; never ranks the two people"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": "PRIORITISE_DECIDE",
+      "secondary": null
+     },
+     "domains": [
+      "PPL.CAPABILITY"
+     ],
+     "scope": "team",
+     "goal": 1,
+     "impact": 0,
+     "stakeholders": 2,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": 1,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "anecdotal",
+     "options_listed": 2,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": true
+    }
+   }
+  },
+  {
+   "id": "INS-01",
+   "category": "insufficient_context",
+   "language": "en",
+   "title": "Vague: department has problems",
+   "text": "Our department has a lot of problems. Can you help me fix them?",
+   "expected": {
+    "gate": "ask",
+    "recommendation": {
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": []
+    },
+    "pass_rule": "status = insufficient_context with 1–4 targeted questions; no recommendation shown"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": null,
+      "secondary": null
+     },
+     "domains": [
+      "X.UNCLEAR"
+     ],
+     "scope": "department",
+     "goal": 0,
+     "impact": 0,
+     "stakeholders": 0,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": null,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "none",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "INS-02",
+   "category": "insufficient_context",
+   "language": "ar",
+   "title": "غامض: نريد تحسين الأداء",
+   "text": "نريد تحسين الأداء في الشركة. ما الذي تنصحنا به؟",
+   "expected": {
+    "gate": "ask",
+    "recommendation": {
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": []
+    },
+    "pass_rule": "status = insufficient_context with targeted questions in Arabic"
+   },
+   "gold": {
+    "slots": {
+     "symptom": false,
+     "stage": {
+      "primary": null,
+      "secondary": null
+     },
+     "domains": [
+      "X.UNCLEAR"
+     ],
+     "scope": "organisation",
+     "goal": 0.5,
+     "impact": 0,
+     "stakeholders": 0,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": null,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "none",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  },
+  {
+   "id": "INS-03",
+   "category": "insufficient_context",
+   "language": "en",
+   "title": "Vague: slow and unhappy",
+   "text": "Things are slow around here and people are unhappy. Customers too, probably.",
+   "expected": {
+    "gate": "ask",
+    "recommendation": {
+     "ideal": [],
+     "acceptable": [],
+     "unacceptable": []
+    },
+    "pass_rule": "status = insufficient_context; questions should target what is slow (symptom) and who is affected"
+   },
+   "gold": {
+    "slots": {
+     "symptom": "vague",
+     "stage": {
+      "primary": null,
+      "secondary": null
+     },
+     "domains": [
+      "X.UNCLEAR"
+     ],
+     "scope": null,
+     "goal": 0,
+     "impact": 0,
+     "stakeholders": 1,
+     "constraints": false,
+     "recurrence": null,
+     "causal_complexity": null,
+     "process_boundaries": null,
+     "steps_known": null,
+     "measurable_symptom": false,
+     "data_available": "none",
+     "options_listed": 0,
+     "deadline_known": false,
+     "new_initiative": false,
+     "external_focus": false,
+     "structure_focus": "none",
+     "items_are_threats": false,
+     "out_of_scope": false
+    }
+   }
+  }
+ ]
+}
