@@ -4,6 +4,8 @@
 
 **Phase vocabulary:** *Phase 0 Foundations → Beta-1 → Beta-2 → GA → Teams → Enterprise → Scale.* Sprints are 2 weeks. Week 1 is the first week after the Phase 0 kickoff.
 
+> **Phase 0 update (2026-11-19).** The team is locked at **3 full-stack engineers** (doc 10 §1). The 24-week plan below assumed 4, so either GA moves to ~week 28 with all 15 frameworks, or GA stays at week 24 with 13 frameworks and BPMN + VSM ship at GA+1 (recommended; P0-D1). Phase 0 status, results and the Beta-1 GO/NO-GO are in docs 10–13. Decisions D8, D10 and D14 are resolved/deferred (00-README).
+
 ## 1. Team assumption
 
 | Role | FTE | Note |

@@ -556,7 +556,7 @@ Reuses the approved IK palette and token architecture from `ik-lna-simulator/sty
 
 ### 8.4 Trust labels: the information model in the UI (D2)
 
-Each statement can show up to three compact markers. They are always icon + short text, never colour alone.
+Each statement can show up to three compact markers. They are always icon + short text, never colour alone. **[v0.3]** Truth, review and decision are three separate controls in the Inspector. Accepting AI content or choosing an option never changes the truth marker (03 §3.1).
 
 | Dimension | Marker | Example (AR / EN) |
 |---|---|---|
@@ -564,6 +564,8 @@ Each statement can show up to three compact markers. They are always icon + shor
 | | ◇ Unverified (`--claim`) | «غير مُتحقَّق» / "Unverified" |
 | | △ Assumption (`--assumption`) | «افتراض» / "Assumption" |
 | Origin | ✦ AI generated (pending review → filled sparkle; accepted → outline sparkle) · 📄 External source · (none for user input) | «اقتراح ذكاء اصطناعي» / "AI suggestion" |
+| Review status [v0.3] | ✦ filled = AI content awaiting review · ✦ outline = kept by user · struck-through + note = challenged · hidden (in history) = rejected | «بانتظار المراجعة» / "Awaiting review" |
+| Decision status [v0.3] (proposals only) | ✓ Chosen · ⏸ Deferred · ✕ Rejected · (none = proposed) | «تم الاختيار» / "Chosen" |
 | Evidence | 📎 count | «📎 ٢» |
 
 - **Density:** the default *compact* mode shows only the truth-status icon plus ✦ on canvases, and full chips in lists and the Inspector. *Full* shows chips everywhere. *Clean* hides the markers on the canvas (the trust overlay toggle brings them back). The density preference is per user.

@@ -1,6 +1,6 @@
 # 03: Knowledge Base Data Schema & Framework Metadata Schema
 
-> **v0.2** (2026-11-19). Applies approved decisions **D1** (PDF = internal reference only) and **D2** (five-dimension information model). It also resolves review findings H1 (catalogue identity), H2 (slot registry), H4 (port registry), M3 (deterministic rules), M8 (originator attribution), M9 (stakeholder axes) and M10 (source vs. platform guidance). Changes are marked **[v0.2]**.
+> **v0.3** (2026-11-19, Phase 0): §3 information model resolved into three independent statuses (Truth / Review / Decision). **v0.2**: applies approved decisions **D1** (PDF = internal reference only) and **D2** (five-dimension information model). It also resolves review findings H1 (catalogue identity), H2 (slot registry), H4 (port registry), M3 (deterministic rules), M8 (originator attribution), M9 (stakeholder axes) and M10 (source vs. platform guidance). Changes are marked **[v0.2]**.
 
 All schemas are **JSON Schema (2020-12)**. In code they are authored as Zod in `packages/schemas` and exported to JSON Schema, so one source feeds the API, LLM structured outputs and UI forms. Abridged where noted. DDL equivalents are in 05.
 
@@ -75,130 +75,103 @@ Registries: Diagnosis Slot Registry · Port Type Registry · Glossary
 
 **Current reference source:** *50 Business Diagrams for Strategic Planning* (Creately). `rights_status = all_rights_reserved`, `use_status = internal_reference_only`, `page_offset = 5`, 56 pages. It is **not ingested**: no chunks, no prompts.
 
-## 3. The information model: five independent dimensions [v0.2, D2]
+## 3. The information model: three statuses, three provenance dimensions [v0.3, Phase 0 decision]
 
-Every piece of information the platform stores or shows is a **Statement**. A Statement could be a diagnosis symptom, a SWOT item, a "why", a risk, an option or an action. Each Statement carries **five independent dimensions** plus a review state for AI content.
+> **v0.3 (Phase 0 scope lock).** Truth Status, Review Status and Decision Status are now three **independent** fields with separate controls, events and UI markers. v0.2 coupled review to AI content and decision to proposals; that left "accepting an AI option" ambiguous: was it kept, chosen, or believed? Each question now has its own field. Origin, authorship, evidence and history are unchanged from v0.2.
 
-| # | Dimension | Field | Values | Who can change it |
+Every piece of information is a **Statement**: a symptom, cause, SWOT item, "why", risk, option, recommendation or action. It carries **three statuses**, each answering a different question, plus **four provenance dimensions**.
+
+### 3.1 The three statuses
+
+| Status | Question it answers | Values | Applies to | Changed by |
 |---|---|---|---|---|
-| 1 | **Truth status** | `truth_status` | `verified` · `unverified` · `assumption` | **Only an explicit user action** ("Mark as verified", "Mark as assumption", "Mark as unverified"). Never set or changed by edits, AI or system |
-| 2 | **Origin** | `origin` | `user_input` · `external_source` · `ai_generated` | Set at creation. **Immutable.** A user rewrite of an AI statement keeps `origin = ai_generated`; the history shows the rewrite |
-| 3 | **Authorship** | `authorship` | `{created_by_type, created_by, last_modified_by_type, last_modified_by}`, types `user` · `ai` · `system` | Updated automatically on every change |
-| 4 | **Evidence reference** | `evidence_refs[]` | 0..n refs to a user message span, an evidence file chunk, an upstream artifact or a platform KB chunk | User or AI may add; removal is a user action |
-| 5 | **Modification history** | `history[]` (compact) + full version history in `artifact_versions` | `{at, actor_type, actor_id, action, field, from, to, reason?}` | Append-only |
+| **Truth Status** | *Do we know this is true?* | `verified` · `unverified` · `assumption` | Assertions (`kind = assertion`); the premises of proposals are separate assertions | **Only** an explicit user verification action ("Mark verified: with evidence / I confirm"), "Mark as assumption", "Mark as unverified" |
+| **Review Status** | *Do we keep this content in our analysis?* | `pending_review` · `accepted` · `challenged` · `rejected` | Content the user did not write: `origin ∈ {ai_generated, external_source}`. User-written content is `not_applicable` | User review actions: Accept, Challenge (keep, disputed, with reason), Reject (removed from the analysis, kept in history) |
+| **Decision Status** | *Have we decided to do this?* | `proposed` · `accepted` · `rejected` · `deferred` | Proposals only (`kind = proposal`: options, recommendations, countermeasures, actions) | User decision actions: Choose, Reject, Defer |
 
-**Statement kinds.** Truth status applies to *assertions about the world*. Proposals (options, recommendations, actions) are not true or false. They are proposed and decided.
+**Independence rules (enforced in code; invariants I1–I10, §3.3):**
+- **Accepting an AI suggestion never establishes factual accuracy.** `review_status = accepted` leaves `truth_status` unchanged. An accepted AI assumption is still an assumption.
+- **Verifying never changes review or decision.** Marking a premise verified doesn't choose the option that depends on it.
+- **Choosing an option doesn't verify its premises.** A chosen option built on assumptions keeps those assumptions visible in the Assumptions Register, and the Critic flags them before export.
+- **The only coupling is one explicit, logged convenience.** Choosing (`decision = accepted`) a proposal whose review is still `pending_review` also records `review = accepted`. These are two events in the history, and the user sees both. No other status change triggers another.
+- **No edit changes any status.** Editing the text of an AI-generated assumption records `text_edited` with the user as last modifier. Its truth status (`assumption`), origin (`ai_generated`) and review/decision statuses stay exactly as they were.
 
-| `kind` | Examples | Carries `truth_status`? | Carries `decision_status`? |
-|---|---|---|---|
-| `assertion` | Symptom, cause, SWOT item, risk, stakeholder attribute, metric | ✅ | — |
-| `proposal` | Strategic option, recommendation, countermeasure, action | — (its *premises* are separate assertions, usually assumptions) | ✅ `proposed` · `accepted` · `rejected` · `deferred` |
+**Examples (the combinations the UI must support):**
 
-**AI review state.** Any Statement with `origin = ai_generated` also has `review_state`: `pending_review` · `accepted` · `rejected`. "AI suggestion" in the UI means `origin = ai_generated ∧ review_state = pending_review`. Accepting an AI statement means *"I keep this in my analysis"*. **It does not verify it.** Its truth status is unchanged.
+| Statement | Truth | Review | Decision | Meaning |
+|---|---|---|---|---|
+| AI: "Hand-offs between four units add waiting time" | assumption | accepted | n/a | Kept in the analysis as a hypothesis to check |
+| User: "Approvals take 45 days on average" | unverified | n/a | n/a | User-reported; can be verified (attested or with evidence) |
+| User: same, after attaching the KPI report | verified (evidence) | n/a | n/a | Fact with a source |
+| AI option: "Automate document pre-check" | n/a (its premises are separate assertions) | accepted | proposed | Kept for comparison, not yet chosen |
+| Same option after the user chooses it | n/a | accepted | accepted | Chosen; premises still assumptions until verified |
+| AI cause the user disputes | assumption | challenged ("we measured this; it's not the system") | n/a | Visible, struck through, with the user's reason |
+| AI action the user removes | n/a | rejected | rejected | Out of the analysis; kept in history |
 
-### 3.1 Statement schema
+### 3.2 Provenance dimensions (unchanged from v0.2)
+
+| Dimension | Field | Values |
+|---|---|---|
+| Origin | `origin` | `user_input` · `external_source` · `ai_generated`. Set at creation, **immutable** |
+| Authorship | `authorship` | `{created_by_type, created_by, last_modified_by_type, last_modified_by, ai_run_id}`; types `user` · `ai` · `system` |
+| Evidence reference | `evidence_refs[]` | Optional: user message span, evidence file chunk, upstream statement, platform KB chunk |
+| Modification history | `history[]` + `statement_events` (05 §3.3a) | Append-only `{at, actor_type, actor_id, action, field, from, to, reason}` |
+
+### 3.3 Statement schema (v3) and invariants
 
 ```json
 {
-  "$id": "core/statement.v2",
+  "$id": "core/statement.v3",
   "type": "object",
-  "required": ["id", "kind", "text", "language", "origin", "authorship", "evidence_refs"],
+  "required": ["id", "kind", "text", "language", "origin", "authorship", "review_status", "evidence_refs"],
   "properties": {
     "id": { "type": "string", "pattern": "^st_[a-z0-9]{12}$" },
     "kind": { "enum": ["assertion", "proposal"] },
-    "text": { "type": "string" },
-    "language": { "enum": ["ar", "en"] },
-    "truth_status": { "enum": ["verified", "unverified", "assumption"], "description": "Required when kind=assertion" },
-    "verification": {
-      "type": "object",
-      "description": "Present only when truth_status=verified",
-      "properties": {
-        "method": { "enum": ["evidence_attached", "user_attested"] },
-        "verified_by": { "type": "string" }, "verified_at": { "type": "string", "format": "date-time" },
-        "note": { "type": "string" }
-      }
-    },
-    "decision_status": { "enum": ["proposed", "accepted", "rejected", "deferred"], "description": "Required when kind=proposal" },
+    "text": { "type": "string" }, "language": { "enum": ["ar", "en"] },
+    "truth_status": { "enum": ["verified", "unverified", "assumption"], "description": "Required iff kind=assertion" },
+    "verification": { "type": "object", "description": "Required iff truth_status=verified",
+      "properties": { "method": { "enum": ["evidence_attached", "user_attested"] }, "verified_by": { "type": "string" }, "verified_at": { "type": "string", "format": "date-time" }, "note": { "type": "string" } } },
+    "review_status": { "enum": ["not_applicable", "pending_review", "accepted", "challenged", "rejected"], "description": "not_applicable iff origin=user_input" },
+    "review": { "type": "object", "properties": { "by": { "type": "string" }, "at": { "type": "string" }, "reason": { "type": "string" } } },
+    "decision_status": { "enum": ["proposed", "accepted", "rejected", "deferred"], "description": "Required iff kind=proposal" },
+    "decision": { "type": "object", "properties": { "by": { "type": "string" }, "at": { "type": "string" }, "reason": { "type": "string" } } },
     "origin": { "enum": ["user_input", "external_source", "ai_generated"] },
-    "review_state": { "enum": ["pending_review", "accepted", "rejected"], "description": "Required when origin=ai_generated" },
-    "authorship": {
-      "type": "object",
-      "required": ["created_by_type", "last_modified_by_type"],
-      "properties": {
-        "created_by_type": { "enum": ["user", "ai", "system"] }, "created_by": { "type": "string" },
-        "last_modified_by_type": { "enum": ["user", "ai", "system"] }, "last_modified_by": { "type": "string" },
-        "ai_run_id": { "type": "string", "description": "The AI run that created it, if any" }
-      }
-    },
+    "authorship": { "$ref": "core/authorship.v1" },
     "evidence_refs": { "type": "array", "items": { "$ref": "core/evidence-ref.v2" } },
-    "confidence": { "enum": ["high", "medium", "low"], "description": "AI's confidence; ai_generated only" },
-    "verification_hint": { "type": "string", "description": "For unverified/assumption: how to verify it" },
-    "depends_on": { "type": "array", "items": { "type": "string" }, "description": "IDs of assertions this statement relies on (premises of a proposal)" },
-    "history": { "type": "array", "maxItems": 20, "items": { "$ref": "core/statement-change.v1" }, "description": "Last 20 changes inline; full trail in artifact_versions + statement_events" }
-  },
-  "allOf": [
-    { "if": { "properties": { "kind": { "const": "assertion" } } }, "then": { "required": ["truth_status"] } },
-    { "if": { "properties": { "kind": { "const": "proposal" } } }, "then": { "required": ["decision_status"] } },
-    { "if": { "properties": { "origin": { "const": "ai_generated" } } }, "then": { "required": ["review_state"] } },
-    { "if": { "properties": { "truth_status": { "const": "verified" } } }, "then": { "required": ["verification"] } }
-  ]
-}
-```
-
-```json
-{
-  "$id": "core/evidence-ref.v2",
-  "type": "object",
-  "required": ["kind"],
-  "properties": {
-    "kind": { "enum": ["user_message_span", "evidence_chunk", "kb_chunk", "upstream_statement"] },
-    "message_id": { "type": "string" }, "char_start": { "type": "integer" }, "char_end": { "type": "integer" },
-    "chunk_id": { "type": "string" },
-    "artifact_id": { "type": "string" }, "artifact_version": { "type": "integer" }, "statement_id": { "type": "string" },
-    "quote": { "type": "string", "maxLength": 300, "description": "Short excerpt from the USER's own message or evidence only" },
-    "added_by_type": { "enum": ["user", "ai", "system"] }
+    "confidence": { "enum": ["high", "medium", "low"] },
+    "verification_hint": { "type": "string" },
+    "depends_on": { "type": "array", "items": { "type": "string" }, "description": "Premise assertions of a proposal" },
+    "history": { "type": "array", "maxItems": 20, "items": { "$ref": "core/statement-change.v2" } }
   }
 }
 ```
 
-```json
-{
-  "$id": "core/statement-change.v1",
-  "type": "object",
-  "required": ["at", "actor_type", "action"],
-  "properties": {
-    "at": { "type": "string", "format": "date-time" },
-    "actor_type": { "enum": ["user", "ai", "system"] }, "actor_id": { "type": "string" },
-    "action": { "enum": ["created", "text_edited", "truth_status_changed", "decision_status_changed", "review_accepted", "review_rejected", "evidence_added", "evidence_removed", "challenged", "translated", "restored"] },
-    "field": { "type": "string" }, "from": {}, "to": {},
-    "reason": { "type": "string" },
-    "critic_finding_id": { "type": "string", "description": "If the change resolved a critic finding" }
-  }
-}
-```
+`core/statement-change.v2` actions: `created`, `text_edited`, `truth_status_changed`, `review_status_changed`, `decision_status_changed`, `evidence_added`, `evidence_removed`, `translated`, `restored`. Each carries `{from, to, reason?, critic_finding_id?}`.
 
-### 3.2 Invariants (enforced in code, tested)
+| ID | Invariant | Test |
+|---|---|---|
+| I1 | No text edit, translation, restore or critic patch changes `truth_status`, `review_status`, `decision_status` or `origin` | Property test over every mutation path |
+| I2 | `truth_status = verified` only via a user verification action with a `verification` record. AI routes cannot emit `verified` (schema enum excludes it) | Schema test + DB guard (05 §3.3a) |
+| I3 | AI assertions claiming user support need a resolving `user_message_span`, else they are downgraded to `assumption` (logged) | Validator test; Phase 0 metric "typing violations" |
+| I4 | User-typed assertions start `unverified`, `review_status = not_applicable` | Unit |
+| I5 | `review_status` transitions are user-only; `accepted` never alters `truth_status` | Property test |
+| I6 | `decision_status` transitions are user-only; `accepted` never alters `truth_status` of premises | Property test |
+| I7 | The only cross-status coupling: deciding on a `pending_review` proposal also records `review = accepted` (two events) | Unit |
+| I8 | Proposals whose premises are `assumption`/`unverified` appear in the Assumptions Register and are checked by the project-level Critic before export | Integration |
+| I9 | Restoring a version appends history; it never rewrites it | Unit |
+| I10 | Translation creates a new language rendering and copies all statuses unchanged (`translated` event) | Unit |
 
-| ID | Invariant |
-|---|---|
-| **I1** | **No edit changes `truth_status` or `origin`.** Editing an AI-generated assumption leaves it an AI-generated assumption, with `last_modified_by_type = user` and a `text_edited` history entry |
-| **I2** | `truth_status = verified` requires an explicit user action and a `verification` record. The AI **cannot** emit `verified`; the output schemas for AI routes exclude it from the enum |
-| **I3** | AI-generated assertions default to `assumption` (inferences) or `unverified` (restatements of something the user said). The validator **downgrades** any AI assertion claiming user support whose `user_message_span` ref doesn't resolve, from `unverified` to `assumption`, and logs the downgrade |
-| **I4** | User-typed assertions default to `unverified`. The user can mark them verified (attested) in one click. Attested and evidence-backed verification are shown differently (09 §8.4) |
-| **I5** | A proposal's `depends_on` assertions that are `assumption` or `unverified` surface in the **Assumptions Register** and are checked by the Critic before export |
-| **I6** | "Challenge" (user disagrees with an AI statement without deleting it) records a `challenged` event with a reason and sets `review_state = rejected` (it stays visible, struck through) or keeps it with a dispute note, at the user's choice |
-| **I7** | Restoring an old version never rewrites history; it creates a new version with `restored` events |
-| **I8** | Translation (02 §3.6) creates a new language rendering. It changes neither `truth_status`, `origin` nor `review_state`, and records a `translated` event |
+### 3.4 Mapping to the requirement wording and UI
 
-### 3.3 Mapping to the original requirement
-
-| Requirement wording | Model expression |
-|---|---|
-| "Fact" | `kind = assertion ∧ truth_status = verified` (badge shows method: evidence / attested) |
-| "Unverified information" | `truth_status = unverified` (typically something the user reported) |
-| "Assumption" | `truth_status = assumption` |
-| "AI-generated suggestion" | `origin = ai_generated ∧ review_state = pending_review` (any kind) |
-| "External source" | `origin = external_source` (user-uploaded documents, future licensed sources) |
+| Requirement wording | Model | UI marker (09 §8.4) |
+|---|---|---|
+| Fact | `truth_status = verified` (method: evidence / attested) | ◆ Verified |
+| Unverified information | `truth_status = unverified` | ◇ Unverified |
+| Assumption | `truth_status = assumption` | △ Assumption |
+| AI suggestion (awaiting review) | `origin = ai_generated ∧ review_status = pending_review` | ✦ filled |
+| AI content kept by the user | `origin = ai_generated ∧ review_status = accepted` | ✦ outline (truth marker unchanged) |
+| Disputed | `review_status = challenged` | struck-through + reason |
+| Chosen option / action | `decision_status = accepted` | ✓ Chosen |
 
 ## 4. Platform knowledge, chunks and citations
 

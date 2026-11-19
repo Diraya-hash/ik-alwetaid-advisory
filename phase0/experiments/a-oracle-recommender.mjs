@@ -7,6 +7,8 @@ import { SEED_VERSION } from "../lib/catalogue.mjs";
 
 const ruleArg = process.argv.find(a => a.startsWith("--ngf="));
 const ngfRule = ruleArg ? ruleArg.split("=")[1] : "v0.2";
+const variant = ngfRule; // v0.2 = frozen baseline; v0.3 = in-sample candidate fixes (gate, cutoff, joint-fit NGF)
+const opts = variant === "v0.3" ? { ngfRule: "v0.3", gateRule: "v0.3", displayCutoff: 0.40 } : variant === "v0.3b" ? { ngfRule: "v0.3b", gateRule: "v0.3", displayCutoff: 0.40 } : { ngfRule: "v0.2" };
 const { scenarios } = JSON.parse(fs.readFileSync(new URL("../eval/scenarios.json", import.meta.url)));
 
 const alias = id => (id === "fw_gantt" ? "fw_action_plan" : id);
@@ -23,16 +25,17 @@ const CONFUSABLE = {
 const rows = [];
 for (const sc of scenarios) {
   const s = sc.gold.slots;
-  const out = recommend(s, { ngfRule });
+  const out = recommend(s, opts);
   const exp = sc.expected;
   const rec = exp.recommendation;
   const top = out.ranked.slice(0, 3).map(r => r.id);
   const ideal = (rec.ideal || []).map(alias), acceptable = (rec.acceptable || []).map(alias), unacc = (rec.unacceptable || []).map(alias);
-  const r = { id: sc.id, category: sc.category, lang: sc.language, status: out.status, top3: top, top3Scores: out.ranked.slice(0,3).map(x => x.score), suff: out.sufficiency?.score };
+  const r = { probableNGF: !!out.probableNGF, id: sc.id, category: sc.category, lang: sc.language, status: out.status, top3: top, top3Scores: out.ranked.slice(0,3).map(x => x.score), suff: out.sufficiency?.score };
   if (exp.gate === "ask") {
     r.kind = "gate"; r.pass = out.status === "insufficient_context";
   } else if (rec.no_good_fit) {
     r.kind = "ngf"; r.pass = out.status === "no_good_fit" || out.status === "out_of_scope";
+    r.flaggedForLLM = !!out.probableNGF;
   } else {
     r.kind = "rec";
     r.gatePass = out.status !== "insufficient_context";
@@ -65,6 +68,7 @@ const summary = {
     recall_pct: pct(ngf.filter(r => r.pass).length, ngf.length),
     precision_pct: pct(predNGF.filter(r => r.kind === "ngf").length, predNGF.length),
   },
+  probable_ngf_flags: { on_ngf_scenarios: rows.filter(r => r.kind === "ngf" && r.probableNGF).map(r => r.id), on_rec_scenarios: rows.filter(r => r.kind === "rec" && r.probableNGF).map(r => r.id) },
   gate_ask: { n: gate.length, correct_pct: pct(gate.filter(r => r.pass).length, gate.length) },
   confusable: Object.fromEntries(Object.entries(CONFUSABLE).map(([k, ids]) => {
     const rs = rows.filter(r => ids.includes(r.id));

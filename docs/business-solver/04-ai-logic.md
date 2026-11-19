@@ -96,7 +96,7 @@ All content fields are **`core/statement.v2`** (03 §3). [v0.2] Schemas are **fl
 }
 ```
 
-`core/statement.v2#ai_output` is the AI-route variant of the statement schema. `truth_status` is restricted to `unverified | assumption`, `origin` to `ai_generated` (or `user_input` when the statement is verbatim user text with a resolving span), and `review_state = pending_review`.
+`core/statement.v2#ai_output` is the AI-route variant of the statement schema. `truth_status` is restricted to `unverified | assumption`, `origin` to `ai_generated` (or `user_input` when the statement is verbatim user text with a resolving span), and `review_status = pending_review` (statement v3, 03 §3.3).
 
 **Typing rules given to the model and enforced by validators:**
 - A restatement of something the user said becomes `origin: user_input` (verbatim span) or `ai_generated` (paraphrase), with `truth_status: unverified` **and** a resolving `user_message_span`. Without a resolving span it is downgraded to `assumption` (I3).
@@ -318,7 +318,7 @@ When the user asks "What should we do?", or a chain reaches GENERATE_OPTIONS, th
 - **Accept**: applies `suggested_correction.patch` **as a user-initiated change** (`last_modified_by_type = user`, history action references `critic_finding_id`). For `verify_assumption` the user gets the verification dialog; the critic never verifies.
 - **Reject**: the user disagrees; a reason (optional text, chip) is stored and fed to critic evaluation.
 - **Dismiss**: not relevant now. Dismissed findings don't reappear unless the target changes.
-- **Content the user has approved** (`review_state = accepted`, `origin = user_input`, or verified) is **never changed automatically**. A finding can only *propose*.
+- **Content the user has approved** (`review_status = accepted`, `decision_status = accepted`, `origin = user_input`, or verified) is **never changed automatically**. A finding can only *propose*.
 - **Review history:** every critique run (`critique_runs`) and every finding state change (`critique_finding_events`) is stored with the target version. History is visible per artifact and in the export manifest summary ("12 findings: 9 resolved, 2 rejected, 1 acknowledged").
 
 ### 7.4 Critic quality controls

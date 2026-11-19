@@ -1,0 +1,714 @@
+{
+ "summary": {
+  "experiment": "A-oracle",
+  "seed": "v0.2-seed",
+  "ngfRule": "v0.2",
+  "n": 29,
+  "recommendation": {
+   "n": 22,
+   "top1_acceptable_pct": 95.5,
+   "top1_ideal_pct": 95.5,
+   "top3_hit_pct": 95.5,
+   "unacceptable_in_top3_cases": [
+    "RSK-03:fw_pest_steeple"
+   ],
+   "false_ngf_cases": [],
+   "false_gate_block_cases": [
+    "STR-04"
+   ]
+  },
+  "no_good_fit": {
+   "expected": 4,
+   "recalled": 2,
+   "recall_pct": 50,
+   "precision_pct": 100
+  },
+  "gate_ask": {
+   "n": 3,
+   "correct_pct": 100
+  },
+  "confusable": {
+   "SWOT vs PEST/STEEPLE": "2/2",
+   "Cause&Effect vs 5 Whys": "4/4",
+   "SIPOC vs BPMN vs VSM": "3/3",
+   "Charter vs Action Plan/Gantt": "2/2",
+   "Org Chart vs OMC": "2/2",
+   "Impact/Effort vs Risk Matrix": "0/2",
+   "Strategic Options vs Impact/Effort": "1/2"
+  },
+  "by_language": {
+   "ar": "8/11",
+   "en": "17/18"
+  },
+  "overall_pass": "25/29"
+ },
+ "rows": [
+  {
+   "id": "ORG-01",
+   "category": "organisational_restructuring",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_org_chart",
+    "fw_op_model_canvas",
+    "fw_stakeholder_map"
+   ],
+   "top3Scores": [
+    0.881,
+    0.624,
+    0.455
+   ],
+   "suff": 1,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "ORG-02",
+   "category": "organisational_restructuring",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_op_model_canvas",
+    "fw_org_chart",
+    "cap_strategic_options"
+   ],
+   "top3Scores": [
+    0.905,
+    0.59,
+    0.49
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "ORG-03",
+   "category": "organisational_restructuring",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_stakeholder_map",
+    "fw_project_charter",
+    "fw_action_plan"
+   ],
+   "top3Scores": [
+    0.9,
+    0.535,
+    0.46
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "PROC-01",
+   "category": "process_inefficiency",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_cause_effect",
+    "fw_vsm",
+    "fw_bpmn"
+   ],
+   "top3Scores": [
+    0.864,
+    0.829,
+    0.545
+   ],
+   "suff": 0.9,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "PROC-02",
+   "category": "process_inefficiency",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_sipoc",
+    "fw_bpmn",
+    "fw_op_model_canvas"
+   ],
+   "top3Scores": [
+    0.881,
+    0.664,
+    0.353
+   ],
+   "suff": 0.85,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "PROC-03",
+   "category": "process_inefficiency",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_vsm",
+    "fw_bpmn",
+    "fw_cause_effect"
+   ],
+   "top3Scores": [
+    0.96,
+    0.602,
+    0.483
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RCA-01",
+   "category": "root_cause_analysis",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_cause_effect",
+    "fw_five_whys",
+    "fw_bpmn"
+   ],
+   "top3Scores": [
+    0.846,
+    0.436,
+    0.343
+   ],
+   "suff": 0.85,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RCA-02",
+   "category": "root_cause_analysis",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_five_whys",
+    "fw_cause_effect",
+    "fw_vsm"
+   ],
+   "top3Scores": [
+    0.876,
+    0.762,
+    0.41
+   ],
+   "suff": 0.85,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RCA-03",
+   "category": "root_cause_analysis",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_cause_effect",
+    "fw_vsm",
+    "fw_five_whys"
+   ],
+   "top3Scores": [
+    0.779,
+    0.307,
+    0.286
+   ],
+   "suff": 0.85,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RSK-01",
+   "category": "risk_assessment",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_risk_matrix",
+    "fw_pest_steeple",
+    "fw_project_charter"
+   ],
+   "top3Scores": [
+    0.941,
+    0.293,
+    0.29
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RSK-02",
+   "category": "risk_assessment",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_risk_matrix",
+    "fw_project_charter",
+    "fw_action_plan"
+   ],
+   "top3Scores": [
+    1,
+    0.393,
+    0.376
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "RSK-03",
+   "category": "risk_assessment",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_risk_matrix",
+    "fw_pest_steeple",
+    "fw_impact_effort"
+   ],
+   "top3Scores": [
+    0.971,
+    0.345,
+    0.3
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [
+    "fw_pest_steeple"
+   ],
+   "pass": false
+  },
+  {
+   "id": "STK-01",
+   "category": "stakeholder_management",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_stakeholder_map",
+    "fw_project_charter",
+    "fw_action_plan"
+   ],
+   "top3Scores": [
+    0.933,
+    0.486,
+    0.243
+   ],
+   "suff": 0.9,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STK-02",
+   "category": "stakeholder_management",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_stakeholder_map",
+    "fw_project_charter",
+    "fw_action_plan"
+   ],
+   "top3Scores": [
+    0.862,
+    0.607,
+    0.48
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STK-03",
+   "category": "stakeholder_management",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_stakeholder_map",
+    "fw_project_charter",
+    "fw_pest_steeple"
+   ],
+   "top3Scores": [
+    0.815,
+    0.477,
+    0.438
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STR-01",
+   "category": "strategic_planning",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_pest_steeple",
+    "fw_swot",
+    "cap_strategic_options"
+   ],
+   "top3Scores": [
+    0.912,
+    0.671,
+    0.437
+   ],
+   "suff": 0.75,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STR-02",
+   "category": "strategic_planning",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_swot",
+    "fw_pest_steeple",
+    "cap_strategic_options"
+   ],
+   "top3Scores": [
+    0.876,
+    0.59,
+    0.486
+   ],
+   "suff": 0.8,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STR-03",
+   "category": "strategic_planning",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "cap_strategic_options",
+    "fw_impact_effort",
+    "fw_swot"
+   ],
+   "top3Scores": [
+    0.834,
+    0.524,
+    0.367
+   ],
+   "suff": 0.85,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "STR-04",
+   "category": "strategic_planning",
+   "lang": "ar",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_impact_effort",
+    "cap_strategic_options",
+    "fw_swot"
+   ],
+   "top3Scores": [
+    0.882,
+    0.39,
+    0.267
+   ],
+   "suff": 0.6,
+   "kind": "rec",
+   "gatePass": false,
+   "falseNGF": false,
+   "top1Acceptable": false,
+   "top1Ideal": false,
+   "top3Hit": false,
+   "unacceptableInTop3": [],
+   "pass": false
+  },
+  {
+   "id": "PRJ-01",
+   "category": "project_execution",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_project_charter",
+    "fw_stakeholder_map",
+    "fw_action_plan"
+   ],
+   "top3Scores": [
+    0.853,
+    0.477,
+    0.476
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "PRJ-02",
+   "category": "project_execution",
+   "lang": "ar",
+   "status": "ok",
+   "top3": [
+    "fw_action_plan",
+    "fw_project_charter",
+    "fw_impact_effort"
+   ],
+   "top3Scores": [
+    0.971,
+    0.614,
+    0.514
+   ],
+   "suff": 0.65,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "PRJ-03",
+   "category": "project_execution",
+   "lang": "en",
+   "status": "ok",
+   "top3": [
+    "fw_cause_effect",
+    "fw_action_plan",
+    "fw_five_whys"
+   ],
+   "top3Scores": [
+    0.79,
+    0.481,
+    0.429
+   ],
+   "suff": 0.95,
+   "kind": "rec",
+   "gatePass": true,
+   "falseNGF": false,
+   "top1Acceptable": true,
+   "top1Ideal": true,
+   "top3Hit": true,
+   "unacceptableInTop3": [],
+   "pass": true
+  },
+  {
+   "id": "NGF-01",
+   "category": "no_good_fit",
+   "lang": "en",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_bpmn",
+    "fw_sipoc",
+    "cap_strategic_options"
+   ],
+   "top3Scores": [
+    0.586,
+    0.476,
+    0.424
+   ],
+   "suff": 0.55,
+   "kind": "ngf",
+   "pass": false
+  },
+  {
+   "id": "NGF-02",
+   "category": "no_good_fit",
+   "lang": "ar",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_pest_steeple",
+    "fw_swot",
+    "fw_project_charter"
+   ],
+   "top3Scores": [
+    0.753,
+    0.617,
+    0.419
+   ],
+   "suff": 0.55,
+   "kind": "ngf",
+   "pass": false
+  },
+  {
+   "id": "NGF-03",
+   "category": "no_good_fit",
+   "lang": "en",
+   "status": "out_of_scope",
+   "top3": [],
+   "top3Scores": [],
+   "kind": "ngf",
+   "pass": true
+  },
+  {
+   "id": "NGF-04",
+   "category": "no_good_fit",
+   "lang": "en",
+   "status": "out_of_scope",
+   "top3": [],
+   "top3Scores": [],
+   "kind": "ngf",
+   "pass": true
+  },
+  {
+   "id": "INS-01",
+   "category": "insufficient_context",
+   "lang": "en",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_swot",
+    "fw_pest_steeple",
+    "fw_risk_matrix"
+   ],
+   "top3Scores": [
+    0.143,
+    0.143,
+    0.143
+   ],
+   "suff": 0.1,
+   "kind": "gate",
+   "pass": true
+  },
+  {
+   "id": "INS-02",
+   "category": "insufficient_context",
+   "lang": "ar",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_swot",
+    "fw_pest_steeple",
+    "cap_strategic_options"
+   ],
+   "top3Scores": [
+    0.143,
+    0.143,
+    0.143
+   ],
+   "suff": 0.15,
+   "kind": "gate",
+   "pass": true
+  },
+  {
+   "id": "INS-03",
+   "category": "insufficient_context",
+   "lang": "en",
+   "status": "insufficient_context",
+   "top3": [
+    "fw_swot",
+    "fw_pest_steeple",
+    "fw_risk_matrix"
+   ],
+   "top3Scores": [
+    0.143,
+    0.143,
+    0.143
+   ],
+   "suff": 0.15,
+   "kind": "gate",
+   "pass": true
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "experiment": "A-perturbation",
+ "variant": "v0.3b",
+ "scenarios": 22,
+ "trials_per_scenario_per_level": 60,
+ "levels": {
+  "L1 (1 mild error)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 100,
+   "unacceptable_in_top3_pct": 0,
+   "gate_blocked_pct": 0,
+   "false_ngf_pct": 0,
+   "probable_ngf_flag_pct": 3.8
+  },
+  "L2 (2 moderate errors)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 100,
+   "unacceptable_in_top3_pct": 1.2,
+   "gate_blocked_pct": 0,
+   "false_ngf_pct": 0,
+   "probable_ngf_flag_pct": 3.7
+  },
+  "L3 (3 moderate errors)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 99.5,
+   "unacceptable_in_top3_pct": 2,
+   "gate_blocked_pct": 0,
+   "false_ngf_pct": 0,
+   "probable_ngf_flag_pct": 4.5
+  },
+  "L4 (wrong primary stage)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 85.5,
+   "unacceptable_in_top3_pct": 30.8,
+   "gate_blocked_pct": 1.8,
+   "false_ngf_pct": 0,
+   "probable_ngf_flag_pct": 0
+  }
+ }
+}

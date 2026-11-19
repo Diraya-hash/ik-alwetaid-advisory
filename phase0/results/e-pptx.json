@@ -1,0 +1,110 @@
+{
+ "deck-P2-ar.pptx": {
+  "structure": {
+   "slides": 8,
+   "pictures": 0,
+   "tables": 5,
+   "autoshapes": 43,
+   "textboxes": 35,
+   "connectors": 20,
+   "connectors_glued_both_ends": 20,
+   "connectors_dangling_refs": 0,
+   "arabic_paragraphs": 173,
+   "arabic_paragraphs_rtl": 173,
+   "runs_missing_cs_font": 0,
+   "text_frames_checked": 170,
+   "overflow_width": [],
+   "overflow_height": [],
+   "min_font_pt": 7.1
+  },
+  "render": {
+   "rendered": true,
+   "pdf_pages": 8,
+   "stderr": "Warning: failed to launch javaldx - java may not function correctly"
+  },
+  "edit_follow": {
+   "moved_shape": "node-t1",
+   "attached_connectors": 3,
+   "rerouted_after_move": 2,
+   "still_glued_after_resave": 3
+  }
+ },
+ "deck-P2-en.pptx": {
+  "structure": {
+   "slides": 8,
+   "pictures": 0,
+   "tables": 5,
+   "autoshapes": 43,
+   "textboxes": 35,
+   "connectors": 20,
+   "connectors_glued_both_ends": 20,
+   "connectors_dangling_refs": 0,
+   "arabic_paragraphs": 0,
+   "arabic_paragraphs_rtl": 0,
+   "runs_missing_cs_font": 0,
+   "text_frames_checked": 170,
+   "overflow_width": [],
+   "overflow_height": [],
+   "min_font_pt": 7.0
+  },
+  "render": {
+   "rendered": true,
+   "pdf_pages": 8,
+   "stderr": "Warning: failed to launch javaldx - java may not function correctly"
+  },
+  "edit_follow": {
+   "moved_shape": "node-t1",
+   "attached_connectors": 3,
+   "rerouted_after_move": 1,
+   "still_glued_after_resave": 3
+  }
+ },
+ "deck-P4-ar.pptx": {
+  "structure": {
+   "slides": 9,
+   "pictures": 0,
+   "tables": 5,
+   "autoshapes": 50,
+   "textboxes": 30,
+   "connectors": 18,
+   "connectors_glued_both_ends": 18,
+   "connectors_dangling_refs": 0,
+   "arabic_paragraphs": 170,
+   "arabic_paragraphs_rtl": 170,
+   "runs_missing_cs_font": 0,
+   "text_frames_checked": 171,
+   "overflow_width": [],
+   "overflow_height": [],
+   "min_font_pt": 8.0
+  },
+  "render": {
+   "rendered": true,
+   "pdf_pages": 9,
+   "stderr": "Warning: failed to launch javaldx - java may not function correctly"
+  }
+ },
+ "deck-P4-en.pptx": {
+  "structure": {
+   "slides": 9,
+   "pictures": 0,
+   "tables": 5,
+   "autoshapes": 50,
+   "textboxes": 30,
+   "connectors": 18,
+   "connectors_glued_both_ends": 18,
+   "connectors_dangling_refs": 0,
+   "arabic_paragraphs": 0,
+   "arabic_paragraphs_rtl": 0,
+   "runs_missing_cs_font": 0,
+   "text_frames_checked": 171,
+   "overflow_width": [],
+   "overflow_height": [],
+   "min_font_pt": 8.0
+  },
+  "render": {
+   "rendered": true,
+   "pdf_pages": 9,
+   "stderr": "Warning: failed to launch javaldx - java may not function correctly"
+  }
+ }
+}

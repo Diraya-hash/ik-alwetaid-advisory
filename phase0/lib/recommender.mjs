@@ -20,8 +20,16 @@ function testPre(v, test) {
   return false;
 }
 
-export function coreSufficiency(s) {
-  const W = C.CORE_WEIGHTS;
+// v0.3 candidate (in-sample): symptom/impact are not required for decision- or design-type stages.
+const SYMPTOM_OPTIONAL = new Set(["PRIORITISE_DECIDE","PLAN_EXECUTION","GENERATE_OPTIONS","UNDERSTAND_CONTEXT","DESIGN_ORGANISATION","MAP_CURRENT_STATE"]);
+export function coreSufficiency(s, gateRule = "v0.2") {
+  const W = { ...C.CORE_WEIGHTS };
+  if (gateRule === "v0.3" && SYMPTOM_OPTIONAL.has(s.stage?.primary)) {
+    if (s.symptom !== true) delete W.symptom;
+    if (!(s.impact > 0)) delete W.impact;
+    const tot = Object.values(W).reduce((a, b) => a + b, 0);
+    for (const k in W) W[k] = W[k] / tot;
+  }
   const fill = {
     symptom: s.symptom === true ? 1 : s.symptom === "vague" ? 0.5 : 0,
     stage: s.stage?.primary ? 1 : 0,
@@ -60,9 +68,11 @@ function stageFit(a, s) {
 /** options: { ngfRule: 'v0.2' | 'v0.3' } */
 export function recommend(s, options = {}) {
   const ngfRule = options.ngfRule || "v0.2";
+  const gateRule = options.gateRule || "v0.2";
+  const cutoff = options.displayCutoff ?? 0;   // v0.3 candidate: hide candidates below this normalised score
   const W = C.WEIGHTS;
   if (s.out_of_scope) return { status: "out_of_scope", ranked: [] };
-  const suff = coreSufficiency(s);
+  const suff = coreSufficiency(s, gateRule);
   const scored = C.APPROACHES.map(a => {
     const { R, unmet } = readiness(a, s);
     const f = { dom: domainAff(a, s), stage: stageFit(a, s), R, sig: C.signalBoost(a, s), disc: C.discriminator(a, s), contra: C.contra(a, s) };
@@ -82,6 +92,8 @@ export function recommend(s, options = {}) {
   }
   for (const c of scored) if (!ranked.includes(c)) ranked.push(c);
 
+  const shown = ranked.filter((r, i) => i === 0 || r.score >= cutoff);
+  ranked.length = 0; ranked.push(...shown);
   const top3 = ranked.slice(0, 3);
   const gatePass = suff.score >= C.GATE_TAU && top3.some(r => r.features.R >= 0.75);
   if (!gatePass) return { status: "insufficient_context", sufficiency: suff, ranked };
@@ -93,6 +105,14 @@ export function recommend(s, options = {}) {
     const covered = C.APPROACHES.some(a => (C.DOMAIN_AFFINITY[a][primary] || 0) > 0.3);
     if (!covered) ngf = true;
   }
+  let probableNGF = false;
+  if (!ngf && ngfRule === "v0.3b") {
+    // v0.3b candidate: joint fit on primary OR secondary stage; absence only FLAGS a probable NGF for the
+    // LLM re-rank to confirm (asymmetric: the LLM may downgrade to NGF, never upgrade a rule-based NGF).
+    const st = [s.stage?.primary, s.stage?.secondary].filter(Boolean);
+    const joint = C.APPROACHES.some(a => st.some(p => (C.STAGE_FIT[a][p] || 0) >= 0.6) && (C.DOMAIN_AFFINITY[a][primary] || 0) >= 0.5);
+    if (!joint) probableNGF = true;
+  }
   if (!ngf && ngfRule === "v0.3") {
     // Candidate rule (in-sample, proposed after run 1): require JOINT fit — at least one approach with
     // stage fit >= 0.6 AND domain affinity >= 0.5 for the primary stage and primary domain.
@@ -101,5 +121,5 @@ export function recommend(s, options = {}) {
     if (!joint) ngf = true;
   }
   if (ngf) return { status: "no_good_fit", sufficiency: suff, ranked, closest: ranked.slice(0, 2).map(r => r.id) };
-  return { status: "ok", sufficiency: suff, ranked };
+  return { status: "ok", sufficiency: suff, ranked, probableNGF };
 }

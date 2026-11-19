@@ -1,0 +1,196 @@
+{
+ "experiment": "C-critic-L1",
+ "structural": {
+  "artifacts": 60,
+  "clean_artifacts": 15,
+  "seeded_defects": 57,
+  "findings": 57,
+  "precision_pct": 100,
+  "recall_pct": 100,
+  "false_positives_on_clean_artifacts": 0,
+  "per_rule": {
+   "action.after_deadline": {
+    "seeded": 3,
+    "flagged": 3,
+    "tp": 3,
+    "fp": 0,
+    "fn": 0
+   },
+   "action.date_order": {
+    "seeded": 3,
+    "flagged": 3,
+    "tp": 3,
+    "fp": 0,
+    "fn": 0
+   },
+   "action.dependency_cycle": {
+    "seeded": 3,
+    "flagged": 3,
+    "tp": 3,
+    "fp": 0,
+    "fn": 0
+   },
+   "action.dependency_order": {
+    "seeded": 6,
+    "flagged": 6,
+    "tp": 6,
+    "fp": 0,
+    "fn": 0
+   },
+   "action.owner": {
+    "seeded": 3,
+    "flagged": 3,
+    "tp": 3,
+    "fp": 0,
+    "fn": 0
+   },
+   "options.score_range": {
+    "seeded": 4,
+    "flagged": 4,
+    "tp": 4,
+    "fp": 0,
+    "fn": 0
+   },
+   "options.too_close_unflagged": {
+    "seeded": 4,
+    "flagged": 4,
+    "tp": 4,
+    "fp": 0,
+    "fn": 0
+   },
+   "options.weighted_calc": {
+    "seeded": 3,
+    "flagged": 3,
+    "tp": 3,
+    "fp": 0,
+    "fn": 0
+   },
+   "options.weights_sum": {
+    "seeded": 4,
+    "flagged": 4,
+    "tp": 4,
+    "fp": 0,
+    "fn": 0
+   },
+   "risk.high_no_mitigation": {
+    "seeded": 4,
+    "flagged": 4,
+    "tp": 4,
+    "fp": 0,
+    "fn": 0
+   },
+   "risk.owner": {
+    "seeded": 4,
+    "flagged": 4,
+    "tp": 4,
+    "fp": 0,
+    "fn": 0
+   },
+   "risk.range": {
+    "seeded": 7,
+    "flagged": 7,
+    "tp": 7,
+    "fp": 0,
+    "fn": 0
+   },
+   "risk.score_calc": {
+    "seeded": 9,
+    "flagged": 9,
+    "tp": 9,
+    "fp": 0,
+    "fn": 0
+   }
+  }
+ },
+ "lexical": {
+  "items": 40,
+  "precision_pct": 75,
+  "recall_pct": 60,
+  "errors": [
+   {
+    "type": "FN",
+    "id": "e6",
+    "language": "en",
+    "text": "Moving approvals online is sure to remove the backlog.",
+    "label": true
+   },
+   {
+    "type": "FN",
+    "id": "e7",
+    "language": "en",
+    "text": "Obviously the root cause is the outdated ERP.",
+    "label": true
+   },
+   {
+    "type": "FP",
+    "id": "e13",
+    "language": "en",
+    "text": "Definitely not a priority for this quarter, according to the sponsor.",
+    "label": false
+   },
+   {
+    "type": "FN",
+    "id": "e15",
+    "language": "en",
+    "text": "The regulator will undoubtedly approve the road if we submit early.",
+    "label": true
+   },
+   {
+    "type": "FP",
+    "id": "e18",
+    "language": "en",
+    "text": "Costs are certainly not the only factor.",
+    "label": false
+   },
+   {
+    "type": "FN",
+    "id": "e19",
+    "language": "en",
+    "text": "The merger is bound to create duplicate roles.",
+    "label": true
+   },
+   {
+    "type": "FN",
+    "id": "a6",
+    "language": "ar",
+    "text": "لا شك أن تحويل الموافقات إلكترونيًا سيزيل التراكم.",
+    "label": true
+   },
+   {
+    "type": "FP",
+    "id": "a9",
+    "language": "ar",
+    "text": "ليس من المؤكد أن المورد سيلتزم بالموعد.",
+    "label": false
+   },
+   {
+    "type": "FN",
+    "id": "a13",
+    "language": "ar",
+    "text": "ستوافق الجهة التنظيمية قطعًا على الطريق إذا قدمنا الطلب مبكرًا.",
+    "label": true
+   },
+   {
+    "type": "FN",
+    "id": "a14",
+    "language": "ar",
+    "text": "من الواضح أن السبب الجذري هو نظام ERP القديم.",
+    "label": true
+   },
+   {
+    "type": "FP",
+    "id": "a16",
+    "language": "ar",
+    "text": "التكلفة بالتأكيد ليست العامل الوحيد.",
+    "label": false
+   },
+   {
+    "type": "FN",
+    "id": "a19",
+    "language": "ar",
+    "text": "أنا متأكد تمامًا أن هذا سينجح.",
+    "label": true
+   }
+  ]
+ }
+}

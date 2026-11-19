@@ -276,12 +276,12 @@ column only, strip tatweel and diacritics for the index, NEVER for the stored di
 ```
 load step → gather context (diagnosis, upstream instance outputs via ports, evidence top-k)
 → if AI prefill enabled: LLM structured call with JSON Schema = the step's content sub-schema
-→ every element becomes a statement {origin: ai_generated, review_state: pending_review, truth_status: assumption|unverified, ai_run_id, evidence_refs}
+→ every element becomes a statement {origin: ai_generated, review_status: pending_review, truth_status: assumption|unverified, ai_run_id, evidence_refs}
 → user accept/edit/reject → JSON Patch applied → new version
 → run validation_rules (deterministic) + Critic item/framework review (async; findings, never edits)
 ```
 
-**Element-level information model [v0.2].** Each item (e.g. a SWOT strength, a "why", a risk) is a `core/statement.v2` (03 §3). It has five independent dimensions: truth status, origin, authorship, evidence refs and history, plus `review_state` for AI items. Edits update authorship and history only. **Truth status and origin never change as a side effect** (I1). These labels survive into exports.
+**Element-level information model [v0.2].** Each item (e.g. a SWOT strength, a "why", a risk) is a `core/statement.v2` (03 §3). It has five independent dimensions: truth status, origin, authorship, evidence refs and history, plus three independent statuses (truth, review, decision; 03 §3.1). Edits update authorship and history only. **No status and no origin changes as a side effect** (I1). These labels survive into exports.
 
 **Two application modes [v0.2].**
 

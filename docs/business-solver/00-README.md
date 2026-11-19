@@ -1,6 +1,6 @@
-# Business Problem Solver: Design Pack (v0.2)
+# Business Problem Solver: Design Pack (v0.2 baseline + Phase 0)
 
-> Status: **v0.2: approved decisions applied. No feature implementation yet.** Next step: Phase 0 (foundations and de-risking spikes).
+> Status: **v0.2 approved as baseline. Phase 0 (foundations & de-risking) authorised and in progress.** Information model updated to v0.3 (Truth / Review / Decision). No feature implementation.
 > Product identity: **Business Problem Solver**. Brand name TBD (open decision D13). Code name `bps`.
 > Date: 2026-11-19
 
@@ -26,7 +26,13 @@
 | 06 | [Security & Data Privacy](06-security-privacy.md) | Threat model, privacy for AI, residency incl. KSA option, IP and reference-source policy | v0.2 |
 | 07 | [Development Roadmap](07-roadmap.md) | 24-week plan to GA, Phase 0 spikes, decision status | v0.2 |
 | 08 | [Product & Architecture Review](08-product-architecture-review.md) | Audit of v0.1, findings C1–C4, H1–H15, M1–M16, L1–L8 | Review of v0.1 |
-| 09 | [UX & Screen Specification](09-ux-and-screen-specification.md) | IA, 20 screens, wireframes, interaction rules, states, responsive, bilingual design system, export consistency | v0.2 (new) |
+| 09 | [UX & Screen Specification](09-ux-and-screen-specification.md) | IA, 20 screens, wireframes, interaction rules, states, responsive, bilingual design system, export consistency | v0.2 (+ v0.3 status markers) |
+| 10 | [Phase 0 Execution Plan](10-phase-0-execution-plan.md) | Scope lock, experiments A–F, tasks with owners, dependencies, acceptance criteria, effort, risks, Phase 0 decisions | Phase 0 |
+| 11 | [Evaluation Framework & Test Cases](11-evaluation-framework-and-test-cases.md) | 29 scenarios (7 categories + No Good Fit + insufficient context; 11 Arabic), metrics, graders, limitations | Phase 0 |
+| 12 | [Technical Proofs of Concept](12-technical-proof-of-concepts.md) | Specs and quantitative exit thresholds for A–F | Phase 0 |
+| 13 | [Phase 0 Results](13-phase-0-results.md) | Measured results, findings, GO/NO-GO for Beta-1 (updated as experiments run) | Phase 0, update 1 |
+
+Phase 0 prototypes live in [`/phase0`](../../phase0/README.md), isolated from production code.
 
 ## Reference source status (D1)
 
@@ -56,16 +62,24 @@ The reference PDF *"50 Business Diagrams for Strategic Planning"* (Creately; © 
 | Review inconsistencies | Catalogue identity (H1), slot registry (H2), phase vocabulary (H3), port registry (H4), Arabic layout service (H10), UX spec (H12), billing (H13), roles (M1), stable enum (M2), deterministic rules (M3), checkpoints (M4), derived projection (M5), workweek by country (M6), taxonomy simplification (M7), originators (M8), stakeholder axes (M9), web hosting (M16), auth wording (L1), embeddings table (L2) | Throughout |
 | Roadmap | 24 weeks to GA; Phase 0 spikes; 4 full-stack engineers assumed | 07 |
 
+## Phase 0 scope lock (2026-11-19)
+
+3 full-stack engineers · initial segments: consultants, business professionals, department managers · human-review add-on deferred · name undecided · **editable PowerPoint is a key objective** (native objects for every visual, process diagrams included) · Truth / Review / Decision statuses separated (03 §3, v0.3). Details: doc 10 §1.
+
 ## Open decisions
 
 | # | Decision | When |
 |---|---|---|
-| D8 | PPTX policy for graph diagrams (native vs. vector picture + "edit in app") | Gate 0, from spike SP-2 |
-| D10 | Segment sequencing (private sector first; government after in-Kingdom verification) | Before Beta-1 recruitment |
-| D11 | Pricing levels | After cost measurement (SP-1) and beta usage |
-| D13 | Brand name | Product owner |
-| D14 | Expert Review add-on (human consultant) | Before GA commercial plan |
-| Team | 4 vs 3 full-stack engineers (affects GA date or scope) | Gate 0 |
+| P0-D0 | API access for model-based Phase 0 experiments (`ANTHROPIC_API_KEY` env var) | Now: blocks A.2, B, C.2, F |
+| P0-D1 | GA plan with 3 engineers: GA week 28 with all 15, or week 24 with 13 (BPMN + VSM at GA+1) | Gate 0 |
+| P0-D2 | PPTX technology: Python export sidecar (python-pptx) vs TS OOXML emitter | Gate 0 |
+| P0-D3 | Recommender rule set v0.3b (LLM may downgrade to No Good Fit, never upgrade) | After held-out run |
+| D11 | Pricing levels | After cost measurement (F) and beta usage |
+| D13 | Brand name | Product owner (deliberately undecided) |
+| ~~D8~~ | Resolved by scope lock: native editable PPTX for all visuals | — |
+| ~~D10~~ | Resolved: consultants, business professionals, department managers first | — |
+| ~~D14~~ | Deferred: human consultant review add-on | — |
+| ~~Team~~ | Resolved: 3 full-stack engineers | — |
 
 ## Relationship to the existing repo
 

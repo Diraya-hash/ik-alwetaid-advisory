@@ -1,0 +1,36 @@
+{
+ "experiment": "A-perturbation",
+ "variant": "v0.2",
+ "scenarios": 22,
+ "trials_per_scenario_per_level": 60,
+ "levels": {
+  "L1 (1 mild error)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 95.5,
+   "unacceptable_in_top3_pct": 4.5,
+   "gate_blocked_pct": 4.5,
+   "false_ngf_pct": 0
+  },
+  "L2 (2 moderate errors)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 95.5,
+   "unacceptable_in_top3_pct": 7.1,
+   "gate_blocked_pct": 4.5,
+   "false_ngf_pct": 0
+  },
+  "L3 (3 moderate errors)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 95.1,
+   "unacceptable_in_top3_pct": 7.5,
+   "gate_blocked_pct": 4.5,
+   "false_ngf_pct": 0
+  },
+  "L4 (wrong primary stage)": {
+   "trials": 1320,
+   "top1_acceptable_pct": 82.7,
+   "unacceptable_in_top3_pct": 31.5,
+   "gate_blocked_pct": 4.5,
+   "false_ngf_pct": 0
+  }
+ }
+}

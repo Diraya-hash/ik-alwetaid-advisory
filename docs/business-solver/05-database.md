@@ -165,15 +165,15 @@ create table workspace.statement_events (
   statement_id text not null,                   -- st_…
   at timestamptz not null default now(),
   actor_type text not null check (actor_type in ('user','ai','system')), actor_id text,
-  action text not null check (action in ('created','text_edited','truth_status_changed','decision_status_changed',
-         'review_accepted','review_rejected','evidence_added','evidence_removed','challenged','translated','restored')),
+  action text not null check (action in ('created','text_edited','truth_status_changed','review_status_changed',
+         'decision_status_changed','evidence_added','evidence_removed','translated','restored')),   -- [v0.3] three independent statuses (03 §3)
   field text, from_value jsonb, to_value jsonb, reason text,
   critic_finding_id text
 );
 create index on workspace.statement_events (statement_id, at);
 create index on workspace.statement_events (project_id, at desc);
 -- Trigger-free: written by the Workspace module in the same transaction as the artifact version.
--- Guard (app + DB check function): truth_status_changed rows require actor_type='user' (03 §3.2, I1–I2).
+-- Guard (app + DB check function): truth/review/decision status changes require actor_type='user' (03 §3.3, I2, I5, I6).
 ```
 
 Optimistic concurrency: `POST /versions {base_version}` runs inside a tx with `select current_version … for update`. A mismatch returns **409** with the server's latest version so the client can rebase. JSON Patch on disjoint paths auto-merges; overlapping paths go to the user.
