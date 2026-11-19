@@ -1,231 +1,262 @@
 # 01: Product Requirements Document
 
-## 1. Problem statement
+> **v0.2** (2026-11-19). Product identity: **Business Problem Solver**. Applies decisions D1–D4 and the additional approved product decisions (review doc 08). It resolves H3 (phase vocabulary), H4 (chaining = Must), H6 (export language), H12 (UX spec → doc 09), H13 (billing), H14 (Problem-Solving Summary), M1 (roles) and M15 (workspace friction). Changes are marked **[v0.2]**.
 
-Managers, consultants and transformation leads face messy business problems: falling service levels, a failing rollout, unclear ownership, a strategic choice. Methodologies for these problems exist: SIPOC, 5 Whys, SWOT and dozens more. Three gaps get in the way of using them:
+**Phase vocabulary (used in all docs):** *Phase 0 Foundations → Beta-1 → Beta-2 → GA → Teams → Enterprise → Scale.* "MVP" means everything up to and including **GA (week 24)**.
 
-1. **Selection gap.** People default to the 2–3 frameworks they know, often the wrong ones. SWOT is used for a process defect. Brainstorming is used where root-cause analysis is needed.
-2. **Application gap.** Knowing a framework's name is not the same as running it well. Typical failures are vague SIPOC boundaries, "5 Whys" that stop at a symptom, and risk matrices with no scoring logic.
-3. **Deliverable gap.** Turning the analysis into a board-ready deck takes hours of formatting.
+## 1. Product positioning [v0.2]
 
-Generic chat assistants close the third gap partly and the first two badly. They recommend frameworks without enough context, mix facts with invention, and produce text instead of structured, editable artifacts.
+| | |
+|---|---|
+| **Product identity** | Business Problem Solver |
+| **User experience** | An AI Management Consultant |
+| **Core intelligence** | Business Framework Intelligence |
+| **Principle** | *Simplicity in experience. Sophistication in intelligence.* |
+| **Promise** | *We don't just answer business questions. We help you solve business problems.* |
 
-## 2. Product vision
+**What makes it a consultant and not a chatbot:** it restates and diagnoses before solving, asks few and sharp questions, labels what it knows vs. assumes, refuses to force a method that doesn't fit, proposes options with trade-offs, reviews its own work (the Critic), and closes with a summary that connects the problem to a plan.
 
-> Describe any business challenge in plain Arabic or English. Get a diagnosed problem, the right methodology with a reason, guided application, a professional visual, and a ready-to-present deliverable. Every step can be edited, has evidence attached, and is saved to the project.
+## 2. Problem statement
 
-**Positioning:** a *specialised consulting copilot*, not a general chatbot and not a diagramming tool. Diagramming tools give you a blank canvas. We give you the *right* canvas, already filled from your own situation, and we show our reasoning.
+Managers, consultants and transformation leads face messy business problems. Methodologies exist, but three gaps block their use:
+1. **Selection gap.** People default to familiar frameworks, often the wrong ones.
+2. **Application gap.** Knowing a framework's name is not the same as applying it rigorously.
+3. **Deliverable gap.** Turning analysis into a board-ready deck takes hours.
 
-## 3. Target users and personas
+Generic assistants partly close gap 3 but handle 1 and 2 badly. They recommend without context, mix facts with invention, and produce text rather than structured, editable, reviewable work.
 
-| Persona | Context | Primary job-to-be-done | Success signal |
+## 3. Users
+
+| Persona | Context | Job-to-be-done | Phase |
 |---|---|---|---|
-| **P1 Operational manager** (primary MVP) | Department head in a GCC public or semi-government entity or a mid-size enterprise. Bilingual, Arabic-first in writing. | "Help me understand why X keeps happening and give me a plan I can present on Sunday." | Exports a deck and presents it |
-| **P2 Internal consultant / PMO / Excellence office** (primary MVP) | Runs improvement projects. Knows frameworks but is time-poor. | "Speed up the analysis and the deliverables while keeping the rigour." | Uses ≥3 frameworks per project; edits rather than rewrites |
-| **P3 Independent consultant / boutique firm** (secondary) | Client work; needs branded output. | "Produce client-grade output under my brand." | Custom templates; multiple client workspaces |
-| **P4 Enterprise transformation office** (Phase 3) | Many users, governance, data residency. | "A standard, governed way of solving problems across the organisation." | SSO, audit, admin analytics |
+| **P1 Operational manager** | Department head (KSA/GCC public, semi-government or private), Arabic-first in writing | "Help me understand why X keeps happening and give me a plan I can present on Sunday." | Beta-1 |
+| **P2 Internal consultant / PMO / excellence office** | Runs improvement projects; knows the frameworks; short of time | "Speed up the analysis and the deliverables while keeping the rigour." | Beta-1 |
+| **P3 Independent consultant / boutique** | Client work, bilingual delivery | "Client-grade output in Arabic and English." | Beta-1 (branding in Teams) |
+| **P4 SME owner / manager** | No in-house strategy function | "Structured help without hiring consultants." | Beta-2 |
+| **P5 Enterprise transformation office** | Many users, governance, residency | "A standard, governed way of solving problems." | Enterprise |
 
-**Non-users (explicitly out of scope):** financial modelling and valuation, legal advice, HR decisions about named individuals (see 06 §6), and real-time BI.
+Non-goals: financial modelling/valuation, legal or medical advice, decisions about named individuals, real-time BI.
 
 ## 4. Goals and non-goals
 
-### Goals (MVP)
-- G1: A user goes from a free-text challenge to an exported PPTX in **under 20 minutes** for a single-framework analysis.
-- G2: **≥80 %** of recommendations are rated "relevant" or "very relevant" by users (thumbs plus a reason). Expert panel agreement on the top-3 recommendation is **≥70 %** on the golden set (04 §9).
-- G3: **Zero** unlabelled claims. Every generated statement carries a claim type, and every `fact` has an evidence reference.
-- G4: Arabic quality is on par with English. Arabic users' task-completion rate is within 5 pts of English users' rate.
-- G5: Every generated artifact can be edited, and every edit is versioned.
+### Goals (GA)
+- **G1:** free-text challenge → exported deliverable in **≤ 20 minutes** for a single-framework analysis (draft-first mode).
+- **G2:** recommendation relevance ≥ 80 % positive; golden-set top-3 hit ≥ 0.85; **No Good Fit precision ≥ 0.80**.
+- **G3:** every statement carries truth status, origin and authorship. **Zero AI statements displayed as "verified"** unless a user verified them.
+- **G4:** Arabic completion rate within 5 pts of English; Arabic quality rubric ≥ 4.2/5.
+- **G5:** everything generated is editable, versioned and reviewable. **No user-approved content is ever changed automatically.**
+- **G6 [v0.2]:** ≥ 70 % of exported deliverables pass the Project-level Critic with no unacknowledged Critical findings.
 
 ### Non-goals (MVP)
-- Real-time multi-user co-editing (Phase 3; MVP has share plus comment).
-- Integrations with Jira, MS Project or Visio (Phase 3+).
-- Free-form diagramming canvas. We are not building a drawing tool.
-- Mobile-native apps (the responsive web app is enough).
-- Fine-tuned models (DR-10).
+Real-time co-editing; Jira/MS Project integrations; a free-form drawing canvas; native mobile apps (mobile web = review and approve); fine-tuned models; in-Kingdom hosting (designed for, delivered in Enterprise).
 
 ## 5. Core user journey
 
 ```
-① Describe ─▶ ② Diagnose ─▶ ③ Recommend ─▶ ④ Select ─▶ ⑤ Apply (guided) ─▶ ⑥ Visualise ─▶ ⑦ Export
-     ▲             │  ▲              │                       │  ▲                 │
-     │             ▼  │              ▼                       ▼  │                 ▼
-     └──── clarify (context gate) ◀──┘              edit / regenerate      chain to next framework
+① Describe → ② Diagnose (⇄ clarify) → ③ Choose approach → ④ Analyse (draft-first ⇄ workshop)
+   → ⑤ Options & decide → ⑥ Plan → ⑦ Review (Critic) → ⑧ Summary & export
+                     ↑ chain to next framework at any analysis step
 ```
 
-### 5.1 Step-by-step flow (screens and system behaviour)
-
-| Step | User sees | System does | Output artifact | Exit criterion |
+| Step | User sees | System does | Artifact | Exit |
 |---|---|---|---|---|
-| **① Describe** | One large composer ("Describe your challenge…") with optional attachments (PDF, DOCX, XLSX, ≤20 MB) and 6 example prompts in the UI language. | Detects language. Runs a PII scan (06 §5). Creates the Project and Conversation. | `ChallengeStatement v1` | Text ≥ 20 words, or the user forces continue |
-| **② Diagnose** | A *Diagnosis card* with: problem statement (reframed), category (taxonomy), symptoms vs. suspected causes, stakeholders, constraints, unknowns, and the **context sufficiency meter**. | Diagnosis Engine extracts a structured `ProblemDiagnosis`. Scores context sufficiency (04 §4). | `ProblemDiagnosis v1` | Sufficiency ≥ 0.65, or the user overrides with an acknowledged warning |
-| ②a **Clarify** (loop) | 1–4 targeted questions as chips or short inputs, each with a "Why I'm asking" tooltip. Max 2 rounds before we offer to proceed. | Picks the questions with the highest *information gain* over the candidate frameworks (04 §5.3). | `ProblemDiagnosis vN` | As above |
-| **③ Recommend** | 3 ranked framework cards (+ "show more"). Each shows: fit score band (High/Med/Low, not a fake-precise %), *why it fits* tied to diagnosis facts, *what you'll get*, effort (time, inputs needed), a "when NOT to use" note, and source attribution. Also shows a suggested **chain** (e.g. Cause & Effect → 5 Whys → Impact/Effort → Action Plan). | Recommendation Engine (04 §5). | `RecommendationSet v1` | User selects ≥ 1 |
-| **④ Select** | Confirm the framework or chain. Optional: "Explain this framework" (RAG answer with citations). | Instantiates a `FrameworkInstance` from the `FrameworkDefinition`. | `FrameworkInstance (draft)` | — |
-| **⑤ Apply** | **Split view.** Left: guided steps from the definition, as a stepper. Right: live preview of the visual. Each step is pre-filled by AI from the diagnosis (marked *AI suggestion*). The user accepts, edits or rejects each item. Inline validation ("this 'why' restates the previous one"). | Framework Builder runs step prompts. Validates against the framework rules. Tracks the provenance of every element. | `FrameworkInstance` (content JSON, versioned) | All required steps valid |
-| **⑥ Visualise** | Full-screen interactive diagram: zoom, drag where the layout allows, inline edit, toggle provenance badges, AR/EN switch, theme. | Visualization Engine renders the canonical `DiagramModel`. | `DiagramModel` | — |
-| **⑦ Export** | Export dialog: format (PPTX / PDF / PNG / SVG; DOCX and XLSX in Phase 2), language, template, include-appendix (evidence & assumptions), include-provenance-badges. | Deliverables Generator (async job). | `Deliverable` file plus manifest | Download / share link |
+| ① Describe | One composer, attachments, example challenges (GCC-relevant), language auto-detect | PII scan; project created | `challenge` | ≥ 20 words or user forces |
+| ② Diagnose | Diagnosis card: reframed problem; symptoms vs. suspected causes; stakeholders; goals; constraints; unknowns; **truth-status labels**; sufficiency meter | Diagnosis Engine; slot-based gate | `diagnosis` | Gate passes or user proceeds with a warning |
+| ②a Clarify | 1–4 questions with "why I'm asking"; max 2 rounds | Information-gain selection with discriminator bonus | `diagnosis` vN | As above |
+| ③ Choose approach | 1–3 ranked approach cards (frameworks and/or **Strategic Options**), each with fit band, reasons tied to the diagnosis, caution, effort; suggested chain; "not recommended because…". **Or a No Good Fit card** with the closest methods and limitations | Recommendation Engine | `recommendation_set` | User selects, or chooses a no-fit path |
+| ④ Analyse | **Consultant mode (default):** the AI drafts the whole framework, every item labelled; the user reviews. **Workshop mode:** guided steps. Split view: canvas + inspector | Framework Builder; Item- and Framework-level Critic | `framework_instance` | Required steps valid |
+| ⑤ Options & decide | Options comparison (impact, effort, risk, feasibility), assumptions, dependencies, preferred option with trade-offs; editable weights | Strategic Options capability | `option_set` | User accepts ≥ 1 option (or skips) |
+| ⑥ Plan | Action Plan table ⇄ **Gantt view** (same data) | Builder + port hand-offs | `framework_instance` (Action Plan) | Optional |
+| ⑦ Review | **Consultant review**: Project-level Critic findings by severity; Assumptions Register; stale-data warnings; accept / reject / dismiss | Critic L3 (mandatory before export) | `critique_run` | Critical findings resolved or acknowledged |
+| ⑧ Summary & export | **Problem-Solving Summary** preview; export dialog: format, **language (Arabic / English / original)**, contents | Deliverables Generator | `ps_summary`, `deliverable` | File ready |
 
-### 5.2 Cross-cutting UX rules
-- **Chat stays available** as a side panel at every step ("make the risks more specific to procurement"). Chat edits create new artifact versions. They never silently overwrite.
-- **Three visual claim types** everywhere: `Fact` (solid badge, with source), `Assumption` (dashed badge; user can confirm it, which turns it into user-asserted), `AI suggestion` (sparkle badge until the user accepts it). `user_input` gets no badge, because it is the user's own words.
-- **Undo and history**: per-artifact version timeline. Compare two versions. Restore any version.
-- **Never a dead end**: every framework output offers "Next best framework" (from the chain graph, 04 §5.6).
-- **RTL**: mirrored layout. Diagrams with a direction (process flows, Gantt timelines, fishbone spine) **mirror in RTL**. Matrices keep mathematical axis semantics, with labels localised (02 §6.5).
+Screen-level detail, wireframes and states: **09-ux-and-screen-specification.md**.
 
 ## 6. Functional requirements
 
-Priority: **M** = MVP must, **S** = MVP should, **C** = could / later. IDs are stable for traceability into tickets.
+Priority: **M** = must for GA · **S** = should for GA · **L** = later (phase named). IDs are stable.
 
-### 6.1 Conversation & input
+### 6.1 Input
 | ID | Requirement | P |
 |---|---|---|
-| FR-IN-1 | Free-text challenge input, AR or EN, mixed-language tolerated | M |
-| FR-IN-2 | Auto-detect language per message. UI language and output language can be set separately | M |
-| FR-IN-3 | Attach documents (PDF, DOCX, XLSX, CSV, TXT). Extracted content becomes *project evidence* and can be cited | S |
-| FR-IN-4 | Example prompts per persona and category | M |
-| FR-IN-5 | Voice input (AR/EN) | C |
+| FR-IN-1 | Free-text challenge in AR or EN; mixed language tolerated | M |
+| FR-IN-2 | UI language and output language set independently; per-message language detection | M |
+| FR-IN-3 | Attach evidence (PDF, DOCX, XLSX, CSV, TXT; ≤ 20 MB/file, ≤ ~150 pages per project in MVP). Extracted text becomes citable project evidence (`origin = external_source`) | S |
+| FR-IN-4 | Example challenges per persona/category, GCC-relevant | M |
 
 ### 6.2 Diagnosis
 | ID | Requirement | P |
 |---|---|---|
-| FR-DX-1 | Produce `ProblemDiagnosis` JSON (04 §3) with claim typing | M |
-| FR-DX-2 | Classify into taxonomy L1/L2 (04 §2) with confidence. Multi-label allowed (max 3) | M |
-| FR-DX-3 | Context sufficiency score with an explanation of what is missing | M |
-| FR-DX-4 | Clarifying-question loop (max 2 rounds by default, configurable) | M |
-| FR-DX-5 | User can edit every diagnosis field. Edits re-trigger recommendation (debounced, explicit "Re-run") | M |
-| FR-DX-6 | Detect out-of-scope or unsafe requests and decline gracefully (04 §7) | M |
+| FR-DX-1 | Structured diagnosis (04 §3) where **every statement carries truth status, origin, authorship, evidence refs and history** | M |
+| FR-DX-2 | Classification: domains (≤ 3), stage, scope, with confidence | M |
+| FR-DX-3 | Slot-based sufficiency score with a "what's missing" explanation | M |
+| FR-DX-4 | Clarifying loop (≤ 2 rounds default; org-configurable) | M |
+| FR-DX-5 | Edit any field; edits mark downstream artifacts `stale` (never deleted); explicit re-run | M |
+| FR-DX-6 | Out-of-scope / unsafe detection with a business-side alternative | M |
 
-### 6.3 Recommendation
+### 6.3 Information model and trust (D2) [v0.2]
 | ID | Requirement | P |
 |---|---|---|
-| FR-RC-1 | Return 1–5 ranked frameworks, only from the *active* catalogue | M |
-| FR-RC-2 | Each recommendation carries rationale bullets linked to diagnosis fields (by JSON pointer) | M |
-| FR-RC-3 | Each carries a `when_not_to_use` caution and prerequisites | M |
-| FR-RC-4 | Suggest a methodology chain (sequence) when the problem needs one | S |
-| FR-RC-5 | "Not enough context" response instead of recommendations when below the gate | M |
-| FR-RC-6 | User feedback per recommendation (👍/👎 plus reason code), stored for evaluation | M |
-| FR-RC-7 | User can browse the full library and pick a framework manually (bypass) | M |
+| FR-TR-1 | Five independent dimensions per statement: truth status (Verified / Unverified / Assumption), origin (User input / External source / AI generated), authorship (User / AI / System), evidence reference (optional), modification history | M |
+| FR-TR-2 | **Editing never changes truth status or origin.** Changing truth status is an explicit user action, recorded in history | M |
+| FR-TR-3 | "Mark as verified" offers two methods: *attach evidence* or *I confirm this* (attested). They are displayed differently | M |
+| FR-TR-4 | AI can never output Verified; AI statements default to Assumption or Unverified (with a resolving user-text reference) | M |
+| FR-TR-5 | User can **challenge** an AI statement (reject with a reason, kept visible) or accept it (kept, still not verified) | M |
+| FR-TR-6 | Assumptions Register per project: all assumptions/unverified statements that proposals depend on, with verification hints | M |
+| FR-TR-7 | Statement history view: who changed what, when, and why | M |
 
-### 6.4 Guided application (Framework Builder)
+### 6.4 Approach recommendation
 | ID | Requirement | P |
 |---|---|---|
-| FR-FB-1 | Stepper driven by `FrameworkDefinition.steps` | M |
-| FR-FB-2 | AI pre-fill per step from the diagnosis and evidence, marked `ai_suggestion` | M |
-| FR-FB-3 | Accept / edit / reject per element. Bulk accept | M |
-| FR-FB-4 | Deterministic validation rules (e.g. Risk Matrix: likelihood and impact are both set) plus AI quality hints | M |
-| FR-FB-5 | "Explain this step" with RAG citations | S |
-| FR-FB-6 | Carry outputs between chained frameworks (e.g. top fishbone causes → 5 Whys seeds) via declared `output_ports`/`input_ports` | S |
-| FR-FB-7 | Manual mode: fill the framework with no AI at all | M |
+| FR-RC-1 | 1–3 ranked approaches (frameworks + Strategic Options) from the active set only | M |
+| FR-RC-2 | Reasons linked to diagnosis statements and slots | M |
+| FR-RC-3 | Caution / when-not-to-use per recommendation | M |
+| FR-RC-4 | Suggested chain, validated by port compatibility | M |
+| FR-RC-5 | "Not enough context" state instead of recommendations below the gate | M |
+| FR-RC-6 | **No Good Fit** response when no approach adequately fits: explanation, closest methods with limitations, paths (Strategic Options / library / refine). **Never a forced recommendation** | M |
+| FR-RC-7 | Explicit differentiation between similar frameworks (04 §5.3), with "not recommended because…" explanations | M |
+| FR-RC-8 | Feedback per recommendation (👍/👎 + reason); demand log for No Good Fit | M |
+| FR-RC-9 | Browse the library and choose manually | M |
 
-### 6.5 Visualisation
+### 6.5 Framework application
 | ID | Requirement | P |
 |---|---|---|
-| FR-VZ-1 | Interactive render for all 15 MVP visual types | M |
-| FR-VZ-2 | Inline edit on canvas, synced with the structured form (single source of truth) | M |
-| FR-VZ-3 | RTL/LTR correct rendering, bilingual labels | M |
-| FR-VZ-4 | Provenance overlay toggle | S |
-| FR-VZ-5 | Light/dark plus print theme. Brand theme per workspace | S / C |
-| FR-VZ-6 | Accessible: keyboard navigation, text alternative (table view) for every diagram | M |
+| FR-FB-1 | **Draft-first (Consultant mode) by default:** a complete first draft, all items `AI generated · pending review` | M |
+| FR-FB-2 | **Workshop mode:** guided step-by-step, switchable at any time without losing work | M |
+| FR-FB-3 | Accept / edit / reject / challenge per item; bulk accept | M |
+| FR-FB-4 | Deterministic validation per step (required fields, calculations, dates) | M |
+| FR-FB-5 | Explain this framework/step (platform KB with citations) | S |
+| FR-FB-6 | **Chaining:** pass outputs between frameworks via typed ports (copy-with-link); "source changed" indicator | M |
+| FR-FB-7 | Manual mode with no AI | M |
+| FR-FB-8 | **Gantt = timeline view of the Action Plan** (same data); actions without dates listed in a tray | M |
+| FR-FB-9 | Framework variants (PEST/PESTLE/STEEPLE; risk scale 3/4/5; stakeholder axes) | M |
 
-### 6.6 Deliverables
+### 6.6 Strategic Options (D4) [v0.2]
 | ID | Requirement | P |
 |---|---|---|
-| FR-EX-1 | PPTX export: title, executive summary, one or more slides per framework, assumptions & evidence appendix | M |
-| FR-EX-2 | PDF report export (A4, RTL-aware) | M |
-| FR-EX-3 | PNG/SVG export of a single diagram | M |
-| FR-EX-4 | DOCX report; XLSX for tabular frameworks (Action Plan, Risk register, Gantt) | S (Phase 2) |
-| FR-EX-5 | Workspace templates (logo, colours, fonts, master slides) | C (Phase 2) |
-| FR-EX-6 | Exports are *editable* native objects (PPTX shapes and tables, not screenshots) | M |
-| FR-EX-7 | Every export embeds a manifest (project, artifact versions, generation date, AI-disclosure footer option) | M |
+| FR-OP-1 | Generate 3–6 distinct options + a "continue as-is" baseline | M |
+| FR-OP-2 | Rationale per option, linked to causes, goals or SWOT items | M |
+| FR-OP-3 | Compare on impact, effort, risk and feasibility (1–5 with a written basis); user-editable weights; weighted score computed in code | M |
+| FR-OP-4 | Assumptions and dependencies per option as labelled statements | M |
+| FR-OP-5 | Preferred option with trade-offs and "choose another if…" conditions; a "too close to call" state | M |
+| FR-OP-6 | User accepts/rejects/defers options; accepted options flow to Impact/Effort or the Action Plan | M |
+| FR-OP-7 | Add own options; re-assess on request | M |
 
-### 6.7 Workspace & history
+### 6.7 AI Critic (D3) [v0.2]
 | ID | Requirement | P |
 |---|---|---|
-| FR-WS-1 | Projects list, search, filters (category, framework, status) | M |
-| FR-WS-2 | Project holds conversation(s), diagnosis, framework instances, evidence, deliverables | M |
-| FR-WS-3 | Full version history per artifact. Restore. Diff view for JSON artifacts | M |
-| FR-WS-4 | Activity log per project (who, what, when) | M |
-| FR-WS-5 | Share project read-only by link (org-scoped) or invite a collaborator (comment/edit) | S |
-| FR-WS-6 | Duplicate a project as a template | C |
-| FR-WS-7 | Soft delete with 30-day restore. Hard delete on request | M |
+| FR-QC-1 | **Item-level review:** statements, data, **calculations**, assumption wording | M (Beta-1) |
+| FR-QC-2 | **Framework-level review:** methodology completeness, logical consistency, missing inputs (framework rubrics) | M (Beta-1) |
+| FR-QC-3 | **Project-level review:** alignment of problem → diagnosis → methods → findings → recommendations → action plan; mandatory before export | M (Beta-2) |
+| FR-QC-4 | Each finding has severity (Critical/High/Medium/Low), an explanation and a suggested correction | M |
+| FR-QC-5 | Accept (user-initiated apply), reject (with reason), dismiss; **never auto-modify user-approved content** | M |
+| FR-QC-6 | Review history per artifact and project; summary in the export manifest | M |
+| FR-QC-7 | Unresolved Critical findings require acknowledgement at export (recorded) | M |
 
-### 6.8 Administration (enterprise-ready foundations in MVP, UI later)
+### 6.8 Visualisation
 | ID | Requirement | P |
 |---|---|---|
-| FR-AD-1 | Multi-tenant org model: Organisation → Workspace → Project | M (data model) |
-| FR-AD-2 | Roles: Owner, Admin, Editor, Commenter, Viewer | M (data) / S (UI) |
-| FR-AD-3 | SSO (SAML / OIDC), SCIM | C (Phase 3) |
-| FR-AD-4 | Framework catalogue admin: activate/deactivate, org-specific frameworks | C (Phase 3) |
-| FR-AD-5 | Usage and AI cost dashboard per org | S |
+| FR-VZ-1 | Interactive, **editable** diagrams for all MVP visual types (no static AI images) | M |
+| FR-VZ-2 | Canvas ⇄ form single source of truth | M |
+| FR-VZ-3 | RTL/LTR-correct rendering and bilingual labels | M |
+| FR-VZ-4 | Trust overlay (truth status / origin) toggle | M |
+| FR-VZ-5 | Accessible table view of every diagram; keyboard operation | M |
+| FR-VZ-6 | Light/dark/print themes | S |
+
+### 6.9 Summary and deliverables
+| ID | Requirement | P |
+|---|---|---|
+| FR-EX-0 | **Problem-Solving Summary [v0.2]:** original challenge → diagnosis → selected methods → key findings → recommendations/preferred option → implementation roadmap → open assumptions → review status. Editable; first section of every deliverable | M |
+| FR-EX-1 | PPTX export (16:9), native editable objects for tables, matrices, canvases and lists; graph diagrams per the D8 policy (open decision, 07) | M |
+| FR-EX-2 | PDF report (A4) | M |
+| FR-EX-3 | PNG/SVG of a single diagram | M |
+| FR-EX-4 | **Export language: Arabic, English, or the original working language [v0.2].** Other-language export creates a *translated version* (AI translation, glossary-enforced), labelled "translated, not yet reviewed" until a user reviews it | M |
+| FR-EX-5 | Assumptions Register, evidence list and methodology notes appendix; truth-status labels carried into exports (configurable density) | M |
+| FR-EX-6 | Export manifest: artifact versions, critic summary, acknowledgements, AI disclosure | M |
+| FR-EX-7 | DOCX, XLSX (Action Plan, risks, options) | L (Teams) |
+| FR-EX-8 | Brand templates | L (Teams) |
+
+### 6.10 Workspace and history
+| ID | Requirement | P |
+|---|---|---|
+| FR-WS-1 | Projects list with search and filters | M |
+| FR-WS-2 | Project contains conversation, diagnosis, approaches, instances, options, critic history, summary, evidence, deliverables | M |
+| FR-WS-3 | Version history with **checkpoints** (step completion, explicit save, AI run, export); restore; compare | M |
+| FR-WS-4 | Activity log per project | M |
+| FR-WS-5 | Read-only org-scoped share link + comments | S |
+| FR-WS-6 | Soft delete (30 days) and hard delete | M |
+| FR-WS-7 | **Personal org/workspace auto-created; workspace UI hidden for individual plans [v0.2]** | M |
+
+### 6.11 Accounts, plans and billing [v0.2]
+| ID | Requirement | P |
+|---|---|---|
+| FR-AC-1 | Roles: **organisation** owner/admin/member/guest; **workspace** admin/editor/commenter/viewer (05 §3.1) | M (data), S (UI) |
+| FR-AC-2 | Plans and entitlements (limits on projects, analyses, exports, features), enforced server-side; **prices not set** (decision pending cost measurement) | M |
+| FR-AC-3 | Usage metering (AI tokens, analyses, exports) and a usage view | M |
+| FR-AC-4 | Payment via a GCC gateway supporting **mada** and cards; **15 % KSA VAT**; **ZATCA-compliant e-invoices** in Arabic | M (paid GA) |
+| FR-AC-5 | Org settings: default language, numerals, calendar (Gregorian/Umm al-Qura), **country and workweek**, PII mode, gate threshold, AI disclosure | M |
+| FR-AC-6 | SSO/SCIM, admin console, org KB, residency profiles incl. **in-Kingdom (KSA)** | L (Enterprise) |
 
 ## 7. Non-functional requirements
 
 | Area | Requirement |
 |---|---|
-| Latency | First diagnosis tokens stream in < 3 s (p50). Full diagnosis < 25 s (p90). Recommendation < 15 s (p90). PPTX export < 30 s (p90) for ≤ 25 slides |
-| Availability | 99.5 % MVP; 99.9 % enterprise tier |
-| Scale (MVP target) | 2,000 MAU, 200 concurrent sessions. Architecture must scale to 100k MAU without a rewrite |
-| Quality gates | Golden-set eval (04 §9) runs in CI on every prompt or definition change. Block merge if top-3 agreement drops > 3 pts |
-| i18n | 100 % string coverage AR/EN (CI test, reusing the simulator's `i18n.test.ts` approach) |
-| Accessibility | WCAG 2.2 AA. axe-core clean. Contrast check in CI |
-| Data residency | Region-pinned deployment option (KSA/UAE region, EU, US) for enterprise (06 §4) |
-| Observability | Trace every AI call with prompt version, model, tokens, latency, cost, validation result |
-| Cost | Target AI cost ≤ US$0.60 per completed single-framework project (median); tracked per route |
+| Latency | First diagnosis content < 3 s (p50). Diagnosis complete < 25 s (p90). Recommendation < 15 s (p90). Framework draft < 30 s (p90). Project-level critic < 40 s (p90). PPTX export < 30 s (p90, ≤ 25 slides). **Validated in the Phase 0 spike** |
+| Availability | 99.5 % at GA; 99.9 % Enterprise |
+| Scale | 2,000 MAU / 200 concurrent at GA; architecture to 100k MAU |
+| Quality gates | Golden-set evals in CI (04 §11); > 3-point regression blocks merge |
+| i18n | 100 % AR/EN string coverage (CI) |
+| Accessibility | WCAG 2.2 AA; axe clean; contrast check (CI) |
+| Residency | Single region at GA; **architecture supports region-pinned stacks incl. a KSA in-Kingdom profile** (02 §7) |
+| Observability | Every AI call traced (prompt version, model, effort, tokens, cost, latency, validation) |
+| Cost | Measured in Phase 0. Pricing stays undecided until measured. Working budget ≤ $0.90 per completed single-framework analysis |
 
-## 8. MVP feature prioritisation
+## 8. MVP prioritisation (GA scope)
 
-Scored with **RICE** (Reach × Impact × Confidence ÷ Effort in person-weeks). Reach is the % of MVP sessions touching the feature. Impact is on a 0.25–3 scale.
-
-| Feature | Reach | Impact | Conf. | Effort | RICE | Decision |
-|---|---|---|---|---|---|---|
-| Diagnosis + context gate + clarify loop | 100 | 3 | 0.8 | 3 | 80 | **MVP** |
-| Recommendation (hybrid) with rationale | 100 | 3 | 0.8 | 3 | 80 | **MVP** |
-| Framework Builder (generic stepper engine) | 95 | 3 | 0.8 | 4 | 57 | **MVP** |
-| 15 framework definitions + renderers | 95 | 3 | 0.7 | 8 | 25 | **MVP** (staged: 8 in Beta-1, 7 in Beta-2) |
-| PPTX export (native, RTL) | 70 | 3 | 0.6 | 4 | 31.5 | **MVP** |
-| PDF export | 60 | 2 | 0.8 | 2 | 48 | **MVP** |
-| PNG/SVG export | 50 | 1 | 1.0 | 0.5 | 100 | **MVP** |
-| Version history + restore | 60 | 2 | 0.9 | 2 | 54 | **MVP** |
-| Claim typing + evidence UI | 100 | 2 | 0.8 | 2 | 80 | **MVP** (core differentiator) |
-| RAG "Explain this framework" with citations | 40 | 1 | 0.8 | 2 | 16 | **MVP-should** (depends on PDF) |
-| Document upload as evidence | 35 | 2 | 0.6 | 3 | 14 | **MVP-should** |
-| Methodology chaining (data hand-off) | 40 | 2 | 0.6 | 3 | 16 | **MVP-should** (Beta-2) |
-| Sharing (read-only link + comment) | 30 | 1 | 0.8 | 2 | 12 | Phase 2 |
-| DOCX / XLSX export | 25 | 1 | 0.8 | 2 | 10 | Phase 2 |
-| Brand templates | 15 | 2 | 0.6 | 3 | 6 | Phase 2 |
-| Real-time co-editing | 10 | 2 | 0.5 | 6 | 1.7 | Phase 3 |
-| SSO/SCIM, admin console | 5* | 3 | 0.9 | 4 | 3.4 | Phase 3 (*enterprise deals depend on it) |
-
-**Staging the 15 frameworks** (by RICE plus coverage of taxonomy categories, so every L1 category has at least one framework in Beta-1):
-
-- **Beta-1 (8):** SWOT, PEST/STEEPLE, 5 Whys, Cause & Effect, SIPOC, Impact/Effort Matrix, Risk Assessment Matrix, Action Plan.
-- **Beta-2 (7):** Stakeholder Map, Project Charter, Gantt, Value Stream Mapping, BPMN, Org Chart, Operating Model Canvas.
-
-Why these are later: BPMN and VSM have the most complex renderers and grammars. Org Chart and the Operating Model Canvas need more input data to be useful.
+| Capability | Wave | Rationale |
+|---|---|---|
+| Diagnosis + gate + clarify (slot registry) | Beta-1 | Foundation of the consultant experience |
+| Information model v2 + Assumptions Register | Beta-1 | Core differentiator (D2) |
+| Hybrid recommendation + differentiation rules + No Good Fit | Beta-1 | Core intelligence (D4) |
+| Draft-first + workshop mode | Beta-1 | Simplicity in experience |
+| Critic Item + Framework levels | Beta-1 | D3 |
+| 8 frameworks: SWOT, PEST/STEEPLE, 5 Whys, Cause & Effect, SIPOC, Impact/Effort, Risk Matrix, Action Plan (table) | Beta-1 | Covers understand, map, root cause, prioritise, risk, plan |
+| **Strategic Options** | Beta-1 | Closes the "what should we do?" gap (D4) |
+| PDF + PNG/SVG export (AR/EN) | Beta-1 | |
+| 7 more: Stakeholder Map, Project Charter, Gantt (view), BPMN, VSM, Org Chart, Operating Model Canvas | Beta-2 | Complex renderers |
+| Chaining via ports | Beta-2 | Must for GA |
+| Critic Project level + pre-export review | Beta-2 | D3 |
+| Problem-Solving Summary | Beta-2 | Closure (H14) |
+| PPTX export + translated-version export | Beta-2 | |
+| Billing, entitlements, VAT, ZATCA | GA hardening | Paid launch |
+| Share link + comments | GA hardening (S) | |
+| DOCX/XLSX, brand templates, co-editing, outcome check-ins | Teams | |
+| SSO/SCIM, residency profiles (KSA), org KB, RAG at scale | Enterprise | |
 
 ## 9. Success metrics
 
-| Layer | Metric | MVP target |
+| Layer | Metric | GA target |
 |---|---|---|
-| North Star | **Weekly Completed Analyses**: a framework instance validated *and* exported or shared | 300/wk by end of Beta-2 |
-| Activation | % of new users reaching an exported deliverable in session 1 | ≥ 35 % |
-| Quality | Recommendation relevance (user rating) | ≥ 80 % positive |
-| Quality | AI suggestion acceptance rate (accepted as-is or lightly edited) | 50–80 % (too high suggests rubber-stamping; investigate) |
-| Trust | % of facts with valid evidence refs | 100 % (validator-enforced) |
+| North Star | **Weekly Solved-Problem Packages**: a project with ≥ 1 validated framework, an accepted option or action plan, a Problem-Solving Summary, and an export | 300/week |
+| Activation | % of new users exporting in session 1 | ≥ 35 % |
+| Recommendation | Relevance (user rating); No Good Fit shown rate (monitor; not a target) | ≥ 80 % positive |
+| Trust | AI statements wrongly shown as verified | 0 |
+| Critic | Findings accepted or resolved / total shown; reject rate | ≥ 50 %; ≤ 40 % |
+| Options | % of decided projects where the user picks an option and states a reason when overriding the AI preference | Tracked |
+| Bilingual | AR vs EN completion gap | ≤ 5 pts |
 | Retention | W4 retention of activated users | ≥ 25 % |
-| Bilingual | AR vs EN completion-rate gap | ≤ 5 pts |
-| Cost | AI cost per completed analysis | ≤ $0.60 median |
 
-## 10. Assumptions, risks and open questions
+## 10. Assumptions, risks, open questions
 
-| # | Type | Item | Mitigation / owner |
+| # | Type | Item | Status / mitigation |
 |---|---|---|---|
-| A1 | Assumption | Primary market is GCC, Arabic-first. | Validate in discovery interviews (Phase 0) |
-| A2 | Assumption | Users accept a 2-round clarification before recommendations. | A/B the gate threshold (0.55 vs 0.65) in Beta |
-| R1 | Risk | **The reference PDF is unavailable or unlicensed for this use** → no source attribution | Platform-authored content is the default. PDF adds citations when ingested (00-README) |
-| R2 | Risk | Arabic RTL in PPTX is fragile across PowerPoint and Keynote versions | Native `a:rtl` paragraphs plus golden-file visual regression on PowerPoint for Windows and Mac. Fallback: PDF |
-| R3 | Risk | Over-trust in AI output for consequential decisions | Claim typing, disclaimers, "assumption" confirmation prompts, AI-disclosure footer |
-| R4 | Risk | LLM cost or latency at scale | Prompt caching of stable prefixes, Batches for offline evals, measured per-route effort tuning (02 §4.4) |
-| Q1 | Open | Brand and product name? | Product owner |
-| Q2 | Open | Pricing model (seat vs. usage vs. hybrid)? | Affects metering design; metering events are designed in (05 §3.9) |
-| Q3 | Open | First enterprise residency region requirement (KSA PDPL)? | Drives Phase 3 infra choice (06 §4) |
+| A1 | Assumption | Initial market KSA, then GCC; Arabic-first with equal English | Planning assumption (approved) |
+| A2 | Assumption | SaaS subscription; segments: professionals, consultants, SMEs, enterprises | Planning assumption; pricing undecided |
+| A3 | Assumption | Users accept ≤ 2 clarification rounds | A/B the gate threshold in Beta |
+| R1 | Risk | Reference PDF is all-rights-reserved | **Resolved by D1**: internal reference only; product content independently authored |
+| R2 | Risk | RTL PPTX fragility | Phase 0 spike; PDF guaranteed |
+| R3 | Risk | Over-trust in AI | Information model, Critic, AI disclosure |
+| R4 | Risk | Unit cost | Phase 0 measurement before pricing |
+| Q1 | Open | Brand name (product identity is "Business Problem Solver") | Product owner |
+| Q2 | Open | Pricing levels | After cost measurement |
+| Q3 | Open | PPTX policy for graph diagrams (D8), segment sequencing (D10), Expert Review add-on (D14) | 07 §10 decision status |

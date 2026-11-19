@@ -1,5 +1,7 @@
 # 06: Security & Data Privacy
 
+> **v0.2** (2026-11-19). Changes: reference-source policy per **D1** (§7); KSA in-Kingdom deployment profile (§4.1); authentication wording (L1); data-classification guidance; information-model and Critic integrity controls (§1); phase vocabulary. Changes are marked **[v0.2]**.
+
 Users will describe **sensitive internal business problems**: restructurings, performance issues, compliance gaps. Confidentiality is a precondition for adoption, not an add-on feature.
 
 ## 1. Threat model (STRIDE summary)
@@ -11,17 +13,19 @@ Users will describe **sensitive internal business problems**: restructurings, pe
 | | Leakage via shared link | Org-scoped links by default; public links disabled for enterprise; expiring hashed tokens |
 | Model behaviour | Prompt injection via uploaded docs or KB | Untrusted-content wrapping; no tools on content-processing routes; output schema validation; outputs never executed |
 | | Data exfiltration through generated links/markdown | Renderers allow-list URL schemes; no remote images in outputs; exports have no external references |
-| Accounts | Credential stuffing / takeover | SSO/OIDC, MFA (TOTP/WebAuthn) for password users, rate limits, breached-password check |
-| Exports | Malicious OOXML/PDF content | We only *generate*, never execute user templates in MVP. Phase-2 brand templates are sanitised (strip macros/external links) |
+| Accounts | Account takeover | Passwordless (magic link) + Google/Microsoft OIDC; optional WebAuthn passkeys; enterprise MFA enforced via the customer IdP; rate limits on sign-in and link issuance [v0.2] |
+| Exports | Malicious OOXML/PDF content | We only *generate*, never execute user templates in MVP. Teams-phase brand templates are sanitised (strip macros/external links) |
 | Uploads | Malware, zip bombs, parser exploits | AV scan, size/page limits, sandboxed extraction worker (no network, read-only FS, seccomp), MIME sniffing |
 | Audit | Repudiation / tampering | Hash-chained audit log shipped to an external SIEM |
+| Information integrity [v0.2] | AI or a bug silently upgrades an assumption to a verified fact, or alters approved content | DB-level guard: `truth_status_changed` events only with `actor_type = user`; AI output schemas exclude `verified`; Critic accepts applied only as user-authored versions; statement history append-only (03 §3.2) |
+| Reference-source leakage [v0.2] | Third-party copyrighted text reaches prompts, outputs or exports | `kb_internal` schema with no API/worker grants; restricted bucket with access logging; CI check that no prompt template or KB entry contains reference-source text (n-gram overlap scan) |
 | Availability | Cost-exhaustion via AI abuse | Per-user/org rate limits and AI budgets; anomaly alerts on token spend |
 
 ## 2. Identity & access (DR-20)
 
 - **Authentication:** OIDC sessions (httpOnly, Secure, SameSite=Lax cookies; short-lived access JWT + rotating refresh). Email magic link + Google/Microsoft for SMB.
 - **Enterprise SSO:** SAML 2.0 / OIDC and SCIM 2.0 via a **managed identity broker** (e.g. WorkOS-class) in SaaS. **Keycloak** in sovereign/on-prem deployments, behind the same internal `IdentityProvider` interface. *Rationale:* SAML edge cases are a time sink; brokers handle per-customer IdP quirks. *Alternative:* building SAML ourselves on a library is rejected (security risk, maintenance cost).
-- **Authorisation:** RBAC (org: owner/admin/member/guest; workspace: admin/editor/commenter/viewer) plus resource shares. Checks are centralised in `platform/acl` with policy-as-code tests. Phase 3 may adopt a relationship-based engine (OpenFGA-style) if sharing gets complex.
+- **Authorisation:** RBAC (org: owner/admin/member/guest; workspace: admin/editor/commenter/viewer) plus resource shares. Checks are centralised in `platform/acl` with policy-as-code tests. The Enterprise phase may adopt a relationship-based engine (OpenFGA-style) if sharing gets complex.
 - **Admin actions** (role changes, exports of all data, SSO config) need step-up re-authentication and are audit-logged.
 
 ## 3. Data protection
@@ -40,6 +44,15 @@ Users will describe **sensitive internal business problems**: restructurings, pe
 - **The model-inference region is part of residency.** The Model Gateway routes each tenant to a provider endpoint (Anthropic API, AWS Bedrock or Google Vertex AI) whose processing location satisfies the tenant's policy. Regional availability of specific models changes over time, so it is **verified at contract time** and encoded as a tenant policy the gateway enforces (it fails closed if no compliant route exists).
 - **GCC focus:** design to meet KSA **PDPL** and UAE **PDPL** requirements (lawful basis, cross-border transfer conditions, data-subject rights, breach notification), plus sector regulators (e.g. NCA ECC controls for government-sector customers in KSA). Formal legal review is a Phase 0 task. **This document is not legal advice.**
 - EU customers: GDPR (DPA, SCCs, sub-processor list, DPIA template).
+
+### 4.1 KSA in-Kingdom option [v0.2]
+
+The architecture supports a **`ksa-sovereign` deployment profile** (02 §7.1): data plane in-Kingdom, inference only via an in-Kingdom compliant route, Model Gateway failing closed, content-free telemetry only. Before offering it to a customer:
+1. Confirm an in-Kingdom inference route (provider endpoint hosted in KSA, or an approved self-hosted model) and run the full eval suite on that route.
+2. Map controls to applicable requirements (e.g. NCA ECC / cloud controls for government entities, PDPL, sector regulators). Formal legal and compliance review is required; this document is not legal advice.
+3. Agree the data-classification ceiling with the customer. The product is not designed for classified ("secret"/"top secret") government data in any profile.
+
+**Data-classification guidance for all profiles [v0.2].** Onboarding and the composer show a short notice: *"Don't enter classified information or personal data you are not permitted to share."* Org admins can set a `data_classification_max` that the Gateway policy enforces.
 
 ## 5. Privacy by design for AI
 
@@ -63,9 +76,9 @@ Users will describe **sensitive internal business problems**: restructurings, pe
 
 | Topic | Policy |
 |---|---|
-| Reference PDF ("50 Business Diagrams… – Creately") | Treated as a **third-party copyrighted reference**. Ingestion needs a recorded licence review (03 §2 `licence`). We index text for retrieval, show **short attributed excerpts** only where usage rights allow, and **never store, render or export its diagrams, templates or page images** |
-| Our visualisations | Independently designed renderers implementing **generic methodology conventions** (2×2 grids, fishbone spine, swimlanes, Gantt bars), which are not themselves protectable. Visual identity (colours, shapes, typography, layout details) is ours. Design reviews include a "no look-alike" check against known commercial templates |
-| Attribution in UI/exports | Generated **only** from `kb_chunk` source records (validator V2): "Source: *Title*, Publisher, p. N". Platform-authored content is labelled "Advisory Studio methodology notes"; AI suggestions are labelled as such |
+| Reference PDF ("50 Business Diagrams for Strategic Planning", © Cinergix Pty Ltd, all rights reserved) [v0.2, D1] | **Internal editorial reference only.** Not ingested into the product KB, not placed in prompts, not quoted, not cited in the UI or exports. Its diagrams, wording, templates and distinctive visual designs are **never reproduced**. Its content is not published, redistributed or used to create derivative commercial content without permission. Stored in a restricted bucket; consultation recorded internally (`kb_internal.reference_mappings`). **The product has no legal or technical dependency on it** |
+| Our visualisations | Independently designed renderers implementing **generic methodology conventions** (2×2 grids, fishbone spine, swimlanes, Gantt bars), which are not themselves protectable. Visual identity (colours, shapes, typography, layout details) is ours. Design reviews include a "no look-alike" check against known commercial templates. **[v0.2]** Every renderer and slide template passes a design review against the reference PDF and known commercial templates before release |
+| Attribution in UI/exports [v0.2] | Methodology **originators** (public knowledge, SME-verified) and platform authorship ("Business Problem Solver methodology notes"). User evidence is cited with file and page. Licensed third-party sources are cited only after legal approval. AI content is labelled through the information model |
 | Framework names & trademarks | Methodology names are used descriptively. Trademarked notations (e.g. BPMN is an OMG specification) are referenced accurately; our BPMN is a documented *subset* |
 | Customer content | Customers own their inputs and outputs. Licence to process only for service delivery |
 
@@ -82,8 +95,8 @@ Users will describe **sensitive internal business problems**: restructurings, pe
 
 | Milestone | Target |
 |---|---|
-| Privacy policy, DPA, sub-processor list, AI use disclosure | Before public beta |
-| PDPL (KSA/UAE) and GDPR readiness assessment | Phase 1 |
-| SOC 2 Type I (or ISO 27001 Stage 1) | Phase 3 |
-| SOC 2 Type II / ISO 27001 certification; ISO 42001 (AI management) gap analysis | Phase 4 |
+| Privacy policy (AR/EN), DPA, sub-processor list, AI use disclosure | Before Beta-1 users |
+| PDPL (KSA/UAE) and GDPR readiness assessment | Phase 0 – Beta-1 |
+| SOC 2 Type I (or ISO 27001 Stage 1) | Enterprise |
+| SOC 2 Type II / ISO 27001 certification; ISO 42001 (AI management) gap analysis | Scale |
 | Sector-specific (e.g. NCA ECC for KSA gov) | On first qualifying enterprise deal |

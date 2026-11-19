@@ -5,6 +5,8 @@
 > Scope: consistency audit, vision fit, framework intelligence, requirements coverage, commercial direction, readiness.
 > Rule followed: docs 00–07 are **not modified**. Every proposed change is listed in §11 (Change Register) for approval.
 
+> **Status update (2026-11-19):** D1–D4 approved, together with the additional product decisions (15 frameworks + differentiation rules; draft-first; Gantt as an Action Plan view; vector search removed if the eval confirms; Problem-Solving Summary; export in AR/EN/original; future KSA in-Kingdom option; pricing undecided; 24-week plan). The Change Register (§11) has been **applied in design pack v0.2** (docs 00–07 updated; doc 09 created). This review is kept unchanged as the record of the v0.1 audit. Remaining open decisions: 00-README "Open decisions".
+
 **Severity scale used throughout**
 
 | Level | Meaning |

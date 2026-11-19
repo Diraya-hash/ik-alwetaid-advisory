@@ -1,433 +1,455 @@
 # 03: Knowledge Base Data Schema & Framework Metadata Schema
 
-All schemas are written as **JSON Schema (2020-12)**. In code they are authored as Zod in `packages/schemas` and exported to JSON Schema, so one source feeds the API, LLM structured outputs and UI forms. Abridged where noted. The DDL equivalents are in 05.
+> **v0.2** (2026-11-19). Applies approved decisions **D1** (PDF = internal reference only) and **D2** (five-dimension information model). It also resolves review findings H1 (catalogue identity), H2 (slot registry), H4 (port registry), M3 (deterministic rules), M8 (originator attribution), M9 (stakeholder axes) and M10 (source vs. platform guidance). Changes are marked **[v0.2]**.
+
+All schemas are **JSON Schema (2020-12)**. In code they are authored as Zod in `packages/schemas` and exported to JSON Schema, so one source feeds the API, LLM structured outputs and UI forms. Abridged where noted. DDL equivalents are in 05.
 
 ## 1. Knowledge model overview
 
 ```
-SourceDocument 1─* SourceVersion 1─* Chunk *─* Framework (tags)
-                                        │
-Framework 1─* FrameworkDefinition (versioned behaviour)      TaxonomyNode *─* Framework  (AffinityEdge, weighted)
-Framework 1─* KnowledgeEntry (authored content: definition, when-to-use, steps, pitfalls, examples)
-KnowledgeEntry 1─* Chunk (KnowledgeEntries are chunked & embedded too)
-Glossary term (AR/EN canonical terms)
+FrameworkRecord 1─* FrameworkDefinition (versioned behaviour)
+FrameworkRecord 1─* KnowledgeEntry (platform-authored content, AR/EN, versioned)
+FrameworkRecord *─* TaxonomyNode   (AffinityEdge, weighted)
+FrameworkRecord 1─* ReferenceMapping ──▶ ReferenceSource (internal only, never shown to users)
+KnowledgeEntry  1─* Chunk          (citable unit with stable ID; embeddings optional, see 02 §3.3)
+EvidenceFile    1─* Chunk          (project evidence uploaded by users)
+Registries: Diagnosis Slot Registry · Port Type Registry · Glossary
 ```
 
-- **SourceDocument** is an external reference (the Creately PDF, future licensed books, standards). Immutable versions; licence metadata is mandatory.
-- **KnowledgeEntry** is *our* structured content about a framework. Each entry carries provenance: `source_document` (extracted from a source, with page refs), `platform_authored` (written by our content team) or `ai_drafted_reviewed` (AI first draft, human approved, and never presented as source material).
-- **Chunk** is the retrievable, embedded unit, from either a source or a KnowledgeEntry.
-- **FrameworkDefinition** is the *executable* specification (steps, schemas, visuals, exports).
+**[v0.2] Product knowledge is 100 % platform-authored.** Every user-facing explanation, instruction, example, visual and Arabic text is written independently by our content team and SME-reviewed (provenance `platform_authored` or `ai_drafted_reviewed`). **The product has no runtime or legal dependency on any third-party reference document.** If every reference source were removed tomorrow, the product would behave identically.
 
-## 2. Source document schema
+## 2. Reference sources (internal only) [v0.2]
+
+### 2.1 Policy (D1)
+
+| Rule | Implementation |
+|---|---|
+| Internal editorial reference only | `ReferenceSource` records live in the `kb_internal` schema. They have **no API route, no retrieval path and no UI surface**. Only the content team's tooling can read them |
+| No reproduction | The source file is stored only in a restricted internal bucket (content-team access, audit-logged). Its text is **not** chunked, embedded or placed in prompts. Its diagrams, templates and page images are never extracted or stored |
+| No derivative commercial content | Authors write from general professional knowledge and multiple references. Content review checklist item: *"No sentence, list or example paraphrases a single reference closely; structure and wording are original."* AI drafting prompts never receive reference-source text |
+| No redistribution | Nothing from a reference source appears in exports, logs shipped to customers, eval sets or marketing |
+| Provenance documented internally | `ReferenceMapping` records which entry the content team consulted for coverage, for audit and future licensing discussions. They are never displayed |
+| Future licensed sources | A source whose licence grants display/quotation rights may be promoted to `citable_source` by an explicit, legal-approved status change. Only then can it enter the citable corpus |
+
+### 2.2 ReferenceSource and ReferenceMapping
 
 ```json
 {
-  "$id": "kb/source-document.v1",
+  "$id": "kb/reference-source.v1",
   "type": "object",
-  "required": ["id", "title", "publisher", "licence", "language", "status"],
+  "required": ["id", "title", "rights_holder", "rights_status", "use_status", "storage_key", "recorded_by", "recorded_at"],
   "properties": {
-    "id": { "type": "string", "pattern": "^src_[a-z0-9]{12}$" },
+    "id": { "type": "string", "pattern": "^ref_[a-z0-9]{12}$" },
     "title": { "type": "string" },
-    "publisher": { "type": "string" },
-    "authors": { "type": "array", "items": { "type": "string" } },
-    "edition": { "type": "string" },
-    "published_date": { "type": "string", "format": "date" },
-    "language": { "enum": ["en", "ar", "mixed"] },
-    "licence": {
-      "type": "object",
-      "required": ["type", "usage_rights", "verified_by", "verified_at"],
-      "properties": {
-        "type": { "enum": ["proprietary_reference", "licensed", "open_cc_by", "open_cc_by_sa", "public_domain", "internal"] },
-        "usage_rights": {
-          "type": "array",
-          "items": { "enum": ["index_for_retrieval", "short_quotation_with_attribution", "display_excerpt", "derive_original_content", "reproduce_visuals"] }
-        },
-        "max_excerpt_chars": { "type": "integer", "default": 300 },
-        "attribution_text": { "type": "string" },
-        "notes": { "type": "string" },
-        "verified_by": { "type": "string" },
-        "verified_at": { "type": "string", "format": "date-time" }
-      }
-    },
-    "scope": { "enum": ["global", "org"] },
-    "org_id": { "type": ["string", "null"] },
-    "status": { "enum": ["pending_licence_review", "ingesting", "active", "retired"] },
-    "current_version_id": { "type": "string" }
+    "rights_holder": { "type": "string" },
+    "rights_status": { "enum": ["all_rights_reserved", "licensed", "open_licence", "public_domain"] },
+    "licence_terms": { "type": "string", "description": "Summary of any granted rights; empty when none" },
+    "use_status": { "enum": ["internal_reference_only", "citable_source", "retired"], "default": "internal_reference_only" },
+    "page_count": { "type": "integer" },
+    "page_offset": { "type": "integer", "description": "pdf_page = printed_page + page_offset" },
+    "storage_key": { "type": "string", "description": "Restricted internal bucket" },
+    "sha256": { "type": "string" },
+    "recorded_by": { "type": "string" }, "recorded_at": { "type": "string", "format": "date-time" },
+    "legal_review": { "type": "object", "properties": { "status": { "enum": ["not_requested", "pending", "cleared", "refused"] }, "ref": { "type": "string" } } }
   }
 }
 ```
 
-**Policy hook:** the retrieval layer reads `licence.usage_rights`. If `display_excerpt` is absent, chunks may ground the model, but the UI shows only the citation (title + page) and never the excerpt. If `reproduce_visuals` is absent (the default), image regions are **not stored** at all: only their captions and surrounding text are indexed. For the Creately PDF we assume `["index_for_retrieval", "short_quotation_with_attribution", "derive_original_content"]` **pending your licence confirmation**.
-
-### 2.1 SourceVersion and Chunk
-
 ```json
 {
-  "$id": "kb/chunk.v1",
+  "$id": "kb/reference-mapping.v1",
   "type": "object",
-  "required": ["id", "corpus", "origin", "text", "language", "locator", "embedding_model"],
+  "required": ["framework_id", "reference_source_id", "entry_title", "printed_page", "pdf_page"],
   "properties": {
-    "id": { "type": "string", "pattern": "^chk_[a-z0-9]{16}$" },
-    "corpus": { "enum": ["global_kb", "org_kb", "project_evidence"] },
-    "org_id": { "type": ["string", "null"] },
-    "project_id": { "type": ["string", "null"] },
-    "origin": {
-      "oneOf": [
-        { "type": "object", "required": ["kind", "source_version_id"], "properties": { "kind": { "const": "source_document" }, "source_version_id": { "type": "string" } } },
-        { "type": "object", "required": ["kind", "knowledge_entry_id", "entry_version"], "properties": { "kind": { "const": "knowledge_entry" }, "knowledge_entry_id": { "type": "string" }, "entry_version": { "type": "integer" } } },
-        { "type": "object", "required": ["kind", "evidence_id"], "properties": { "kind": { "const": "user_upload" }, "evidence_id": { "type": "string" } } }
-      ]
-    },
-    "text": { "type": "string", "description": "Display text, original form (diacritics preserved)" },
-    "text_normalised": { "type": "string", "description": "Search-only normalised form (Arabic letter unification, tatweel/diacritics removed)" },
-    "language": { "enum": ["en", "ar"] },
-    "locator": {
-      "type": "object",
-      "properties": {
-        "page_start": { "type": "integer" }, "page_end": { "type": "integer" },
-        "section_path": { "type": "array", "items": { "type": "string" } },
-        "char_start": { "type": "integer" }, "char_end": { "type": "integer" },
-        "sheet": { "type": "string" }, "cell_range": { "type": "string" }
-      }
-    },
-    "section_type": { "enum": ["definition", "use_case", "when_not_to_use", "steps", "example", "pitfall", "template_description", "background", "other"] },
-    "framework_ids": { "type": "array", "items": { "type": "string" } },
-    "taxonomy_codes": { "type": "array", "items": { "type": "string" } },
-    "token_count": { "type": "integer" },
-    "embedding_model": { "type": "string" },
-    "embedding_dim": { "type": "integer" },
-    "content_hash": { "type": "string" }
+    "framework_id": { "type": "string" },
+    "variant": { "type": ["string", "null"], "description": "e.g. 'STEEPLE' for fw_pest_steeple" },
+    "reference_source_id": { "type": "string" },
+    "entry_no": { "type": ["integer", "null"] },
+    "entry_title": { "type": "string" },
+    "printed_page": { "type": "integer" }, "pdf_page": { "type": "integer" },
+    "consulted_for": { "type": "array", "items": { "enum": ["coverage_check", "terminology", "scope_of_use_cases"] } },
+    "notes": { "type": "string", "description": "Internal; never shown" }
   }
 }
 ```
 
-## 3. Shared trust primitives: Claim, EvidenceRef, Provenance
+**Current reference source:** *50 Business Diagrams for Strategic Planning* (Creately). `rights_status = all_rights_reserved`, `use_status = internal_reference_only`, `page_offset = 5`, 56 pages. It is **not ingested**: no chunks, no prompts.
 
-These three types appear in **every** AI output (diagnosis, recommendation, framework elements, narratives). They are the concrete form of "distinguish facts, assumptions and AI-generated suggestions".
+## 3. The information model: five independent dimensions [v0.2, D2]
+
+Every piece of information the platform stores or shows is a **Statement**. A Statement could be a diagnosis symptom, a SWOT item, a "why", a risk, an option or an action. Each Statement carries **five independent dimensions** plus a review state for AI content.
+
+| # | Dimension | Field | Values | Who can change it |
+|---|---|---|---|---|
+| 1 | **Truth status** | `truth_status` | `verified` · `unverified` · `assumption` | **Only an explicit user action** ("Mark as verified", "Mark as assumption", "Mark as unverified"). Never set or changed by edits, AI or system |
+| 2 | **Origin** | `origin` | `user_input` · `external_source` · `ai_generated` | Set at creation. **Immutable.** A user rewrite of an AI statement keeps `origin = ai_generated`; the history shows the rewrite |
+| 3 | **Authorship** | `authorship` | `{created_by_type, created_by, last_modified_by_type, last_modified_by}`, types `user` · `ai` · `system` | Updated automatically on every change |
+| 4 | **Evidence reference** | `evidence_refs[]` | 0..n refs to a user message span, an evidence file chunk, an upstream artifact or a platform KB chunk | User or AI may add; removal is a user action |
+| 5 | **Modification history** | `history[]` (compact) + full version history in `artifact_versions` | `{at, actor_type, actor_id, action, field, from, to, reason?}` | Append-only |
+
+**Statement kinds.** Truth status applies to *assertions about the world*. Proposals (options, recommendations, actions) are not true or false. They are proposed and decided.
+
+| `kind` | Examples | Carries `truth_status`? | Carries `decision_status`? |
+|---|---|---|---|
+| `assertion` | Symptom, cause, SWOT item, risk, stakeholder attribute, metric | ✅ | — |
+| `proposal` | Strategic option, recommendation, countermeasure, action | — (its *premises* are separate assertions, usually assumptions) | ✅ `proposed` · `accepted` · `rejected` · `deferred` |
+
+**AI review state.** Any Statement with `origin = ai_generated` also has `review_state`: `pending_review` · `accepted` · `rejected`. "AI suggestion" in the UI means `origin = ai_generated ∧ review_state = pending_review`. Accepting an AI statement means *"I keep this in my analysis"*. **It does not verify it.** Its truth status is unchanged.
+
+### 3.1 Statement schema
 
 ```json
 {
-  "$id": "core/claim.v1",
+  "$id": "core/statement.v2",
   "type": "object",
-  "required": ["id", "text", "claim_type", "evidence_refs"],
+  "required": ["id", "kind", "text", "language", "origin", "authorship", "evidence_refs"],
   "properties": {
-    "id": { "type": "string" },
+    "id": { "type": "string", "pattern": "^st_[a-z0-9]{12}$" },
+    "kind": { "enum": ["assertion", "proposal"] },
     "text": { "type": "string" },
-    "claim_type": {
-      "enum": ["fact", "assumption", "ai_suggestion", "user_input"],
-      "description": "fact = stated by the user or supported by cited evidence; assumption = plausible but unverified premise the analysis depends on; ai_suggestion = an idea/recommendation generated by the AI; user_input = typed/edited by the user (verbatim authority)"
+    "language": { "enum": ["ar", "en"] },
+    "truth_status": { "enum": ["verified", "unverified", "assumption"], "description": "Required when kind=assertion" },
+    "verification": {
+      "type": "object",
+      "description": "Present only when truth_status=verified",
+      "properties": {
+        "method": { "enum": ["evidence_attached", "user_attested"] },
+        "verified_by": { "type": "string" }, "verified_at": { "type": "string", "format": "date-time" },
+        "note": { "type": "string" }
+      }
     },
-    "evidence_refs": { "type": "array", "items": { "$ref": "core/evidence-ref.v1" } },
-    "confidence": { "enum": ["high", "medium", "low"], "description": "Only for assumption/ai_suggestion" },
-    "verification_hint": { "type": "string", "description": "For assumptions: how the user could verify it" }
-  }
+    "decision_status": { "enum": ["proposed", "accepted", "rejected", "deferred"], "description": "Required when kind=proposal" },
+    "origin": { "enum": ["user_input", "external_source", "ai_generated"] },
+    "review_state": { "enum": ["pending_review", "accepted", "rejected"], "description": "Required when origin=ai_generated" },
+    "authorship": {
+      "type": "object",
+      "required": ["created_by_type", "last_modified_by_type"],
+      "properties": {
+        "created_by_type": { "enum": ["user", "ai", "system"] }, "created_by": { "type": "string" },
+        "last_modified_by_type": { "enum": ["user", "ai", "system"] }, "last_modified_by": { "type": "string" },
+        "ai_run_id": { "type": "string", "description": "The AI run that created it, if any" }
+      }
+    },
+    "evidence_refs": { "type": "array", "items": { "$ref": "core/evidence-ref.v2" } },
+    "confidence": { "enum": ["high", "medium", "low"], "description": "AI's confidence; ai_generated only" },
+    "verification_hint": { "type": "string", "description": "For unverified/assumption: how to verify it" },
+    "depends_on": { "type": "array", "items": { "type": "string" }, "description": "IDs of assertions this statement relies on (premises of a proposal)" },
+    "history": { "type": "array", "maxItems": 20, "items": { "$ref": "core/statement-change.v1" }, "description": "Last 20 changes inline; full trail in artifact_versions + statement_events" }
+  },
+  "allOf": [
+    { "if": { "properties": { "kind": { "const": "assertion" } } }, "then": { "required": ["truth_status"] } },
+    { "if": { "properties": { "kind": { "const": "proposal" } } }, "then": { "required": ["decision_status"] } },
+    { "if": { "properties": { "origin": { "const": "ai_generated" } } }, "then": { "required": ["review_state"] } },
+    { "if": { "properties": { "truth_status": { "const": "verified" } } }, "then": { "required": ["verification"] } }
+  ]
 }
 ```
 
 ```json
 {
-  "$id": "core/evidence-ref.v1",
+  "$id": "core/evidence-ref.v2",
   "type": "object",
   "required": ["kind"],
   "properties": {
-    "kind": { "enum": ["user_message_span", "evidence_chunk", "kb_chunk", "upstream_artifact"] },
+    "kind": { "enum": ["user_message_span", "evidence_chunk", "kb_chunk", "upstream_statement"] },
     "message_id": { "type": "string" }, "char_start": { "type": "integer" }, "char_end": { "type": "integer" },
     "chunk_id": { "type": "string" },
-    "artifact_id": { "type": "string" }, "artifact_version": { "type": "integer" }, "json_pointer": { "type": "string" },
-    "quote": { "type": "string", "maxLength": 300, "description": "Short supporting excerpt; omitted in UI if licence forbids display" }
+    "artifact_id": { "type": "string" }, "artifact_version": { "type": "integer" }, "statement_id": { "type": "string" },
+    "quote": { "type": "string", "maxLength": 300, "description": "Short excerpt from the USER's own message or evidence only" },
+    "added_by_type": { "enum": ["user", "ai", "system"] }
   }
 }
 ```
 
-**Validator rules (enforced in code, not trusted to the model):**
-- V1: `claim_type = fact` ⇒ `evidence_refs.length ≥ 1`, each resolving to a real message span or a chunk supplied in *this* run. Otherwise the claim is auto-downgraded to `assumption` and a `downgraded_reason` is recorded.
-- V2: a `kb_chunk` with `origin.kind = source_document` is the **only** way something is attributed to the PDF. UI copy like "According to *50 Business Diagrams…*, p. 14" is generated from the chunk's source record, never from model text.
-- V3: when a user edits text, `claim_type` becomes `user_input` unless the user explicitly keeps the original type (e.g. editing the wording of an assumption).
-- V4: assumptions surface in the export's **Assumptions Register** with `verification_hint`.
-
-**Element provenance** (attached to every editable element in an artifact):
 ```json
 {
-  "$id": "core/provenance.v1",
+  "$id": "core/statement-change.v1",
   "type": "object",
-  "required": ["origin", "status"],
+  "required": ["at", "actor_type", "action"],
   "properties": {
-    "origin": { "enum": ["ai", "user", "system", "imported"] },
-    "status": { "enum": ["suggested", "accepted", "edited", "rejected"] },
-    "ai_run_id": { "type": "string" },
-    "created_at": { "type": "string", "format": "date-time" },
-    "last_edited_by": { "type": "string" },
-    "last_edited_at": { "type": "string", "format": "date-time" }
+    "at": { "type": "string", "format": "date-time" },
+    "actor_type": { "enum": ["user", "ai", "system"] }, "actor_id": { "type": "string" },
+    "action": { "enum": ["created", "text_edited", "truth_status_changed", "decision_status_changed", "review_accepted", "review_rejected", "evidence_added", "evidence_removed", "challenged", "translated", "restored"] },
+    "field": { "type": "string" }, "from": {}, "to": {},
+    "reason": { "type": "string" },
+    "critic_finding_id": { "type": "string", "description": "If the change resolved a critic finding" }
   }
 }
 ```
 
-## 4. Framework metadata schema (FrameworkDefinition)
+### 3.2 Invariants (enforced in code, tested)
 
-### 4.1 Split: `Framework` (identity & catalogue metadata) vs `FrameworkDefinition` (versioned behaviour)
+| ID | Invariant |
+|---|---|
+| **I1** | **No edit changes `truth_status` or `origin`.** Editing an AI-generated assumption leaves it an AI-generated assumption, with `last_modified_by_type = user` and a `text_edited` history entry |
+| **I2** | `truth_status = verified` requires an explicit user action and a `verification` record. The AI **cannot** emit `verified`; the output schemas for AI routes exclude it from the enum |
+| **I3** | AI-generated assertions default to `assumption` (inferences) or `unverified` (restatements of something the user said). The validator **downgrades** any AI assertion claiming user support whose `user_message_span` ref doesn't resolve, from `unverified` to `assumption`, and logs the downgrade |
+| **I4** | User-typed assertions default to `unverified`. The user can mark them verified (attested) in one click. Attested and evidence-backed verification are shown differently (09 §8.4) |
+| **I5** | A proposal's `depends_on` assertions that are `assumption` or `unverified` surface in the **Assumptions Register** and are checked by the Critic before export |
+| **I6** | "Challenge" (user disagrees with an AI statement without deleting it) records a `challenged` event with a reason and sets `review_state = rejected` (it stays visible, struck through) or keeps it with a dispute note, at the user's choice |
+| **I7** | Restoring an old version never rewrites history; it creates a new version with `restored` events |
+| **I8** | Translation (02 §3.6) creates a new language rendering. It changes neither `truth_status`, `origin` nor `review_state`, and records a `translated` event |
+
+### 3.3 Mapping to the original requirement
+
+| Requirement wording | Model expression |
+|---|---|
+| "Fact" | `kind = assertion ∧ truth_status = verified` (badge shows method: evidence / attested) |
+| "Unverified information" | `truth_status = unverified` (typically something the user reported) |
+| "Assumption" | `truth_status = assumption` |
+| "AI-generated suggestion" | `origin = ai_generated ∧ review_state = pending_review` (any kind) |
+| "External source" | `origin = external_source` (user-uploaded documents, future licensed sources) |
+
+## 4. Platform knowledge, chunks and citations
+
+### 4.1 KnowledgeEntry
 
 ```json
 {
-  "$id": "fw/framework.v1",
+  "$id": "kb/knowledge-entry.v2",
   "type": "object",
-  "required": ["id", "slug", "names", "status", "family", "taxonomy_affinity", "summary", "provenance"],
+  "required": ["id", "framework_id", "section_type", "version", "body", "provenance", "status"],
   "properties": {
-    "id": { "type": "string", "pattern": "^fw_[a-z0-9_]+$", "examples": ["fw_five_whys"] },
+    "id": { "type": "string" }, "framework_id": { "type": "string" },
+    "section_type": { "enum": ["definition", "purpose", "use_case", "when_not_to_use", "inputs", "steps", "example", "pitfall", "facilitation_tip", "interpretation"] },
+    "version": { "type": "integer" },
+    "body": { "type": "object", "required": ["en", "ar"], "properties": { "en": { "type": "string" }, "ar": { "type": "string" } }, "description": "Markdown. Arabic written natively, not translated" },
+    "provenance": { "enum": ["platform_authored", "ai_drafted_reviewed", "org_authored"] },
+    "authors": { "type": "array", "items": { "type": "string" } },
+    "review": { "type": "object", "properties": { "sme": { "type": "string" }, "arabic_editor": { "type": "string" }, "originality_check": { "type": "boolean" }, "approved_at": { "type": "string" } } },
+    "status": { "enum": ["draft", "in_review", "published", "retired"] }
+  }
+}
+```
+
+### 4.2 Chunk (citable unit)
+
+Chunks exist for (a) published KnowledgeEntries (`corpus = platform_kb`), (b) user evidence (`corpus = project_evidence`) and later (c) org KB (`org_kb`, Teams/Enterprise). Reference sources never produce chunks.
+
+```json
+{
+  "$id": "kb/chunk.v2",
+  "type": "object",
+  "required": ["id", "corpus", "origin", "text", "language", "locator"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^chk_[a-z0-9]{16}$" },
+    "corpus": { "enum": ["platform_kb", "org_kb", "project_evidence"] },
+    "org_id": { "type": ["string", "null"] }, "project_id": { "type": ["string", "null"] },
+    "origin": { "oneOf": [
+      { "type": "object", "required": ["kind", "knowledge_entry_id", "entry_version"], "properties": { "kind": { "const": "knowledge_entry" }, "knowledge_entry_id": { "type": "string" }, "entry_version": { "type": "integer" } } },
+      { "type": "object", "required": ["kind", "evidence_id"], "properties": { "kind": { "const": "user_upload" }, "evidence_id": { "type": "string" } } }
+    ] },
+    "text": { "type": "string" }, "text_normalised": { "type": "string" },
+    "language": { "enum": ["en", "ar"] },
+    "locator": { "type": "object", "properties": { "page": { "type": "integer" }, "section_path": { "type": "array", "items": { "type": "string" } }, "sheet": { "type": "string" }, "cell_range": { "type": "string" }, "char_start": { "type": "integer" }, "char_end": { "type": "integer" } } },
+    "section_type": { "type": "string" }, "framework_ids": { "type": "array", "items": { "type": "string" } },
+    "token_count": { "type": "integer" }, "content_hash": { "type": "string" },
+    "embedding": { "description": "[v0.2] OPTIONAL, absent in MVP (02 §3.3). Added by migration if Phase-0 eval shows retrieval is needed" }
+  }
+}
+```
+
+Chunk IDs work **without** vectors. The MVP places platform-KB chunks for the relevant frameworks in the prompt as `<kb id="chk_…">`, and evidence chunks as `<evidence id="chk_…" file="…" page="…">`. Output schemas cite these IDs, and the validator checks them.
+
+## 5. Registries [v0.2]
+
+### 5.1 Diagnosis Slot Registry (`packages/taxonomy/slots.json`)
+
+Preconditions, the sufficiency gate, question selection and the Critic reference **slot IDs only**. CI fails if a slot's `pointer` doesn't exist in `ai/problem-diagnosis.v2` or if any definition references an unknown slot.
+
+| Slot ID | Pointer in diagnosis (04 §3) | Type | Core weight |
+|---|---|---|---|
+| `symptom` | `/problem/observable_symptom` | statement | 0.20 |
+| `stage` | `/classification/stage` | enum + confidence | 0.15 |
+| `domain` | `/classification/domains/0` | enum + confidence | 0.15 |
+| `scope` | `/classification/scope` | enum | 0.10 |
+| `goal` | `/goals` (≥1) or `/problem/desired_state` | statement[] | 0.10 |
+| `impact` | `/problem/impact` | statement | 0.10 |
+| `stakeholders` | `/stakeholders` | list | 0.10 |
+| `constraints` | `/constraints` or `/signals/deadline_known` | statement[] / bool | 0.10 |
+| `recurrence` | `/signals/recurrence` | enum | — |
+| `causal_complexity` | `/signals/causal_complexity_estimate` | 1–5 | — |
+| `process_named` | `/signals/process_named` | bool | — |
+| `process_boundaries` | `/signals/process_boundaries_known` | bool | — |
+| `steps_known` | `/signals/process_steps_known` | bool | — |
+| `measurable_symptom` | `/signals/measurable_symptom` | bool | — |
+| `data_available` | `/signals/data_available` | enum | — |
+| `options_listed` | `/options_mentioned` (count) | int | — |
+| `deadline_known` | `/signals/deadline_known` | bool | — |
+| `new_initiative` | `/signals/new_initiative` | bool | — |
+| `external_focus` | `/signals/external_focus` | bool | — |
+| `structure_focus` | `/signals/structure_focus` | enum `reporting_lines` · `delivery_model` · `none` | — |
+| `items_are_threats` | `/signals/items_are_threats` | bool | — |
+
+Each slot entry also holds: `label {ar,en}`, `question_template {ar,en}`, `why_it_matters {ar,en}`, `answer_widget` (chips / short text / number / yes-no).
+
+### 5.2 Port Type Registry (`packages/frameworks/ports.json`)
+
+| Port type | Item schema | Typical producers → consumers |
+|---|---|---|
+| `problem_statement` | statement | Diagnosis → every framework |
+| `cause_list` | statement[] (assertions) | Cause & Effect, 5 Whys → Strategic Options, Action Plan (countermeasures) |
+| `factor_list` | statement[] tagged by factor | PEST/STEEPLE → SWOT (opportunities/threats) |
+| `swot_set` | 4 × statement[] | SWOT → Strategic Options |
+| `option_list` | proposal[] | Strategic Options → Impact/Effort |
+| `prioritised_option_list` | proposal[] + impact/effort scores | Impact/Effort, Strategic Options → Action Plan |
+| `risk_list` | assertion[] + L/I | Risk Matrix → Action Plan (mitigations), Project Charter |
+| `stakeholder_list` | assertion[] + attributes | Stakeholder Map → Project Charter, Action Plan (owners) |
+| `process_step_list` | ordered steps | SIPOC → BPMN, VSM |
+| `action_list` | proposal[] (owner, dates, status) | Action Plan → Gantt view, Problem-Solving Summary |
+
+**Hand-off semantics: copy-with-link.** The downstream instance copies the items, keeping their IDs as `upstream_statement` evidence refs, and records the upstream version. If the upstream changes later, the downstream shows a *"source changed"* indicator and the Project-level Critic raises a finding. Nothing is synced silently.
+
+### 5.3 Glossary
+`packages/i18n/glossary.json`: `{id, en, ar, notes, do_not_translate}`. Framework names: Latin acronyms are kept (SIPOC, BPMN, SWOT, PEST, STEEPLE), with an Arabic expansion on first use.
+
+## 6. Framework metadata schema
+
+### 6.1 FrameworkRecord (identity & catalogue metadata)
+
+```json
+{
+  "$id": "fw/framework.v2",
+  "type": "object",
+  "required": ["id", "slug", "names", "status", "family", "summary", "taxonomy_affinity", "stage_fit", "provenance", "origin_attribution"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^fw_[a-z0-9_]+$" },
     "slug": { "type": "string" },
-    "catalogue_no": { "type": "integer", "description": "Position in the 50-item catalogue (03 §5)" },
-    "names": {
-      "type": "object", "required": ["en", "ar"],
-      "properties": { "en": { "type": "string" }, "ar": { "type": "string" }, "aliases": { "type": "array", "items": { "type": "string" } } }
-    },
-    "status": { "enum": ["active", "beta", "inactive_catalogued", "deprecated"],
-                "description": "inactive_catalogued = stored in KB for future activation; never recommended" },
-    "family": { "enum": ["process", "root_cause", "strategy_environment", "prioritisation", "risk", "stakeholder_org", "project_planning", "operating_model", "other"] },
-    "summary": { "$ref": "#/$defs/i18n", "description": "≤ 280 chars, used in catalogue prompt prefix and cards" },
-    "purpose_tags": { "type": "array", "items": { "enum": ["understand_process", "find_root_cause", "scan_environment", "assess_position", "prioritise", "assess_risk", "align_stakeholders", "define_scope", "plan_schedule", "assign_actions", "design_organisation", "design_operating_model", "reduce_waste"] } },
-    "taxonomy_affinity": {
-      "type": "array",
-      "items": { "type": "object", "required": ["code", "weight"],
-                 "properties": { "code": { "type": "string" }, "weight": { "type": "number", "minimum": 0, "maximum": 1 } } },
-      "description": "Seed weights for Stage B scoring (04 §5.2). Owned by content team; tuned by feedback"
-    },
-    "preconditions": {
-      "type": "array",
-      "description": "Context requirements (04 §4); evaluated against ProblemDiagnosis",
-      "items": { "type": "object", "required": ["field", "requirement", "severity"],
-                 "properties": {
-                   "field": { "type": "string", "description": "Diagnosis slot, e.g. 'process.boundaries'" },
-                   "requirement": { "enum": ["present", "min_items", "value_in"] },
-                   "param": {},
-                   "severity": { "enum": ["blocking", "important", "nice_to_have"] } } }
-    },
-    "contraindications": {
-      "type": "array",
-      "items": { "type": "object", "required": ["rule", "message"],
-                 "properties": { "rule": { "type": "object", "description": "JSONLogic over diagnosis" }, "message": { "$ref": "#/$defs/i18n" } } }
-    },
+    "names": { "type": "object", "required": ["en", "ar"], "properties": { "en": { "type": "string" }, "ar": { "type": "string" }, "aliases": { "type": "array", "items": { "type": "string" } } } },
+    "status": { "enum": ["active", "beta", "pending_source_review", "inactive", "deprecated"] },
+    "family": { "enum": ["process", "root_cause", "strategy_environment", "prioritisation", "risk", "stakeholder_org", "project_planning", "operating_model"] },
+    "variants": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "names": { "$ref": "#/$defs/i18n" }, "params": { "type": "object" } } },
+                  "description": "e.g. PEST | PESTLE | STEEPLE; Risk 3x3|4x4|5x5; Stakeholder power_interest|influence_support" },
+    "views": { "type": "array", "items": { "type": "string" }, "description": "[v0.2] Additional visual views over the same content, e.g. Action Plan → ['action_table','gantt']" },
+    "summary": { "$ref": "#/$defs/i18n" },
+    "purpose_tags": { "type": "array", "items": { "type": "string" } },
+    "taxonomy_affinity": { "type": "array", "items": { "type": "object", "properties": { "code": { "type": "string" }, "weight": { "type": "number" } } } },
+    "stage_fit": { "type": "object", "additionalProperties": { "type": "number" }, "description": "Stage code → 0..1 (04 §5.2)" },
+    "preconditions": { "type": "array", "items": { "type": "object", "required": ["slot", "requirement", "severity"],
+      "properties": { "slot": { "type": "string", "description": "Slot Registry ID" }, "requirement": { "enum": ["present", "true", "false", "min", "value_in"] }, "param": {}, "severity": { "enum": ["blocking", "important", "nice_to_have"] } } } },
+    "discriminators": { "type": "array", "description": "[v0.2] Rules separating this framework from confusable ones (04 §5.3)",
+      "items": { "type": "object", "properties": { "vs": { "type": "string" }, "slot": { "type": "string" }, "prefer_when": { "type": "object", "description": "JSONLogic over slots" }, "explanation": { "$ref": "#/$defs/i18n" } } } },
+    "contraindications": { "type": "array", "items": { "type": "object", "properties": { "rule": { "type": "object" }, "message": { "$ref": "#/$defs/i18n" } } } },
     "complements": { "type": "array", "items": { "type": "object", "properties": { "framework_id": { "type": "string" }, "relation": { "enum": ["precedes", "follows", "alternative", "deepens"] } } } },
-    "effort": { "type": "object", "properties": { "minutes_typical": { "type": "integer" }, "inputs_needed": { "$ref": "#/$defs/i18n" }, "group_recommended": { "type": "boolean" } } },
-    "outputs_description": { "$ref": "#/$defs/i18n" },
-    "when_not_to_use": { "$ref": "#/$defs/i18n" },
+    "effort": { "type": "object", "properties": { "minutes_typical": { "type": "integer" }, "group_recommended": { "type": "boolean" } } },
     "difficulty": { "enum": ["basic", "intermediate", "advanced"] },
     "visual_type": { "type": "string" },
     "active_definition_version": { "type": "string" },
-    "knowledge_entry_ids": { "type": "array", "items": { "type": "string" } },
-    "source_refs": { "type": "array", "items": { "type": "object", "properties": { "source_document_id": { "type": "string" }, "pages": { "type": "string" } } },
-                     "description": "Empty until the PDF is ingested and pages verified by a reviewer" },
-    "provenance": { "enum": ["source_document", "platform_authored", "ai_drafted_reviewed"] },
-    "review": { "type": "object", "properties": { "reviewed_by": { "type": "string" }, "reviewed_at": { "type": "string" }, "sme_signoff": { "type": "boolean" } } }
+    "provenance": { "enum": ["platform_authored", "ai_drafted_reviewed"] },
+    "origin_attribution": { "type": "object", "description": "[v0.2] Methodology originators (public knowledge), shown in the Explain panel",
+      "properties": { "originators": { "type": "array", "items": { "type": "string" } }, "era": { "type": "string" }, "notes": { "$ref": "#/$defs/i18n" }, "verified_by_sme": { "type": "boolean" } } },
+    "review": { "type": "object" }
   },
   "$defs": { "i18n": { "type": "object", "properties": { "en": { "type": "string" }, "ar": { "type": "string" } } } }
 }
 ```
 
-### 4.2 FrameworkDefinition (behaviour; semver-versioned)
+**[v0.2] Removed:** `catalogue_no` (identity must not depend on a third-party document's numbering) and `source_refs` (replaced by internal `ReferenceMapping`, §2.2).
 
-```json
-{
-  "$id": "fw/definition.v1",
-  "type": "object",
-  "required": ["framework_id", "version", "content_schema", "steps", "visual", "export"],
-  "properties": {
-    "framework_id": { "type": "string" },
-    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
-    "content_schema": { "type": "object", "description": "JSON Schema of FrameworkInstance.content; element items $ref core/claim + core/provenance" },
-    "ports": {
-      "type": "object",
-      "properties": {
-        "inputs":  { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "accepts": { "type": "string", "description": "port type e.g. 'cause_list', 'action_list', 'risk_list', 'process_steps', 'stakeholder_list'" }, "maps_to": { "type": "string", "description": "JSON pointer into content" } } } },
-        "outputs": { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "type": { "type": "string" }, "from": { "type": "string", "description": "JSONata over content" } } } }
-      }
-    },
-    "steps": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "title", "instructions", "target", "required"],
-        "properties": {
-          "id": { "type": "string" },
-          "title": { "$ref": "#/$defs/i18n" },
-          "instructions": { "$ref": "#/$defs/i18n", "description": "User-facing guidance; platform-authored" },
-          "tips": { "type": "array", "items": { "$ref": "#/$defs/i18n" } },
-          "target": { "type": "string", "description": "JSON pointer of the content subtree this step fills" },
-          "required": { "type": "boolean" },
-          "prefill": { "type": "object", "properties": { "enabled": { "type": "boolean" }, "prompt_id": { "type": "string" }, "max_items": { "type": "integer" }, "kb_query_hints": { "type": "array", "items": { "type": "string" } } } },
-          "validation": { "type": "array", "items": { "$ref": "#/$defs/rule" } },
-          "ai_critique": { "type": "object", "properties": { "enabled": { "type": "boolean" }, "prompt_id": { "type": "string" } } }
-        }
-      }
-    },
-    "validation": { "type": "array", "items": { "$ref": "#/$defs/rule" }, "description": "Whole-instance rules" },
-    "visual": {
-      "type": "object", "required": ["type", "mapping"],
-      "properties": {
-        "type": { "type": "string" },
-        "mapping": { "type": "string", "description": "JSONata expression: content → DiagramModel (nodes/regions/edges)" },
-        "options": { "type": "object" }
-      }
-    },
-    "export": {
-      "type": "object",
-      "properties": {
-        "pptx": { "type": "array", "items": { "type": "object", "properties": { "recipe": { "enum": ["title_and_diagram", "diagram_full", "table", "bullets_with_callout", "matrix_with_notes", "register_table"] }, "when": { "type": "object" }, "title_strategy": { "enum": ["action_title_llm", "static"] } } } },
-        "pdf": { "type": "object", "properties": { "sections": { "type": "array", "items": { "type": "string" } } } },
-        "xlsx": { "type": "object", "properties": { "sheets": { "type": "array" } } }
-      }
-    },
-    "changelog": { "type": "string" }
-  },
-  "$defs": {
-    "i18n": { "type": "object", "properties": { "en": { "type": "string" }, "ar": { "type": "string" } } },
-    "rule": {
-      "type": "object", "required": ["id", "level", "logic", "message"],
-      "properties": {
-        "id": { "type": "string" },
-        "level": { "enum": ["error", "warning", "hint"] },
-        "logic": { "type": "object", "description": "JSONLogic; helper ops: count, distinct_ratio, similarity(a,b), has_owner, date_order" },
-        "message": { "$ref": "#/$defs/i18n" }
-      }
-    }
-  }
-}
-```
+### 6.2 FrameworkDefinition (behaviour; semver)
 
-### 4.3 Worked example: 5 Whys (platform-authored, abridged)
+Unchanged in structure from v0.1, except as listed here:
+- `content_schema` items `$ref` **`core/statement.v2`**.
+- `ports.inputs[].accepts` and `ports.outputs[].type` must be **Port Type Registry** IDs.
+- `steps[]` gain `draft_group` (**[v0.2]**, for draft-first mode). Steps in the same group are generated together in one AI call when the user starts in Consultant mode (02 §3.4).
+- **Validation rules are deterministic only [v0.2, M3].** JSONLogic with the allowed operators `var, ==, !=, <, <=, >, >=, and, or, !, count, sum, min, max, unique_count, date_before, is_empty, has_value, matches_regex`. Any semantic judgement (vagueness, duplication by meaning, blame language, logical gaps) belongs to the **Critic** (02 §3.4b), declared per step as `critic: { framework_rubric_id }`.
+- `visual` may declare multiple `views` (e.g. Action Plan: `action_table` and `gantt`).
 
-> Provenance: `platform_authored`. The instructions below are standard professional practice written by us. **Not quoted from or attributed to the PDF.** `source_refs` stays empty until a reviewer maps verified PDF pages.
+### 6.3 Worked example: 5 Whys (abridged; platform-authored)
 
 ```json
 {
   "framework": {
-    "id": "fw_five_whys", "slug": "five-whys", "catalogue_no": 6,
-    "names": { "en": "5 Whys", "ar": "الأسئلة الخمسة (لماذا)", "aliases": ["Five Whys", "5Y"] },
+    "id": "fw_five_whys", "slug": "five-whys",
+    "names": { "en": "5 Whys", "ar": "تحليل «لماذا» الخماسي", "aliases": ["Five Whys", "5Y"] },
     "status": "active", "family": "root_cause",
-    "purpose_tags": ["find_root_cause"],
-    "taxonomy_affinity": [
-      { "code": "OPS.QUALITY", "weight": 0.9 }, { "code": "OPS.PERFORMANCE", "weight": 0.7 },
-      { "code": "CX.SERVICE", "weight": 0.7 }, { "code": "PPL.ENGAGEMENT", "weight": 0.4 }
-    ],
+    "stage_fit": { "FIND_ROOT_CAUSE": 1.0, "MAP_CURRENT_STATE": 0.1 },
+    "taxonomy_affinity": [ { "code": "OPS.QUALITY", "weight": 0.9 }, { "code": "OPS.PERFORMANCE", "weight": 0.7 }, { "code": "CX.SERVICE_LEVEL", "weight": 0.7 } ],
     "preconditions": [
-      { "field": "problem.statement", "requirement": "present", "severity": "blocking" },
-      { "field": "problem.observable_symptom", "requirement": "present", "severity": "blocking" },
-      { "field": "problem.recurrence", "requirement": "present", "severity": "important" }
+      { "slot": "symptom", "requirement": "present", "severity": "blocking" },
+      { "slot": "recurrence", "requirement": "value_in", "param": ["recurring", "chronic"], "severity": "important" }
     ],
-    "contraindications": [
-      { "rule": { ">=": [{ "var": "problem.causal_complexity_estimate" }, 3] },
-        "message": { "en": "Many interacting causes are likely; start with a Cause & Effect diagram and use 5 Whys on its top branches.", "ar": "يُرجَّح وجود أسباب متعددة متداخلة؛ ابدأ بمخطط السبب والنتيجة ثم طبّق الأسئلة الخمسة على أهم فروعه." } }
+    "discriminators": [
+      { "vs": "fw_cause_effect", "slot": "causal_complexity",
+        "prefer_when": { "<=": [{ "var": "causal_complexity" }, 2] },
+        "explanation": { "en": "One failure chain is likely, so drilling down is faster than mapping many causes.", "ar": "يُرجَّح وجود سلسلة إخفاق واحدة، لذا فالتعمق المباشر أسرع من رسم أسباب متعددة." } }
     ],
-    "complements": [
-      { "framework_id": "fw_cause_effect", "relation": "precedes" },
-      { "framework_id": "fw_action_plan", "relation": "follows" }
-    ],
-    "effort": { "minutes_typical": 20, "group_recommended": true },
-    "difficulty": "basic", "visual_type": "why_chain", "provenance": "platform_authored", "source_refs": []
+    "complements": [ { "framework_id": "fw_cause_effect", "relation": "precedes" }, { "framework_id": "fw_action_plan", "relation": "follows" } ],
+    "visual_type": "why_chain", "provenance": "platform_authored",
+    "origin_attribution": { "originators": ["Toyota Production System practice"], "era": "20th century", "verified_by_sme": false }
   },
   "definition": {
     "framework_id": "fw_five_whys", "version": "1.0.0",
-    "content_schema": {
-      "type": "object", "required": ["problem", "chains"],
-      "properties": {
-        "problem": { "$ref": "core/claim.v1" },
-        "chains": { "type": "array", "maxItems": 3, "items": {
-          "type": "object", "properties": {
-            "whys": { "type": "array", "minItems": 1, "maxItems": 7, "items": { "allOf": [{ "$ref": "core/claim.v1" }, { "properties": { "provenance": { "$ref": "core/provenance.v1" } } }] } },
-            "root_cause": { "$ref": "core/claim.v1" },
-            "countermeasures": { "type": "array", "items": { "$ref": "core/claim.v1" } } } } }
-      }
-    },
     "ports": {
-      "inputs": [{ "name": "seed_causes", "accepts": "cause_list", "maps_to": "/chains/*/whys/0" }],
-      "outputs": [{ "name": "root_causes", "type": "cause_list", "from": "chains.root_cause" },
-                  { "name": "countermeasures", "type": "action_list", "from": "chains.countermeasures" }]
+      "inputs":  [ { "name": "seed_causes", "accepts": "cause_list", "maps_to": "/chains/*/whys/0" } ],
+      "outputs": [ { "name": "root_causes", "type": "cause_list", "from": "chains.root_cause" },
+                   { "name": "countermeasures", "type": "option_list", "from": "chains.countermeasures" } ]
     },
     "steps": [
-      { "id": "define", "target": "/problem", "required": true,
-        "title": { "en": "State the problem precisely", "ar": "صِف المشكلة بدقة" },
-        "instructions": { "en": "Describe what happens, where and how often, as an observable fact, not a cause or a blame.", "ar": "صِف ما يحدث وأين وكم مرة، كحقيقة يمكن ملاحظتها، لا كسبب أو اتهام." },
-        "prefill": { "enabled": true, "prompt_id": "fw.five_whys.define", "max_items": 1 } },
-      { "id": "ask_why", "target": "/chains", "required": true,
-        "title": { "en": "Ask 'why?' until you reach a controllable cause", "ar": "اسأل «لماذا؟» حتى تصل إلى سبب يمكن التحكم فيه" },
-        "prefill": { "enabled": true, "prompt_id": "fw.five_whys.chain", "max_items": 3 },
-        "validation": [
-          { "id": "no_repeat", "level": "warning", "logic": { "<": [{ "max_pairwise_similarity": [{ "var": "whys.text" }] }, 0.85] },
-            "message": { "en": "Two answers say nearly the same thing; go one level deeper.", "ar": "إجابتان متشابهتان تقريبًا؛ تعمّق مستوى إضافيًا." } },
-          { "id": "depth", "level": "hint", "logic": { ">=": [{ "count": [{ "var": "whys" }] }, 3] },
-            "message": { "en": "Most chains need at least 3 levels.", "ar": "تحتاج معظم السلاسل إلى ثلاثة مستويات على الأقل." } }
-        ],
-        "ai_critique": { "enabled": true, "prompt_id": "fw.five_whys.critique" } },
-      { "id": "root_cause", "target": "/chains/*/root_cause", "required": true,
-        "title": { "en": "Confirm the root cause", "ar": "أكّد السبب الجذري" },
-        "validation": [{ "id": "not_person", "level": "warning", "logic": { "!": { "mentions_individual_blame": [{ "var": "text" }] } },
-          "message": { "en": "Root causes should be about systems or processes, not individuals.", "ar": "يجب أن يتعلق السبب الجذري بالأنظمة أو العمليات، لا بالأفراد." } }] },
-      { "id": "countermeasures", "target": "/chains/*/countermeasures", "required": false,
-        "title": { "en": "Propose countermeasures", "ar": "اقترح إجراءات تصحيحية" },
-        "prefill": { "enabled": true, "prompt_id": "fw.five_whys.countermeasures", "max_items": 3 } }
+      { "id": "define", "target": "/problem", "required": true, "draft_group": "g1",
+        "title": { "en": "State the problem as an observable fact", "ar": "صِف المشكلة كما تُلاحَظ" } },
+      { "id": "ask_why", "target": "/chains", "required": true, "draft_group": "g1",
+        "validation": [ { "id": "min_depth", "level": "hint", "logic": { ">=": [{ "count": [{ "var": "whys" }] }, 3] },
+                          "message": { "en": "Chains usually need three or more levels to move past symptoms.", "ar": "تحتاج السلاسل عادةً إلى ثلاثة مستويات أو أكثر لتجاوز الأعراض." } } ],
+        "critic": { "framework_rubric_id": "rubric.five_whys.v1" } },
+      { "id": "root_cause", "target": "/chains/*/root_cause", "required": true, "draft_group": "g1" },
+      { "id": "countermeasures", "target": "/chains/*/countermeasures", "required": false, "draft_group": "g2" }
     ],
-    "visual": { "type": "why_chain", "mapping": "{ 'nodes': [ ... ] }" },
-    "export": { "pptx": [ { "recipe": "diagram_full", "title_strategy": "action_title_llm" }, { "recipe": "bullets_with_callout", "when": { "var": "has_countermeasures" } } ] }
+    "visual": { "type": "why_chain", "views": ["why_chain"] },
+    "export": { "pptx": [ { "recipe": "diagram_full", "title_strategy": "action_title_llm" } ] }
   }
 }
 ```
 
-### 4.4 FrameworkInstance (runtime)
+**Source vs. platform guidance [v0.2, M10]:** platform guidance governs product behaviour. Where reference material elsewhere recommends something different (e.g. a fixed number of "whys"), the Explain panel may say *"Some practitioners recommend …; this platform suggests …, because …"*, written originally. Reference-source text is never quoted.
 
-```json
-{
-  "$id": "fw/instance.v1",
-  "type": "object",
-  "required": ["id", "project_id", "framework_id", "definition_version", "content", "step_state"],
-  "properties": {
-    "id": { "type": "string" }, "project_id": { "type": "string" },
-    "framework_id": { "type": "string" }, "definition_version": { "type": "string" },
-    "chain_id": { "type": ["string", "null"] }, "chain_position": { "type": ["integer", "null"] },
-    "inputs_bound": { "type": "array", "items": { "type": "object", "properties": { "port": { "type": "string" }, "from_instance": { "type": "string" }, "from_version": { "type": "integer" } } } },
-    "content": { "type": "object", "description": "Validates against definition.content_schema" },
-    "step_state": { "type": "object", "additionalProperties": { "enum": ["not_started", "prefilled", "in_review", "complete", "skipped"] } },
-    "validation_report": { "type": "array", "items": { "type": "object", "properties": { "rule_id": { "type": "string" }, "level": { "type": "string" }, "path": { "type": "string" }, "message": { "type": "string" } } } },
-    "language": { "enum": ["ar", "en"] }
-  }
-}
-```
+### 6.4 FrameworkInstance (runtime)
 
-## 5. Framework catalogue (50 slots)
+As in v0.1, plus:
+- `content` items are `core/statement.v2`.
+- `active_view` (for multi-view frameworks).
+- `inputs_bound[]` record `{port, from_instance, from_version, copied_statement_ids[]}`.
+- `upstream_changed: boolean` (computed).
 
-`catalogue_no` 1–15 are the **MVP set (active)**. 16–50 are **`inactive_catalogued`** slots. Names, KB content and page references are populated **only from the actual PDF during ingestion task K-2**. They are intentionally not guessed here.
+## 7. Framework catalogue
 
-| No | id | EN | AR (draft, glossary-reviewed) | Family | Visual type | MVP wave |
+### 7.1 MVP (15 frameworks, all `active` at GA)
+
+| id | EN | AR (draft, glossary review pending) | Family | Visual / views | Variants | Wave |
 |---|---|---|---|---|---|---|
-| 1 | fw_bpmn | BPMN | نمذجة إجراءات الأعمال (BPMN) | process | process_flow_swimlane | Beta-2 |
-| 2 | fw_sipoc | SIPOC | نموذج SIPOC (الموردون-المدخلات-العملية-المخرجات-العملاء) | process | sipoc_table_flow | Beta-1 |
-| 3 | fw_vsm | Value Stream Mapping | خريطة تدفق القيمة | process | value_stream | Beta-2 |
-| 4 | fw_org_chart | Organizational Chart | الهيكل التنظيمي | stakeholder_org | hierarchy_tree | Beta-2 |
-| 5 | fw_op_model_canvas | Operating Model Canvas | لوحة نموذج التشغيل | operating_model | canvas_blocks | Beta-2 |
-| 6 | fw_five_whys | 5 Whys | الأسئلة الخمسة (لماذا) | root_cause | why_chain | Beta-1 |
-| 7 | fw_cause_effect | Cause and Effect Diagram | مخطط السبب والنتيجة (عظمة السمكة) | root_cause | fishbone | Beta-1 |
-| 8 | fw_risk_matrix | Risk Assessment Matrix | مصفوفة تقييم المخاطر | risk | heat_matrix | Beta-1 |
-| 9 | fw_stakeholder_map | Stakeholder Map | خريطة أصحاب المصلحة | stakeholder_org | matrix_2x2_scatter | Beta-2 |
-| 10 | fw_project_charter | Project Charter | ميثاق المشروع | project_planning | document_blocks | Beta-2 |
-| 11 | fw_gantt | Gantt Chart | مخطط جانت | project_planning | gantt | Beta-2 |
-| 12 | fw_swot | SWOT Analysis | تحليل SWOT (نقاط القوة والضعف والفرص والتهديدات) | strategy_environment | matrix_2x2_list | Beta-1 |
-| 13 | fw_pest_steeple | PEST / STEEPLE Analysis | تحليل PEST / STEEPLE | strategy_environment | factor_columns | Beta-1 |
-| 14 | fw_impact_effort | Impact Effort Matrix | مصفوفة الأثر والجهد | prioritisation | matrix_2x2_scatter | Beta-1 |
-| 15 | fw_action_plan | Action Plan | خطة العمل | project_planning | action_table | Beta-1 |
-| 16–50 | `fw_tbd_16` … `fw_tbd_50` | *from PDF ToC* | *to translate* | *assign at ingestion* | *map to an existing visual type where possible* | Future |
+| fw_swot | SWOT Analysis | تحليل SWOT | strategy_environment | matrix_2x2_list | — | Beta-1 |
+| fw_pest_steeple | PEST / STEEPLE Analysis | تحليل PEST / STEEPLE | strategy_environment | factor_columns | PEST · PESTLE · STEEPLE | Beta-1 |
+| fw_five_whys | 5 Whys | تحليل «لماذا» الخماسي | root_cause | why_chain | — | Beta-1 |
+| fw_cause_effect | Cause and Effect Diagram | مخطط السبب والنتيجة (عظمة السمكة) | root_cause | fishbone | category sets (6M, 4P, custom) | Beta-1 |
+| fw_sipoc | SIPOC | نموذج SIPOC | process | sipoc_table_flow | — | Beta-1 |
+| fw_impact_effort | Impact Effort Matrix | مصفوفة الأثر والجهد | prioritisation | matrix_2x2_scatter | — | Beta-1 |
+| fw_risk_matrix | Risk Assessment Matrix | مصفوفة تقييم المخاطر | risk | heat_matrix | 3×3 · 4×4 · 5×5 | Beta-1 |
+| fw_action_plan | Action Plan (incl. **Gantt view**) | خطة العمل | project_planning | action_table · **gantt** | — | Beta-1 (table) / Beta-2 (Gantt view) |
+| fw_gantt | Gantt Chart | مخطط جانت | project_planning | **alias entry → opens fw_action_plan in `gantt` view** | — | Beta-2 |
+| fw_stakeholder_map | Stakeholder Map | خريطة أصحاب المصلحة | stakeholder_org | matrix_2x2_scatter | power_interest · influence_support | Beta-2 |
+| fw_project_charter | Project Charter | ميثاق المشروع | project_planning | document_blocks | — | Beta-2 |
+| fw_bpmn | BPMN (core subset) | نمذجة إجراءات الأعمال (BPMN) | process | process_flow_swimlane | — | Beta-2 |
+| fw_vsm | Value Stream Mapping | خريطة تدفق القيمة | process | value_stream | data-light · data-rich | Beta-2 |
+| fw_org_chart | Organizational Chart | الهيكل التنظيمي | stakeholder_org | hierarchy_tree | role-based (default) · named | Beta-2 |
+| fw_op_model_canvas | Operating Model Canvas | لوحة نموذج التشغيل | operating_model | canvas_blocks | — | Beta-2 |
 
-**Design notes for the MVP set**
-- **PEST vs STEEPLE** is **one framework with a variant parameter** (`factors: PEST | PESTLE | STEEPLE`), not three entries. It shares one `factor_columns` visual.
-- **Risk Matrix** has a `scale` parameter (3×3, 4×4, 5×5) and a scoring method (`L×I` by default; banding thresholds configurable per org in Phase 3, to align with an enterprise's ERM policy).
-- **Gantt** supports a dual-calendar header and workweek configuration (Sun–Thu default for GCC locales; Mon–Fri otherwise).
+**Gantt [v0.2, approved]:** `fw_gantt` stays a catalogue and recommendation entry, because users ask for "a Gantt chart". Selecting it creates or opens the project's **Action Plan instance in the Gantt view**. There is one dataset (actions, owners, start/end, dependencies, status) and two views. Gantt-specific fields (`start`, `end`, `depends_on_action_ids`, `milestone`) are optional Action Plan fields; the Gantt view lists actions missing dates in a side tray.
 
-**Activation checklist for slots 16–50** (per framework): (1) licence-compliant KB entries extracted from the PDF with page refs → (2) SME review → (3) Framework record + affinity weights → (4) Definition (reusing a visual type) → (5) ≥ 10 golden-set cases → (6) flag `status: beta` for a cohort → (7) `active`.
+### 7.2 Platform capability (not a catalogue framework)
 
-## 6. Content governance
+| id | Name | Why it isn't a "framework" |
+|---|---|---|
+| `cap_strategic_options` | Generate Strategic Options / توليد الخيارات الاستراتيجية | A consulting capability (04 §6) that produces and compares courses of action. It is platform-designed, needs no reference source and appears in recommendations as a capability card |
+
+### 7.3 Pending entries
+The internal reference source has **50** entries. The MVP set maps to **16** of them (PEST and STEEPLE are separate entries there, one variant-based framework here). **34 entries remain `pending_source_review`.** They are not named, described or catalogued in product data. Activation of any method needs: an independent platform-authored KB (no derivation from the reference text) → SME review → definition → ≥ 10 golden cases → beta → active. Order is driven by the `no_good_fit` demand log (04 §5.7).
+
+## 8. Content governance
 
 | Stage | Who | Gate |
 |---|---|---|
-| Draft | Content author (or AI-drafted → `ai_drafted_reviewed` only after review) | Schema-valid (CI) |
-| SME review | Methodology SME (certified practitioner) | Checklist: accuracy, AR/EN parity, no copied text beyond licence, examples original |
-| Localisation review | Arabic business editor | Glossary compliance; MSA register |
-| Eval | CI | Golden-set regression ≤ 3 pts drop |
-| Publish | Content lead | Version bump; changelog; old definition versions kept for existing instances |
-
-The **glossary** (`packages/i18n/glossary.json`) is part of governance. Each term has `{en, ar, notes, do_not_translate}`; for example, "SIPOC" and "BPMN" keep their Latin acronyms with an Arabic expansion on first use.
+| Draft | Content author (AI drafting allowed **without** reference-source input) | Schema-valid (CI) |
+| SME review | Methodology SME | Accuracy, completeness, **originality check** (no close paraphrase of any single reference) |
+| Arabic editorial | Arabic business editor | Native writing (not translation), glossary, MSA business register |
+| Eval | CI | Golden-set regression ≤ 3 points |
+| Publish | Content lead | Version bump, changelog; old definition versions kept for existing instances |

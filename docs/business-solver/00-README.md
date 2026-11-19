@@ -1,58 +1,72 @@
-# Business Problem-Solving Platform: Design Pack (v0.1)
+# Business Problem Solver: Design Pack (v0.2)
 
-> Status: **Draft for review. No code yet** (as requested).
-> Working name: **Advisory Studio**. Code name `studio`. Rename freely: the name appears in no schema.
+> Status: **v0.2: approved decisions applied. No feature implementation yet.** Next step: Phase 0 (foundations and de-risking spikes).
+> Product identity: **Business Problem Solver**. Brand name TBD (open decision D13). Code name `bps`.
 > Date: 2026-11-19
 
-## What this pack contains
+**Positioning**
 
-| # | Document | Covers the requested deliverables |
+| | |
+|---|---|
+| Product identity | Business Problem Solver |
+| User experience | An AI Management Consultant |
+| Core intelligence | Business Framework Intelligence |
+| Principle | *Simplicity in experience. Sophistication in intelligence.* |
+| Promise | *We don't just answer business questions. We help you solve business problems.* |
+
+## Documents
+
+| # | Document | Covers | Version |
+|---|---|---|---|
+| 01 | [Product Requirements Document](01-prd.md) | PRD, user journey, functional requirements, MVP prioritisation, metrics | v0.2 |
+| 02 | [Technical Architecture](02-architecture.md) | Engines and modules (incl. Strategic Options and Critic), AI platform, visualisation, deployment profiles (incl. KSA in-Kingdom) | v0.2 |
+| 03 | [Knowledge & Framework Schemas](03-knowledge-schemas.md) | Five-dimension information model, platform KB, reference-source policy, registries, framework metadata, catalogue | v0.2 |
+| 04 | [AI Logic](04-ai-logic.md) | Taxonomy, diagnosis, sufficiency gate, recommendation + differentiation rules + No Good Fit, Strategic Options, three-level Critic, evals | v0.2 |
+| 05 | [Database Architecture](05-database.md) | Postgres DDL, RLS, statement events, critique tables, billing, retention | v0.2 |
+| 06 | [Security & Data Privacy](06-security-privacy.md) | Threat model, privacy for AI, residency incl. KSA option, IP and reference-source policy | v0.2 |
+| 07 | [Development Roadmap](07-roadmap.md) | 24-week plan to GA, Phase 0 spikes, decision status | v0.2 |
+| 08 | [Product & Architecture Review](08-product-architecture-review.md) | Audit of v0.1, findings C1–C4, H1–H15, M1–M16, L1–L8 | Review of v0.1 |
+| 09 | [UX & Screen Specification](09-ux-and-screen-specification.md) | IA, 20 screens, wireframes, interaction rules, states, responsive, bilingual design system, export consistency | v0.2 (new) |
+
+## Reference source status (D1)
+
+The reference PDF *"50 Business Diagrams for Strategic Planning"* (Creately; © Cinergix Pty Ltd, all rights reserved) has been provided and inspected. It is **not ingested**.
+
+- It is an **internal editorial reference only**. It is recorded in a restricted internal schema and bucket (03 §2) and never enters the product KB, prompts, UI or exports.
+- Its diagrams, wording, templates and distinctive visual designs are **not reproduced**. Its content is not published, redistributed or used for derivative commercial content without permission.
+- **All product knowledge is platform-authored** (English and native Arabic), SME-reviewed and originality-checked. The product has **no legal or technical dependency** on the PDF.
+- The MVP's 15 frameworks correspond to **16** of its 50 entries (PEST and STEEPLE are separate there). **34 entries remain pending.** They are not named or catalogued in product data and are activated only through independently authored content (03 §7.3).
+
+## v0.2 changelog
+
+| Decision / finding | Change | Where |
 |---|---|---|
-| 01 | [Product Requirements Document](01-prd.md) | 1 PRD, 7 user journey & application flow, 8 MVP feature prioritisation |
-| 02 | [Technical Architecture](02-architecture.md) | 2 Complete technical architecture (7 engines), 10 Visualisation architecture |
-| 03 | [Knowledge & Framework Schemas](03-knowledge-schemas.md) | 3 Knowledge Base data schema, 4 Framework metadata schema |
-| 04 | [AI Logic: Taxonomy, Diagnosis, Recommendation](04-ai-logic.md) | 5 AI recommendation logic, 6 Problem classification taxonomy |
-| 05 | [Database Architecture](05-database.md) | 9 Database architecture (DDL-level) |
-| 06 | [Security & Data Privacy](06-security-privacy.md) | 11 Security and data privacy |
-| 07 | [Development Roadmap](07-roadmap.md) | 12 Development roadmap |
+| **D1** Reference PDF internal only | Reference-source schema in `kb_internal`; platform-authored KB; attribution to methodology originators; CI leakage check | 03 §2, 05 §3.6, 06 §7 |
+| **D2** Information model | Statements with **truth status** (Verified / Unverified / Assumption), **origin** (User input / External source / AI generated), **authorship** (User / AI / System), **evidence refs**, **modification history**; invariants I1–I8 (edits never change truth status or origin; AI can't verify) | 03 §3, 04 §3, 05 §3.3a, 09 §8.4 |
+| **D3** Three-level Critic | Item (deterministic incl. calculations) / Framework (rubrics) / Project (alignment, mandatory pre-export); severity, explanation and correction required; accept/reject/dismiss; review history; never auto-modifies | 02 §3.4b, 04 §7, 05 §3.10, 09 S12 |
+| **D4** Strategic Options + No Good Fit | Options capability (generate, rationale, impact/effort/risk/feasibility, assumptions, dependencies, preferred option with trade-offs); deterministic No Good Fit rule; demand log | 02 §3.4a, 04 §5.7, §6, 09 S07, S10 |
+| Keep 15 frameworks + differentiation rules | Discriminators for 8 confusable sets, with golden-set gates | 03 §6.1, 04 §5.3 |
+| Draft-first default | Consultant mode (default) + Workshop mode | 02 §3.4, 09 S08–S09 |
+| Gantt = Action Plan view | One dataset, two views; `fw_gantt` is a catalogue alias | 03 §7.1, 09 S11 |
+| Vector search removed from MVP (if eval confirms) | Long-context cached KB; FTS for evidence; per-model embedding tables as the extension | 02 §3.3, 05 §3.6, 07 SP-4 |
+| Problem-Solving Summary | New artifact; first section of every deliverable | 01 FR-EX-0, 02 §3.6, 09 S13 |
+| Export language AR / EN / original | Translated versions, labelled and reviewable | 02 §3.6 (DR-24), 09 S14 |
+| Future KSA in-Kingdom hosting | Deployment profiles; Gateway fails closed; verification gate | 02 §7.1, 06 §4.1 |
+| Pricing undecided | Billing plumbing without prices; cost spike first | 01 FR-AC-2, 05 §3.12, 07 SP-1 |
+| Review inconsistencies | Catalogue identity (H1), slot registry (H2), phase vocabulary (H3), port registry (H4), Arabic layout service (H10), UX spec (H12), billing (H13), roles (M1), stable enum (M2), deterministic rules (M3), checkpoints (M4), derived projection (M5), workweek by country (M6), taxonomy simplification (M7), originators (M8), stakeholder axes (M9), web hosting (M16), auth wording (L1), embeddings table (L2) | Throughout |
+| Roadmap | 24 weeks to GA; Phase 0 spikes; 4 full-stack engineers assumed | 07 |
 
-Every major decision is recorded as a **Decision Record (DR-nn)** with rationale and rejected alternatives. The index is in [02 §0](02-architecture.md#0-decision-records-index).
+## Open decisions
 
-## ⚠️ Source status: the reference PDF was not available
-
-The brief names *"50 Business Diagrams for Strategic Planning – Creately"* as the primary knowledge source. **I could not find it.** I checked:
-
-- this repository,
-- the session's upload and attachment folders,
-- your Google Drive (searched by title and full text for "Creately" and "Business Diagrams").
-
-So, to follow the rule *"do not invent information and attribute it to the PDF"*:
-
-1. **Nothing in this pack is attributed to the PDF.** Methodology descriptions here come from general professional practice. They are tagged `provenance: "platform_authored"` in the schema examples, never `source_document`.
-2. The schemas include a **source ingestion pipeline** (03 §2, 02 §3.3). It turns the PDF into page-anchored, citable chunks once it is supplied. Every PDF-derived field then carries `source_ref {document_id, page, locator}`.
-3. **The framework catalogue (03 §5) lists the 15 MVP methodologies by name only.** The other 35 entries are placeholders `F16–F50`. They get filled from the PDF's actual table of contents during ingestion (roadmap Phase 0, task K-2). I did not guess which 35 frameworks the PDF contains.
-4. **Copyright posture:** the PDF is treated as a **reference to learn from, not content to republish**. We store short, cited excerpts for retrieval and attribution. We do not store or render its diagrams or templates. All visuals come from our own renderers (02 §6). See 06 §7.
-
-**Action needed from you:** upload the PDF to the repo (e.g. `docs/business-solver/sources/`) or to Drive, and confirm you have the right to use it as an internal reference. Phase 0 cannot finish without it.
+| # | Decision | When |
+|---|---|---|
+| D8 | PPTX policy for graph diagrams (native vs. vector picture + "edit in app") | Gate 0, from spike SP-2 |
+| D10 | Segment sequencing (private sector first; government after in-Kingdom verification) | Before Beta-1 recruitment |
+| D11 | Pricing levels | After cost measurement (SP-1) and beta usage |
+| D13 | Brand name | Product owner |
+| D14 | Expert Review add-on (human consultant) | Before GA commercial plan |
+| Team | 4 vs 3 full-stack engineers (affects GA date or scope) | Gate 0 |
 
 ## Relationship to the existing repo
 
-This repo already contains:
-
-- `alwetaid-advisory-v2/`: the marketing site.
-- `ik-lna-simulator/`: a Next.js 14 / TypeScript / Tailwind / Zod app with a working AR/EN + RTL i18n system, design tokens, a contrast checker and E2E scripts.
-
-The new platform is a **separate set of apps in the same repo** (`apps/studio-web`, `apps/studio-api`, `apps/studio-worker`; see 02 §8). It **reuses the simulator's proven pieces**: the i18n dictionary pattern and `[locale]` routing, the token CSS, the IBM Plex Sans Arabic + Inter font pairing, and the contrast and axe checks. That saves an estimated 2–3 weeks of RTL groundwork.
-
-## The ten-line summary
-
-1. **Chat-first, but not chat-only.** The conversation drives a structured **Project Workspace**. Every AI output lands as an editable, versioned *artifact*, not as chat text.
-2. **Seven engines behind one orchestrator.** They are deployed as modules of a single TypeScript service plus one worker service (a modular monolith), not as microservices (DR-01).
-3. **Every AI output is schema-validated JSON.** Every claim inside it is typed `fact | assumption | ai_suggestion | user_input`, with evidence references (DR-05).
-4. **Gated recommendation.** The engine refuses to recommend until a *context sufficiency score* passes a threshold. Until then it asks targeted clarifying questions (04 §4).
-5. **Hybrid recommendation.** Deterministic rules plus taxonomy-to-framework affinity scoring produce the candidates. The LLM re-ranks them and explains why, and it can only pick from candidates the rules allow (DR-07). This keeps it explainable, auditable and testable.
-6. **Frameworks are data, not code.** Each methodology is a versioned *Framework Definition* (JSON). It declares the inputs, guided steps, output schema, validation rules and visual type. Turning on framework #16 means writing content, not code (DR-08).
-7. **One canonical document model renders everywhere.** A diagram's JSON model renders to interactive SVG on the web, and to PPTX, PDF and DOCX on the server, from the same source (DR-12).
-8. **Postgres is the system of record.** It holds project data, the knowledge base (pgvector plus full-text search) and the audit trail. Row-level security gives tenant isolation, and an enterprise single-tenant option exists (DR-14, DR-15).
-9. **Arabic is first-class, not a translation layer.** The app is bilingual end to end. That covers the UI, the AI output (generated natively in the user's language, not machine-translated), the RTL diagram layout and the RTL PPTX/PDF exports.
-10. **MVP: 15 frameworks, 3 export formats (PPTX, PDF, PNG/SVG), single-user workspaces with sharing, 14 weeks.** Enterprise SSO, teams and BYO-model follow in Phase 3.
+The new apps will be `apps/bps-web`, `apps/bps-api` and `apps/bps-worker` (02 §8). They reuse the `ik-lna-simulator` i18n dictionaries and `[locale]` routing, the IK token CSS (incl. the existing fact/claim/assumption colours, re-mapped to the D2 vocabulary in 09 §8.1), the IBM Plex Sans Arabic + Inter pairing, and the contrast/axe checks. `ik-lna-simulator/` and `alwetaid-advisory-v2/` are untouched.
