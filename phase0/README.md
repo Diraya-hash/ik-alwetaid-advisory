@@ -18,7 +18,9 @@ Experiments for docs/business-solver/10–13. **Not production code.** Nothing h
 | PowerPoint validation pack | `python3 experiments/e-pptx/build_validation_pack.py` (protocol: doc 16) | No |
 | PowerPoint results workbook | `python3 experiments/e-pptx/make_results_template.py` (refuses to overwrite) | No |
 | Human evaluation (doc 17) | `node scripts/human-eval.mjs prepare|submit|compare …` | No (needs model results) |
-| Integrity check | `node scripts/verify-integrity.mjs` | No |
+| Integrity check | `node scripts/verify-integrity.mjs` (scoring freeze + reporting lock + all seals) | No |
+| PowerPoint workbook summary | `python3 experiments/e-pptx/summarize_manual_results.py <filled.xlsx> --out results/validation-pack/manual-summary.json` | No |
+| Consolidated GO/NO-GO report | `node scripts/evidence-report.mjs --effort=high --human=<round dir> --pptx=<manual-summary.json>` (NO-GO while any prerequisite is missing) | Needs model runs |
 
 **API key:** never in files, logs or chat. Use the reviewer-gated GitHub environment secret and the `phase0-eval` workflow (doc 14 §4). The held-out set must not be read for tuning. The suite refuses to score it if the frozen configuration or the seal changed.
 

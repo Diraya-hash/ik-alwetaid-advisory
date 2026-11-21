@@ -34,6 +34,7 @@
 | 14 | [**Phase 0 Decision Report**](14-phase-0-decision-report.md) | Approved decisions, outstanding experiments, measured results, risks, Beta-1 readiness criteria, 3-engineer plan, API key security | **Current decision baseline** |
 | 15 | [PowerPoint Export Service Contract](15-pptx-export-service-contract.md) | Python service boundary, API, schemas, validation gates, fonts, versioning | v1.0 draft |
 | 16 | [PowerPoint Manual Validation Protocol](16-pptx-manual-validation-protocol.md) | PowerPoint Win/Mac + Keynote test matrix, validation packs, **consolidated six-dimension results workbook**, exit criteria | Ready to run |
+| — | Evaluation reporting | Per-language independent gates, 5-segment reporting, evidence classes E1–E5, consolidated GO/NO-GO generator: doc 14 §8c | Ready |
 | 17 | [Human Evaluator Guide](17-human-evaluator-guide.md) | 20-scenario blinded human review: criteria, scoring, examples, Arabic/English instructions, disagreement adjudication, coordinator steps | Ready to run |
 
 Phase 0 prototypes live in [`/phase0`](../../phase0/README.md), isolated from production code.

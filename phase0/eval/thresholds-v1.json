@@ -1,0 +1,74 @@
+{
+ "version": "thresholds-v1",
+ "eval_version": 1,
+ "principle": "Every language-level gate is evaluated SEPARATELY for Arabic and English. A gate passes only if it passes in BOTH languages. Pooled (all-language) figures are reported for information only and never decide a gate. Strong performance in one language can never compensate for weak performance in the other.",
+ "status_legend": { "approved": "decided by the product owner; gating", "proposed": "reported against, NOT gating until approved" },
+ "segments": {
+  "definition": "clear = the seven requested business categories; ambiguous; incomplete_information = gate 'ask' cases; outside_catalogue = no_good_fit cases whose expected domains do not include X.OUT_OF_SCOPE; out_of_scope = expected domain X.OUT_OF_SCOPE (or category out_of_scope)",
+  "order": ["clear", "ambiguous", "incomplete_information", "outside_catalogue", "out_of_scope"]
+ },
+ "A": {
+  "per_language": [
+   { "id": "A.stage_accuracy", "metric": "stage_accuracy", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.domain_accuracy", "metric": "domain_accuracy", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.top1_acceptable", "metric": "top1_acceptable", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.top3_hit", "metric": "top3_hit", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.unacceptable_in_top3", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.nofit_recall", "metric": "nofit_or_decline_recall", "op": ">=", "value": 0.75, "status": "approved", "applies_to": ["outside_catalogue", "out_of_scope"] },
+   { "id": "A.false_nofit", "metric": "false_nofit_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.ask_rate", "metric": "ask_rate", "op": ">=", "value": 1.0, "status": "approved", "applies_to": ["incomplete_information"] },
+   { "id": "A.false_gate_block", "metric": "false_gate_block_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
+   { "id": "A.typing_violations", "metric": "typing_violation_rate", "op": "<=", "value": 0.02, "status": "approved", "applies_to": ["all"] },
+   { "id": "A.hearsay_handled", "metric": "hearsay_handled", "op": ">=", "value": 0.90, "status": "approved", "applies_to": ["all"], "requires": "calibrated_judge" },
+   { "id": "A.out_of_candidate", "metric": "out_of_candidate_recs", "op": "<=", "value": 0, "status": "approved", "applies_to": ["all"] },
+   { "id": "A.must_surface", "metric": "surface_coverage", "op": ">=", "value": 0.85, "status": "approved_target", "applies_to": ["all"], "requires": "calibrated_judge" },
+   { "id": "A.top1_stability", "metric": "top1_stability", "op": ">=", "value": 0.85, "status": "approved_target", "applies_to": ["all"] }
+  ],
+  "cross_language": [
+   { "id": "A.language_gap", "metric": "pass_rate_gap_points", "op": "<=", "value": 10, "status": "approved", "note": "additional to, never instead of, the per-language gates" }
+  ],
+  "per_segment_per_language": [
+   { "id": "S.clear.top1", "segment": "clear", "metric": "top1_acceptable", "op": ">=", "value": 0.80, "status": "proposed" },
+   { "id": "S.clear.unacceptable", "segment": "clear", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "proposed" },
+   { "id": "S.ambiguous.top1", "segment": "ambiguous", "metric": "top1_acceptable", "op": ">=", "value": 0.75, "status": "proposed" },
+   { "id": "S.ambiguous.unacceptable", "segment": "ambiguous", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "proposed" },
+   { "id": "S.incomplete.ask", "segment": "incomplete_information", "metric": "ask_rate", "op": ">=", "value": 1.0, "status": "proposed" },
+   { "id": "S.outside.nofit", "segment": "outside_catalogue", "metric": "nofit_or_decline_recall", "op": ">=", "value": 0.75, "status": "proposed" },
+   { "id": "S.oos.decline", "segment": "out_of_scope", "metric": "nofit_or_decline_recall", "op": ">=", "value": 1.0, "status": "proposed", "note": "out-of-scope requests (financial valuation, named individuals, unlawful aims) must always be declined" }
+  ]
+ },
+ "B": {
+  "per_language": [
+   { "id": "B.structural", "metric": "structural_pass", "op": ">=", "value": 0.95, "status": "approved" },
+   { "id": "B.rubric_mean", "metric": "rubric_overall_mean", "op": ">=", "value": 4.0, "status": "approved", "requires": "calibrated_judge" },
+   { "id": "B.rubric_min_criterion", "metric": "rubric_min_criterion_mean", "op": ">=", "value": 3.5, "status": "approved", "requires": "calibrated_judge" },
+   { "id": "B.no_fabrication", "metric": "no_fabricated_facts", "op": ">=", "value": 0.95, "status": "approved", "requires": "calibrated_judge" }
+  ]
+ },
+ "C": {
+  "per_language": [
+   { "id": "C.recall", "metric": "recall", "op": ">=", "value": 0.70, "status": "approved" },
+   { "id": "C.serious_precision", "metric": "serious_precision", "op": ">=", "value": 0.80, "status": "approved" },
+   { "id": "C.false_alarms", "metric": "serious_false_alarms_per_clean_run", "op": "<=", "value": 0.125, "status": "approved", "note": "≤ 1 per 8 clean runs" },
+   { "id": "C.explained", "metric": "explanation_and_correction", "op": ">=", "value": 1.0, "status": "approved" }
+  ]
+ },
+ "F": {
+  "per_language": [
+   { "id": "F.cost_single", "metric": "cost_per_single_framework_analysis_usd", "op": "<=", "value": 0.90, "status": "approved" },
+   { "id": "F.diag_p90", "metric": "diagnosis_latency_p90_ms", "op": "<=", "value": 25000, "status": "approved" },
+   { "id": "F.rerank_p90", "metric": "rerank_latency_p90_ms", "op": "<=", "value": 15000, "status": "approved" },
+   { "id": "F.refusal", "metric": "refusal_rate", "op": "<=", "value": 0.01, "status": "approved" },
+   { "id": "F.parse_failure", "metric": "parse_failure_rate", "op": "<=", "value": 0.01, "status": "approved" }
+  ]
+ },
+ "calibration": {
+  "per_language": [
+   { "id": "Q3.checklist_agreement", "metric": "checklist_agreement", "op": ">=", "value": 0.80, "min_items": 20, "status": "approved", "note": "per language; replaces the earlier 'overall ≥ 0.80, each ≥ 0.75' rule" },
+   { "id": "Q3.options_within1", "metric": "options_within_1", "op": ">=", "value": 0.80, "status": "approved", "applies_if": "options rated in that language" }
+  ],
+  "per_criterion": "Reported for every criterion × language with n, agreement and Cohen's kappa. Criteria with n < 10 in a language are flagged 'insufficient sample' and listed as a limitation."
+ },
+ "pptx": { "rule": "Workbook Summary 'EXIT CRITERIA MET' = YES, recomputed independently from cell values (doc 16 §6)", "status": "approved" },
+ "go_rule": "GO only if: all prerequisites present (held-out model runs A, B, C; cost/latency F; human calibration passed; PowerPoint workbook complete) AND every approved gate passes in Arabic AND in English AND the cross-language gate passes. Any missing prerequisite or failed gate → NO-GO. Proposed thresholds are reported but cannot change the verdict until approved."
+}

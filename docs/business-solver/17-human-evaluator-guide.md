@@ -74,7 +74,8 @@ An AI system ("the consultant") read each business challenge, diagnosed it, and 
    - `rationale` (one sentence);
    - `follow_up`, one of: `judge_prompt_issue` · `answer_key_erratum` · `none`.
 4. **Integrity rule:** adjudication **never edits** the sealed test set, the expected answers, the scoring rules or the prompts. Errata and prompt fixes are collected for a **new, versioned evaluation** (eval version 2) with its own freeze and seal.
-5. **Calibration passes** if checklist agreement is ≥ 0.80 on ≥ 20 items, Arabic and English are each ≥ 0.75, and, where options were rated, ≥ 80% of rubric scores are within 1 point. If it fails, judge-based metrics don't count toward the launch decision until a recalibrated judge passes in a new evaluation version.
+5. **Calibration passes only if Arabic and English each pass independently:** checklist agreement ≥ 0.80 on ≥ 20 items **in each language**, and, where options were rated in that language, ≥ 80% of rubric scores within 1 point. A strong result in one language never compensates for the other. If a language fails, judge-based gates for that language are "not established" (and the launch verdict is NO-GO) until a recalibrated judge passes in a new evaluation version.
+6. **Reporting.** `compare` reports agreement **by criterion × language**: checklist "captured" items, checklist "hearsay" items, each options criterion, and the next step vs. the automatic grade, each with *n*, agreement and Cohen's kappa. Criteria with *n* < 10 in a language are flagged as insufficient samples. It also reports the human-only criteria (Q1, Q2, Q5, Q6) per language. After adjudication, `summarise` checks that every disagreement has an adjudicator, decision, rationale and follow-up, and writes `disagreements-log.md` (the documented rationales) and `disagreements-summary.json` (counts by decision, follow-up, criterion and language).
 
 ## 7. تعليمات المُقيِّم (العربية)
 
@@ -108,6 +109,7 @@ An AI system ("the consultant") read each business challenge, diagnosed it, and 
 | Prepare | `node scripts/human-eval.mjs prepare --a=results/runs/<ev1-heldout-a-…>.json --b=results/runs/<ev1-heldout-b-…>.json --out=human-eval/round-1` | Creates `evaluator/` and `coordinator/` |
 | Share | Send **only** `human-eval/round-1/evaluator/` | Never share `coordinator/` or `results/` |
 | Submit | `node scripts/human-eval.mjs submit --dir=human-eval/round-1 --responses=<returned.csv> --evaluator="<name>"` | Validates every answer and records the SHA-256 |
-| Compare | `node scripts/human-eval.mjs compare --dir=human-eval/round-1` | Refuses to run without a receipt |
+| Compare | `node scripts/human-eval.mjs compare --dir=human-eval/round-1` | Refuses to run without a receipt; per criterion × language |
+| Summarise | `node scripts/human-eval.mjs summarise --dir=human-eval/round-1` | After adjudication; fails if any row lacks a rationale |
 | Adjudicate | Fill `disagreements.csv` | §6 |
 | Record | Add the calibration result to doc 13 | Gate Q3 in doc 14 |

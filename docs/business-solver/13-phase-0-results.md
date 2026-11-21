@@ -16,6 +16,18 @@
 
 **Blocker (P0-D0).** The model-based experiments need `ANTHROPIC_API_KEY`. In this cloud environment it can only be added as an **environment variable** in the environment's settings, where commands in sessions using that environment can read it. A new session picks it up. Once it's added, the full suite runs in about a day: `node experiments/llm-suite.mjs a|b|c` then `node experiments/f-cost-latency.mjs`. A dry run already confirms that all 53 primary requests (29 diagnosis, 8 options, 16 critic) build, and that all five output schemas convert to the structured-output format. *Estimated* cost of one full sweep at two effort levels: roughly US$25–40 (based on request sizes and list prices; to be replaced by F's measurement).
 
+## 0b. Evidence classes used in this document [2026-11-21]
+
+| Class | Meaning | Can it decide GO/NO-GO? |
+|---|---|---|
+| **E1 Model evaluation: held-out** | Real model calls on the sealed, independently authored held-out set, with frozen configuration | **Yes**, the only class that can |
+| **E2 Model evaluation: tuning (in-sample)** | Real model calls on the tuning set (written by the rules author) | No, information only |
+| **E3 Deterministic experiment** | Real code on test data with no model (rules oracle/perturbation, Critic L1, BPMN layout, PowerPoint automated checks) | No, supporting evidence |
+| **E4 Tool validation** | Checks that harnesses, integrity controls, security controls and workbooks work | No |
+| **E5 Synthetic test** | Made-up data used only to test tools | **Never**; never reported as a result |
+
+Classes of the results so far: §A.1 and §A.1b (oracle, perturbation) = **E3**; §C.1 (Critic L1) = **E3**; §D (BPMN) = **E3**; §E automated deck checks and validation packs = **E3**; harness dry runs, integrity and security checks, workbook and calibration-tool checks = **E4**; all synthetic fixtures = **E5** (tool tests only, not results). **No E1 or E2 result exists yet.**
+
 ## 1. Scorecard
 
 | Exp. | Capability | Result | Status |
@@ -242,5 +254,6 @@ node experiments/f-cost-latency.mjs
 | Update | Date | Content |
 |---|---|---|
 | 1 | 2026-11-19 | A.1, A.1b, C.1, D, E (automated) executed; A.2, B, C.2, F blocked on API access; GO/NO-GO: NO-GO pending evidence |
+| 4 | 2026-11-21 | **No new measurements.** Reporting readiness (E4 tool validation): thresholds-v1 with per-language independent gates; segmentation by 5 categories; per-criterion × language calibration and an adjudicated disagreement log; consolidated evidence-report generator (real current state → NO-GO, 6 prerequisites missing); reporting layer locked; evidence classes E1–E5 defined |
 | 3 | 2026-11-21 | **No new measurements.** Prepared and verified (synthetic tests only, not results): blinded human-evaluation tool + guide (doc 17); six-dimension PowerPoint results workbook; integrity hardening (all sets sealed, eval-v1 freeze incl. graders/pricing, versioned immutable runs, negative tests passed). Project remains in Phase 0 |
 | 2 | 2026-11-21 | **No model measurements (still no API access).** Added: blind-authored held-out set (40; 20 AR) sealed; config frozen with enforced integrity checks; held-out dry run 40/40; PowerPoint validation packs (2 × 10 slides): 0 pictures, 16/16 connectors attached, 170/170 Arabic paragraphs RTL, 0 overflow, LibreOffice render 10/10; font finding (Arabic web subset lacks Latin digits → full fonts required); secret scans clean incl. full git history. NO-GO unchanged (doc 14) |

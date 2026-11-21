@@ -39,9 +39,24 @@ export function evaluationStarted(v) {
   if (fs.existsSync(log)) return fs.readFileSync(log, "utf8").split("\n").some(l => l.includes(`"eval_version":"${v}"`));
   return false;
 }
+// Reporting layer (thresholds, GO/NO-GO generator, calibration tool, workbook tools): locked separately so the eval-v1
+// scoring freeze stays untouched. Same rule: cannot be re-locked once the evaluation version has results.
+export const REPORTING_FILES = ["eval/thresholds-v1.json", "scripts/evidence-report.mjs", "scripts/human-eval.mjs",
+  "experiments/e-pptx/summarize_manual_results.py", "experiments/e-pptx/make_results_template.py"];
+const REPORTING_LOCK = new URL("lib/reporting-lock.json", root);
+export function reportingHash() {
+  const parts = REPORTING_FILES.map(f => [f, sha256(fs.readFileSync(new URL(f, root)))]);
+  return { files: Object.fromEntries(parts), combined: sha256(parts.map(p => p.join(":")).join("\n")) };
+}
+export function checkReportingLock() {
+  if (!fs.existsSync(REPORTING_LOCK)) return { ok: false, reason: "no reporting-lock.json" };
+  const lk = JSON.parse(fs.readFileSync(REPORTING_LOCK)), now = reportingHash();
+  if (lk.combined !== now.combined) return { ok: false, reason: `reporting layer changed since lock: ${Object.keys(now.files).filter(k => lk.files[k] !== now.files[k]).join(", ")}` };
+  return { ok: true, lock: lk };
+}
 export const SEALED_SETS = ["eval/scenarios.json", "eval/heldout/heldout-v1.json", "eval/critic-semantic.json", "eval/certainty-wording.json"];
 export function verifyAll() {
-  const out = { config: checkFrozen(), seals: Object.fromEntries(SEALED_SETS.map(s => [s, checkSeal(new URL(s, root).pathname)])) };
-  out.ok = out.config.ok && Object.values(out.seals).every(x => x.ok);
+  const out = { config: checkFrozen(), reporting: checkReportingLock(), seals: Object.fromEntries(SEALED_SETS.map(s => [s, checkSeal(new URL(s, root).pathname)])) };
+  out.ok = out.config.ok && out.reporting.ok && Object.values(out.seals).every(x => x.ok);
   return out;
 }

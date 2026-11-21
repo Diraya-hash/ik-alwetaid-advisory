@@ -1,0 +1,14 @@
+{
+ "eval_version": 1,
+ "files": {
+  "eval/thresholds-v1.json": "20b253af86b5994759d82abafff5a765f847f49e18df19cd4ee2245e819e9a9b",
+  "scripts/evidence-report.mjs": "d1e8662bd7783137b29848b90604459c27826c300d787d0f17a3b7103a2cf0ac",
+  "scripts/human-eval.mjs": "6c698a6204445f903b0f78988545afbab836342e8d02679221cd4ac3924786ad",
+  "experiments/e-pptx/summarize_manual_results.py": "38afb7ff4d3ccbb035fef782039e1049ed662077beee9e897f2557b85cee3aac",
+  "experiments/e-pptx/make_results_template.py": "865a821688a40b19dc26171ed61b1a6a291383c8af2d7bd47223a8617980afc8"
+ },
+ "combined": "176e114bbb44c6d315046c66a8e888bd43f8059ed793c5b7818f6356087b56f1",
+ "locked_at": "2026-11-21T18:14:04.924Z",
+ "git_head": "1cb3e650df6d18bcf4b5e1593b7210c4c407e86b",
+ "reason": "Eval v1 reporting layer (re-lock before any model result): evidence report now also verifies the reporting lock and all seals at run time"
+}

@@ -73,6 +73,32 @@
 
 Full texts, expected `must_surface` items (facts a good diagnosis must capture), `must_not_be_verified` items (hearsay that must not be presented as established fact), chain hints and gold slot values are in `phase0/eval/scenarios.json`.
 
+## 4b. Scenario segments and evidence classes [2026-11-21]
+
+All model-evaluation results are reported **by segment × language**:
+
+| Segment | Definition | Held-out cases (AR / EN) |
+|---|---|---|
+| **Clear** | The seven requested business categories | 8 / 8 |
+| **Ambiguous** | Two or more approaches defensible, or mixed stages | 5 / 5 |
+| **Incomplete information** | The right move is to ask (gate "ask") | 3 / 3 |
+| **Outside catalogue** | A business problem whose right method is not in the catalogue (No Good Fit) | 2 / 3 |
+| **Out of scope** | Must be declined (financial valuation, named individuals, unlawful aims) | 1 / 2 |
+
+Segment sizes per language are small, so every segment figure is reported with *n* and a 95% Wilson interval. **Approved** gates apply per language over the segments listed in `phase0/eval/thresholds-v1.json`. Per-segment thresholds are **proposed** (reported, not gating) until you approve them.
+
+**Language independence:** every gate is evaluated separately for Arabic and for English and must pass in **both**. Pooled figures are shown for information only.
+
+Every reported number carries one of these evidence classes:
+
+| Class | Meaning | Can it decide GO/NO-GO? |
+|---|---|---|
+| **E1 Model evaluation: held-out** | Real model calls on the sealed, independently authored held-out set, with frozen configuration | **Yes**, the only class that can |
+| **E2 Model evaluation: tuning (in-sample)** | Real model calls on the tuning set (written by the rules author) | No, information only |
+| **E3 Deterministic experiment** | Real code on test data with no model (rules oracle/perturbation, Critic L1, BPMN layout, PowerPoint automated checks) | No, supporting evidence |
+| **E4 Tool validation** | Checks that harnesses, integrity controls, security controls and workbooks work | No |
+| **E5 Synthetic test** | Made-up data used only to test tools | **Never**; never reported as a result |
+
 ## 5. Metrics and grading rules
 
 ### 5.1 Experiment A: diagnosis and recommendation
