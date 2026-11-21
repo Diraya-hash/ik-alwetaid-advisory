@@ -1,0 +1,21 @@
+{
+ "file": "eval/scenarios.json",
+ "sha256": "656b09d5504aab6975249c542a0d09d3548bdd7a47e4b288365bade8cf7de79f",
+ "sealed_at": "2026-11-21T18:02:34.131Z",
+ "git_head": "ea9a071e325037a5c9c47beda9e179d0c5067230",
+ "provenance": "Tuning set v0.1 (in-sample; authored by the rules author 2026-11-19)",
+ "items": 29,
+ "arabic": 11,
+ "by_category": {
+  "organisational_restructuring": 3,
+  "process_inefficiency": 3,
+  "root_cause_analysis": 3,
+  "risk_assessment": 3,
+  "stakeholder_management": 3,
+  "strategic_planning": 4,
+  "project_execution": 3,
+  "no_good_fit": 4,
+  "insufficient_context": 3
+ },
+ "rule": "Do not modify. Do not use to tune rules, prompts or matrices. Score only with a frozen configuration."
+}

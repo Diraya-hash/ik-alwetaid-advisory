@@ -1,0 +1,13 @@
+{
+ "file": "eval/critic-semantic.json",
+ "sha256": "8bc55676919ada8ca33b06b1366019dc22f0b005ebe7bcd343b9d36c5dddf5a1",
+ "sealed_at": "2026-11-21T18:02:34.167Z",
+ "git_head": "ea9a071e325037a5c9c47beda9e179d0c5067230",
+ "provenance": "Critic L2/L3 seeded set v0.1 (authored by the rules author; not independent)",
+ "items": 16,
+ "arabic": 5,
+ "by_category": {
+  "undefined": 16
+ },
+ "rule": "Do not modify. Do not use to tune rules, prompts or matrices. Score only with a frozen configuration."
+}

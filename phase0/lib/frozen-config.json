@@ -1,14 +1,23 @@
 {
+ "eval_version": 1,
  "files": {
-  "catalogue.mjs": "05af36a08b971873bac2c819d8a697e6338e208989056070b701cc02d0bf2cd7",
-  "recommender.mjs": "a3a0a55a3efd7438c4c55d99072d1f72673f8b2874faf9aa980b2fda49e16bcf",
-  "schemas.mjs": "0fc5026f9f08c969796a1cdf0bf591bb412e8e6ce178db33712c5d0a9fda9945",
-  "prompts.mjs": "2edc33072313f8e1fdec045e41e7382b4ce887d92f9e679a77fc7f3eb972ebc8",
-  "critic-rules.mjs": "cf6f23f874edf86796bdf67a60cf11feafefe5d38412ebc8a0f353ec2e1f1d48"
+  "lib/catalogue.mjs": "05af36a08b971873bac2c819d8a697e6338e208989056070b701cc02d0bf2cd7",
+  "lib/recommender.mjs": "a3a0a55a3efd7438c4c55d99072d1f72673f8b2874faf9aa980b2fda49e16bcf",
+  "lib/schemas.mjs": "0fc5026f9f08c969796a1cdf0bf591bb412e8e6ce178db33712c5d0a9fda9945",
+  "lib/prompts.mjs": "2edc33072313f8e1fdec045e41e7382b4ce887d92f9e679a77fc7f3eb972ebc8",
+  "lib/critic-rules.mjs": "cf6f23f874edf86796bdf67a60cf11feafefe5d38412ebc8a0f353ec2e1f1d48",
+  "lib/llm.mjs": "2eb2e0c77441faf6b2d91c390064ca777c0021fbeb74597edc5a847ce42d0b49",
+  "experiments/llm-suite.mjs": "5fab607e1c512e499f8fa91a61fbdde22980d638c7cad29996283e5ca7f8af51",
+  "experiments/f-cost-latency.mjs": "f2fa544cdb23d551e5f84aa14b0683e41edc5f683940b65264c26a6dd03b04a8"
  },
- "combined": "7df429b05a26e1a02d9cf4215a35b267cfe76854f8d462302205459b12cad480",
- "frozen_at": "2026-11-21T17:49:31.378Z",
- "git_head": "fede2a8436ddeea9b0b305a2a23e48a72d7f4a1f",
- "reason": "Phase 0: recommender v0.3b approved 2026-11-21; prompts, schemas and critic rules v1 frozen before any held-out scoring",
- "recommender_rule_set": "v0.3b"
+ "combined": "945f2b7bdeeafe092fb9246e7446930de501f258f8457f62163067e8a491bd4b",
+ "frozen_at": "2026-11-21T18:02:34.088Z",
+ "git_head": "ea9a071e325037a5c9c47beda9e179d0c5067230",
+ "reason": "Pre-evaluation re-freeze of eval v1: scope widened to graders, metrics and pricing (llm-suite.mjs, f-cost-latency.mjs, llm.mjs); output capture for human evaluation added. No model results exist for v1. Rules v0.3b and prompts unchanged.",
+ "recommender_rule_set": "v0.3b",
+ "supersedes": {
+  "eval_version": 1,
+  "combined": "7df429b05a26e1a02d9cf4215a35b267cfe76854f8d462302205459b12cad480",
+  "frozen_at": "2026-11-21T17:49:31.378Z"
+ }
 }

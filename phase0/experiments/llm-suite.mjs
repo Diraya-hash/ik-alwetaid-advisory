@@ -20,14 +20,20 @@ const SET = arg("set", "tuning");
 const SET_PATH = SET === "heldout" ? new URL("../eval/heldout/heldout-v1.json", import.meta.url).pathname : new URL("../eval/scenarios.json", import.meta.url).pathname;
 if (!fs.existsSync(SET_PATH)) { console.error(`Evaluation set not found: ${SET_PATH}`); process.exit(2); }
 const { scenarios } = JSON.parse(fs.readFileSync(SET_PATH));
-const integrity = { set: SET, config: checkFrozen(), seal: SET === "heldout" ? checkSeal(SET_PATH) : { ok: true, note: "tuning set (in-sample)" } };
-if (SET === "heldout" && (!integrity.config.ok || !integrity.seal.ok)) {
-  console.error("REFUSING to score the held-out set:", !integrity.config.ok ? integrity.config.reason : integrity.seal.reason);
-  console.error("Held-out results are only valid with a frozen configuration and an intact seal (doc 14 §3).");
+// Every evaluation set is sealed and the configuration (rules, prompts, schemas, graders) is frozen. Any mismatch →
+// refuse to run. Changes after evaluation begins require a NEW evaluation version (scripts/freeze-config.mjs --new-eval-version).
+const CRITIC_SET = new URL("../eval/critic-semantic.json", import.meta.url).pathname;
+const integrity = { set: SET, config: checkFrozen(), seal: checkSeal(SET_PATH), criticSeal: EXP === "c" ? checkSeal(CRITIC_SET) : { ok: true } };
+if (!integrity.config.ok || !integrity.seal.ok || !integrity.criticSeal.ok) {
+  console.error("REFUSING to run:", !integrity.config.ok ? integrity.config.reason : !integrity.seal.ok ? integrity.seal.reason : integrity.criticSeal.reason);
+  console.error("Results are only valid with a frozen configuration and intact seals (doc 14 §3). Changes need a new evaluation version.");
   process.exit(2);
 }
-const MANIFEST = { experiment: EXP, set: SET, set_file: SET_PATH.split("/phase0/")[1], set_sha256: integrity.seal.seal?.sha256 ?? null,
-  config_hash: configHash().combined, config_frozen_match: integrity.config.ok,
+const EVAL_VERSION = integrity.config.frozen.eval_version ?? 1;
+const RUN_ID = `ev${EVAL_VERSION}-${SET}-${EXP}-${EFFORT}-${new Date().toISOString().replace(/[:.]/g, "-")}`;
+process.env.BPS_RUN_ID = RUN_ID; process.env.BPS_EVAL_VERSION = String(EVAL_VERSION); // tagged onto every per-call log record
+const MANIFEST = { run_id: RUN_ID, eval_version: EVAL_VERSION, experiment: EXP, set: SET, set_file: SET_PATH.split("/phase0/")[1],
+  set_sha256: integrity.seal.seal?.sha256 ?? null, config_hash: configHash().combined, config_frozen_match: integrity.config.ok,
   git_head: (() => { try { return execSync("git rev-parse HEAD").toString().trim(); } catch { return null; } })(),
   effort: EFFORT, runs: RUNS, started_at: new Date().toISOString() };
 const pick = arr => (ONLY ? arr.filter(s => ONLY.split(",").includes(s.id)) : arr);
@@ -53,7 +59,10 @@ const pct = (n, d) => (d ? +(100 * n / d).toFixed(1) : null);
 function save(name, obj) {
   if (DRY_RUN) return;
   const out = { manifest: { ...MANIFEST, finished_at: new Date().toISOString(), spent_usd: +spentUsd().toFixed(4) }, ...obj };
-  fs.writeFileSync(new URL(`../results/${name}-${SET}.json`, import.meta.url), JSON.stringify(out, null, 1));
+  // Each run is a new immutable file; results are never overwritten (versioned evaluation runs).
+  const dir = new URL("../results/runs/", import.meta.url); fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(new URL(`${RUN_ID}.json`, dir), JSON.stringify(out, null, 1), { flag: "wx" });
+  console.log(`results written: results/runs/${RUN_ID}.json`);
 }
 
 // ---------------- Experiment A ----------------
@@ -77,8 +86,14 @@ async function expA() {
         r.outOfCandidate = rr.parsed.recommendations.filter(x => !allowed.has(x.approach_id)).length;
         if (rr.parsed.status === "no_good_fit") status = "no_good_fit"; else ranked = recs.length ? recs : ranked;
         r.llmFits = rr.parsed.recommendations.map(x => x.fit);
+        r.rerankOutput = rr.parsed;
       } else r.rerankError = rr.record.error || rr.record.stop_reason;
     }
+    // Full model output kept for human evaluation (doc 17). Shown to evaluators without any grades.
+    r.output = { reframed_problem: d.reframed_problem, statements: d.statements, classification: d.classification, unknowns: d.unknowns,
+      out_of_scope: d.out_of_scope, status, recommendations: r.rerankOutput?.recommendations?.filter(x => (r.rerankOutput.status === "ok")) ?? [],
+      no_good_fit_explanation: r.rerankOutput?.no_good_fit_explanation ?? null, not_recommended: r.rerankOutput?.not_recommended ?? [],
+      deterministic_top3: det.ranked.slice(0, 3).map(x => x.id) };
     const exp = sc.expected, rec = exp.recommendation, top = ranked.slice(0, 3);
     Object.assign(r, { status, top3: top, stage: slots.stage, domains: slots.domains, scope: slots.scope,
       domainOk: exp.domains_any_of ? [...exp.domains_any_of, ...(exp.domains_acceptable || [])].includes(slots.domains[0]) : null,
@@ -145,6 +160,7 @@ async function expB() {
     if (!o.parsed) { rows.push({ ...r, error: o.record.error || o.record.stop_reason }); continue; }
     const p = o.parsed, real = p.options.filter(x => !x.is_baseline), base = p.options.filter(x => x.is_baseline);
     const scored = p.options.map(x => ({ id: x.id, w: weightedOptionScore({ assessment: { impact: x.impact, effort: x.effort, risk: x.risk, feasibility: x.feasibility } }, W) })).sort((a, b) => b.w - a.w);
+    r.output = p; // full option set, for human evaluation (doc 17)
     Object.assign(r, { nOptions: real.length, baselineCount: base.length, preferredValid: p.options.some(x => x.id === p.preferred_option_id),
       allHaveAssumptions: real.every(x => x.assumptions.length > 0), allAddressSomething: real.every(x => x.addresses.length > 0),
       preferredIsTopWeighted: scored[0].id === p.preferred_option_id, tooClose: scored.length > 1 && scored[0].w - scored[1].w < 0.3 });

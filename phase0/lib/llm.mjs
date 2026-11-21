@@ -51,7 +51,7 @@ export async function structured({ route, scenario, model = MODELS.main, effort 
   catch (e) { error = { name: e?.constructor?.name, status: e?.status, message: redact(e?.message).slice(0, 300) }; }
   const latency = Date.now() - t0;
   const u = res?.usage;
-  const rec = { at: new Date().toISOString(), set: SET, route, scenario, model, served_model: res?.model ?? null, effort, latency_ms: latency, stop_reason: res?.stop_reason ?? null,
+  const rec = { at: new Date().toISOString(), run_id: process.env.BPS_RUN_ID ?? null, eval_version: process.env.BPS_EVAL_VERSION ?? null, set: SET, route, scenario, model, served_model: res?.model ?? null, effort, latency_ms: latency, stop_reason: res?.stop_reason ?? null,
     refusal_category: res?.stop_details?.category ?? null, parsed_ok: !!res?.parsed_output, error,
     usage: u ? { input: u.input_tokens, output: u.output_tokens, cache_read: u.cache_read_input_tokens, cache_write: u.cache_creation_input_tokens } : null,
     cost_usd: cost(model, u) };

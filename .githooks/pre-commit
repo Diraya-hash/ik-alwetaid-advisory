@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# Opt-in pre-commit hook: blocks commits that add credential-like content.
-# Enable once per clone:  git config core.hooksPath .githooks
+# Opt-in pre-commit hook. Enable once per clone:  git config core.hooksPath .githooks
+#  1. Blocks commits that add credential-like content.
+#  2. Blocks commits that leave the frozen evaluation configuration or any sealed evaluation set modified
+#     (changes must go into a new versioned evaluation — doc 14 §3).
 set -euo pipefail
-bash "$(git rev-parse --show-toplevel)/phase0/scripts/check-no-secrets.sh" --staged
+root="$(git rev-parse --show-toplevel)"
+bash "$root/phase0/scripts/check-no-secrets.sh" --staged
+if git diff --cached --name-only | grep -qE '^phase0/(lib|experiments|eval)/'; then
+  (cd "$root/phase0" && node scripts/verify-integrity.mjs)
+fi

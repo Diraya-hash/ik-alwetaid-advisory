@@ -4,7 +4,11 @@
 import fs from "node:fs";
 const file = new URL("../results/llm-runs.jsonl", import.meta.url);
 if (!fs.existsSync(file)) { console.log("No measured runs yet (results/llm-runs.jsonl missing). Run llm-suite.mjs with ANTHROPIC_API_KEY set."); process.exit(0); }
-const recs = fs.readFileSync(file, "utf8").trim().split("\n").map(JSON.parse).filter(r => !r.dry_run);
+// --eval-version=N (default: all) and --set=heldout|tuning (default: all) filter the measured calls.
+const flag = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || "").split("=")[1];
+const EV = flag("eval-version"), SETF = flag("set");
+const recs = fs.readFileSync(file, "utf8").trim().split("\n").map(JSON.parse).filter(r => !r.dry_run)
+  .filter(r => (!EV || String(r.eval_version) === EV) && (!SETF || r.set === SETF));
 const q = (arr, p) => { const s = [...arr].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.floor(p * s.length))] : null; };
 const groups = {}; recs.forEach(r => (groups[`${r.route}|${r.effort}`] ||= []).push(r));
 const routes = Object.fromEntries(Object.entries(groups).map(([k, rs]) => {

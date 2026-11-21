@@ -1,0 +1,13 @@
+{
+ "file": "eval/certainty-wording.json",
+ "sha256": "beafb76be4afbde7e7409f53d3ffef1ed021cd0c2b6cdeed5d32d1a27be1ab44",
+ "sealed_at": "2026-11-21T18:02:34.208Z",
+ "git_head": "ea9a071e325037a5c9c47beda9e179d0c5067230",
+ "provenance": "Certainty-wording labelled set v0.1 (rules author)",
+ "items": 40,
+ "arabic": 20,
+ "by_category": {
+  "undefined": 40
+ },
+ "rule": "Do not modify. Do not use to tune rules, prompts or matrices. Score only with a frozen configuration."
+}
