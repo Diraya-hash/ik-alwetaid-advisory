@@ -248,6 +248,31 @@ Consequential changes in the reporting layer only (the frozen scoring components
 
 Verified (E4/E5 only, not results): the real state → **NO-GO**, 6 prerequisites missing; a synthetic fixture (scratchpad only) with weak Arabic fails S1/S3/S5 in Arabic while English passes, and the language gap gate fails. The verdict is forced to INVALID on synthetic input. **Reporting layer re-locked for eval v1** (`lib/reporting-lock.json`, combined hash `14ee8eb6…`); any further change needs evaluation version 2.
 
+## 8e. S7 Conditional Recommendation Assumption Integrity added; final eval-v1 reporting lock (2026-11-21, fifth update)
+
+**Decision (Option B):** assumption integrity in conditional recommendations is a gating product-quality requirement. The S1–S6 thresholds are unchanged.
+
+| Item | Definition |
+|---|---|
+| Threshold | ≥ 90%, per language (Arabic and English independently) |
+| Eligible (denominator) | Ambiguous scenario-runs where a conditional recommendation was actually provided: status ok, ≥ 1 recommendation shown, model's rank-1 fit below "high". Clarification requests, No Good Fit, declines and unconditional recommendations are excluded and never penalised |
+| Passing (numerator) | Judge "yes" on all of AI1 assumptions explicit, AI2 supported or labelled unverified, AI3 how the recommendation changes if they are wrong ("partial" fails) |
+| Reported | Ambiguous runs, eligible runs, judged runs, passing runs, estimate, 95% CI on distinct scenarios, scenario count, per-item rates, reasons for non-eligibility, threshold pass vs statistically established |
+| Measurement | `scripts/assumption-judge.mjs`: AI judge (same judge model and schema as the frozen config, imported unchanged) on stored experiment-A outputs. It refuses unless the config is frozen, the seal is intact, the reporting layer is locked and the source is a real held-out A run |
+| Calibration | Blinded: `human-eval prepare --aij` adds AI1–AI3 for **every** eligible case; the judge's verdicts stay in `coordinator/` until submit. Per language: all eligible cases rated, ≥ 12 item pairs, item agreement ≥ 0.80, adjudication complete |
+| Cannot evaluate → NO-GO | No eligible case, an eligible run without a complete verdict, an eligibility mismatch with the A outputs, a judge run on another A run or lock, or failed calibration → S7 not established → NO-GO |
+
+**Known limitations (reported automatically).** The frozen re-rank schema has no dedicated "assumptions" or "if wrong" field, so the judge assesses the free-text reasons and cautions; S7 may therefore fail, and that would be a genuine product finding for eval v2. There are at most 10 eligible runs per language (5 ambiguous scenarios × 2 runs). If the model mostly asks for clarification on ambiguous cases, S7 or its calibration may be not established and the verdict stays NO-GO; running with `runs=3` raises the ceiling to 15.
+
+**Workflow:** `phase0-eval` runs the S7 judge after experiment A. Verified only on synthetic fixtures in the scratchpad (E5), and the real state stays NO-GO with 7 prerequisites missing:
+- An Arabic 3/5 result fails while English 10/10 passes ("not established" statistically).
+- Without calibration, S7 is not established.
+- An incomplete verdict makes S7 not established.
+- An eligibility mismatch is reported as a problem.
+- Clarification runs are excluded.
+
+**Evaluation scope is now closed for eval v1.** The reporting layer has been re-locked (combined hash `5a92509c…`; it now also covers `lib/assumption-integrity.mjs` and `scripts/assumption-judge.mjs`), and the lock is recorded in `lib/frozen-config-history.jsonl`. No further thresholds or scope changes; any change after the first run requires eval v2.
+
 ## 9. Recommendation
 
 **Beta-1: NO-GO (unchanged).** No full product implementation.

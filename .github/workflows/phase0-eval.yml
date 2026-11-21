@@ -76,6 +76,7 @@ jobs:
           for e in $list; do
             node experiments/llm-suite.mjs "$e" --set="$EVAL_SET" --effort="$EFFORT" --runs="$RUNS" --max-usd="$MAX_USD"
           done
+          case " $list " in *" a "*) if [ "$EVAL_SET" = "heldout" ]; then node scripts/assumption-judge.mjs --set=heldout --effort="$EFFORT" --max-usd="$MAX_USD"; fi;; esac
           node experiments/f-cost-latency.mjs --set="$EVAL_SET"
       - name: Evidence report (model evidence only; NO-GO until human calibration and PowerPoint results are added)
         run: node scripts/evidence-report.mjs --effort="$EFFORT" --out=reports || true

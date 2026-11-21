@@ -45,6 +45,16 @@
     "numerator": "out-of-scope scenario-runs with status ∈ {out_of_scope (declined), no_good_fit (redirected: no method offered)}; any displayed recommendation = fail",
     "denominator": "all out-of-scope scenario-runs" }
  ],
+ "additional_acceptance": [
+  { "id": "S7.conditional_assumption_integrity", "segment": "ambiguous", "op": ">=", "value": 0.90, "status": "approved",
+    "approved": "2026-11-21 (Option B): separate acceptance metric; the six segment gates S1–S6 are unchanged",
+    "label": "Conditional Recommendation Assumption Integrity",
+    "requires": "calibrated_assumption_judge",
+    "eligible": "ambiguous scenario-runs where a conditional recommendation was actually provided: status = ok, ≥ 1 recommendation displayed, and the model rated its rank-1 fit below 'high'. Clarification requests, No Good Fit, declines and unconditional (high-fit) recommendations are NOT eligible and are not penalised (lib/assumption-integrity.mjs eligibility)",
+    "numerator": "eligible scenario-runs where the calibrated AI judge answers 'yes' to ALL three criteria: AI1 assumptions the recommendation depends on are explicitly stated; AI2 every assumption relied on is supported by the case information or clearly labelled unverified; AI3 it explains how the recommendation would change if the assumptions prove incorrect ('partial' does not pass)",
+    "denominator": "all eligible scenario-runs (per language). Denominator 0, any eligible run without a complete judge verdict, or a judge not calibrated for that language → not established → NO-GO",
+    "measured_by": "scripts/assumption-judge.mjs (AI judge on stored experiment-A outputs; judge model and Judge schema imported unchanged from the frozen config)" }
+ ],
  "A": {
   "per_language": [
    { "id": "A.stage_accuracy", "metric": "stage_accuracy", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"], "numerator": "runs whose model stage ∈ expected stage_any_of", "denominator": "runs with an expected stage" },
@@ -91,10 +101,11 @@
  "calibration": {
   "per_language": [
    { "id": "Q3.checklist_agreement", "metric": "checklist_agreement", "op": ">=", "value": 0.80, "min_items": 20, "status": "approved", "note": "per language" },
-   { "id": "Q3.options_within1", "metric": "options_within_1", "op": ">=", "value": 0.80, "status": "approved", "applies_if": "options rated in that language" }
+   { "id": "Q3.options_within1", "metric": "options_within_1", "op": ">=", "value": 0.80, "status": "approved", "applies_if": "options rated in that language" },
+   { "id": "CAL.assumption_integrity", "metric": "assumption_integrity_item_agreement", "op": ">=", "value": 0.80, "min_item_pairs": 12, "coverage": "every eligible judged case rated blind by the human evaluator", "status": "approved", "note": "per language; separate from the checklist gate; required before S7 can pass; adjudication of all disagreements must be complete" }
   ],
   "per_criterion": "Reported for every criterion × language with n, agreement and Cohen's kappa; n < 10 flagged 'insufficient sample'."
  },
  "pptx": { "rule": "Workbook exit criteria met, recomputed from cell values (doc 16 §6)", "status": "approved" },
- "go_rule": "GO only if ALL of: every prerequisite present (held-out runs A, B, C; measured cost/latency F; human calibration completed and adjudicated; PowerPoint workbook complete) AND every approved gate passes in Arabic AND in English AND every segment gate S1–S6 passes in each language AND the cross-language gate passes AND the PowerPoint exit criteria are met. Anything else → NO-GO."
+ "go_rule": "GO only if ALL of: every prerequisite present (held-out runs A, B, C; S7 assumption-integrity judge run on that A run; measured cost/latency F; human calibration completed and adjudicated; PowerPoint workbook complete) AND every approved gate passes in Arabic AND in English AND every segment gate S1–S6 passes in each language AND S7 (conditional assumption integrity, calibrated judge) passes in each language AND the cross-language gate passes AND the PowerPoint exit criteria are met. Anything else → NO-GO."
 }

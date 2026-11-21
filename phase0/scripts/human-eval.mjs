@@ -3,13 +3,16 @@
 //   2. submit   → validates the evaluator's completed CSV and writes an immutable receipt with its SHA-256
 //   3. compare  → only runs if a receipt exists and the responses are unchanged; then reveals the judge and computes agreement
 // Usage:
-//   node scripts/human-eval.mjs prepare --a=<results/runs/ev1-heldout-a-...json> [--b=<...-b-...json>] --out=<dir> [--n=20]
+//   node scripts/human-eval.mjs prepare --a=<results/runs/ev1-heldout-a-...json> --aij=<...-aij-...json> [--b=<...-b-...json>] --out=<dir> [--n=20]
+//     (--aij: assumption-integrity judge run on the same A run; EVERY eligible conditional recommendation is added for
+//      human rating of AI1–AI3, so S7 calibration covers all judged cases)
 //   node scripts/human-eval.mjs submit  --dir=<dir> --responses=<completed.csv> --evaluator="<name>"
 //   node scripts/human-eval.mjs compare --dir=<dir>          (agreement per criterion × language; per-language gate)
 //   node scripts/human-eval.mjs summarise --dir=<dir>        (after adjudication: documents decisions and rationales)
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { ITEMS as AI_ITEMS } from "../lib/assumption-integrity.mjs";
 const sha = b => crypto.createHash("sha256").update(b).digest("hex");
 const flag = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || "").slice(k.length + 3);
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
@@ -78,12 +81,19 @@ function packetMarkdown(pid, sc, r, opt) {
 }
 
 if (process.argv[2] === "prepare") {
-  const aPath = flag("a"), bPath = flag("b"), out = flag("out"), n = +(flag("n") || 20);
-  if (!aPath || !out) { console.error("prepare needs --a and --out"); process.exit(1); }
+  const aPath = flag("a"), bPath = flag("b"), aijPath = flag("aij"), out = flag("out"), n = +(flag("n") || 20);
+  if (!aPath || !out || !aijPath) { console.error("prepare needs --a, --aij and --out (S7 assumption-integrity calibration is required in eval v1)"); process.exit(1); }
   if (fs.existsSync(out)) { console.error(`REFUSED: ${out} exists (each human evaluation round is a new folder).`); process.exit(2); }
   const A = JSON.parse(fs.readFileSync(aPath)); const B = bPath ? JSON.parse(fs.readFileSync(bPath)) : null;
   const { scenarios } = JSON.parse(fs.readFileSync(path.join(root, A.manifest.set_file)));
   const sel = selectScenarios(A.rows, scenarios, n);
+  const AIJ = JSON.parse(fs.readFileSync(aijPath));
+  if (AIJ.manifest?.source_run_id !== A.manifest.run_id) { console.error(`REFUSED: the assumption-integrity judge run (${AIJ.manifest?.source_run_id}) was not made on this A run (${A.manifest.run_id}).`); process.exit(2); }
+  const aijEligible = AIJ.rows.filter(x => x.eligible);
+  const aijKey = x => `${x.id}|${x.run}`; const aijBy = Object.fromEntries(aijEligible.map(x => [aijKey(x), x]));
+  const aiCovered = new Set();
+  const addAI = (add, r) => { const j = aijBy[aijKey(r)]; if (!j) return; aiCovered.add(aijKey(r));
+    AI_ITEMS.forEach(it => add(it.key, `Conditional recommendation, assumption integrity: ${it.ask}`, ALLOWED.ynp, j.verdicts?.[it.key] ?? null)); };
   fs.mkdirSync(path.join(out, "evaluator", "packets"), { recursive: true }); fs.mkdirSync(path.join(out, "coordinator"), { recursive: true });
   const resp = [["packet_id", "language", "item_id", "question", "allowed_answers", "answer", "comment"]]; const key = [];
   sel.forEach((r, i) => {
@@ -102,13 +112,25 @@ if (process.argv[2] === "prepare") {
     add("Q5_language", `Language quality (${sc.language === "ar" ? "native Modern Standard Arabic business register" : "professional English"}) (1–5)`, ALLOWED.scale5);
     add("Q6_usable", "Would you send this to a manager?", ALLOWED.usable);
     if (optRow) OPTION_CRITERIA.forEach(c => add(`OPT_${c}`, `Options — ${c.replace(/_/g, " ")} (1–5)`, ALLOWED.scale5, optRow.scores?.[c] != null ? String(optRow.scores[c]) : null));
+    addAI(add, r);
   });
+  // Every remaining eligible conditional recommendation (any run) becomes an extra packet rated ONLY on AI1–AI3.
+  let extra = sel.length;
+  for (const j of aijEligible.filter(x => !aiCovered.has(aijKey(x)))) {
+    const r = A.rows.find(x => x.id === j.id && x.run === j.run); const sc = scenarios.find(s => s.id === j.id); if (!r || !sc) continue;
+    const pid = `P${String(++extra).padStart(2, "0")}`;
+    fs.writeFileSync(path.join(out, "evaluator", "packets", `${pid}.md`), packetMarkdown(pid, sc, r, null));
+    addAI((item, question, allowed, judge = null) => { resp.push([pid, sc.language, item, question, allowed.join("|"), "", ""]); key.push({ packet_id: pid, scenario_id: r.id, run: r.run, language: sc.language, item_id: item, judge, auto: null }); }, r);
+  }
+  const byLang = arr => ({ ar: arr.filter(x => x.lang === "ar").length, en: arr.filter(x => x.lang === "en").length });
   fs.writeFileSync(path.join(out, "evaluator", "responses.csv"), BOM + resp.map(r => r.map(csvq).join(",")).join("\n") + "\n");
   fs.copyFileSync(path.join(root, "..", "docs", "business-solver", "17-human-evaluator-guide.md"), path.join(out, "evaluator", "EVALUATOR-GUIDE.md"));
   const keyBuf = Buffer.from(JSON.stringify(key, null, 1));
   fs.writeFileSync(path.join(out, "coordinator", "KEY-do-not-share.json"), keyBuf);
   const manifest = { prepared_at: new Date().toISOString(), source_a: aPath, source_b: bPath || null, run_id: A.manifest.run_id, eval_version: A.manifest.eval_version,
-    packets: sel.length, arabic: sel.filter(r => r.lang === "ar").length, response_rows: resp.length - 1, key_sha256: sha(keyBuf),
+    packets: extra, calibration_packets: sel.length, arabic: sel.filter(r => r.lang === "ar").length,
+    source_aij: aijPath, aij_run_id: AIJ.manifest.run_id, aij_eligible_rows: byLang(aijEligible), aij_eligible_complete: byLang(aijEligible.filter(x => x.complete)),
+    response_rows: resp.length - 1, key_sha256: sha(keyBuf),
     blinding: "Share ONLY the evaluator/ folder. coordinator/ holds AI-judge verdicts and automatic grades and must not be visible to the evaluator before submit." };
   fs.writeFileSync(path.join(out, "manifest.json"), JSON.stringify(manifest, null, 1));
   console.log(JSON.stringify(manifest, null, 1));
@@ -133,11 +155,13 @@ if (process.argv[2] === "prepare") {
   const resp = Object.fromEntries(parseCsv(buf.toString("utf8")).map(r => [`${r.packet_id}|${r.item_id}`, r]));
   const key = JSON.parse(fs.readFileSync(path.join(dir, "coordinator", "KEY-do-not-share.json")));
   // criterion of an item: CHK_surface_3 → "checklist:surface", CHK_hearsay_0 → "checklist:hearsay", OPT_x → "options:x", Q4 → "next_step_vs_auto"
-  const crit = id => id.startsWith("CHK_surface") ? "checklist:surface" : id.startsWith("CHK_hearsay") ? "checklist:hearsay" : id.startsWith("OPT_") ? `options:${id.slice(4)}` : id === "Q4_next_step" ? "next_step_vs_auto_grade" : `human_only:${id}`;
+  const crit = id => id.startsWith("CHK_surface") ? "checklist:surface" : id.startsWith("CHK_hearsay") ? "checklist:hearsay" : id.startsWith("OPT_") ? `options:${id.slice(4)}` : id === "Q4_next_step" ? "next_step_vs_auto_grade" : /^AI\d_/.test(id) ? `assumption_integrity:${id}` : `human_only:${id}`;
   const pairs = []; const humanOnly = []; const dis = [];
   for (const k of key) {
     const h = resp[`${k.packet_id}|${k.item_id}`]; if (!h) continue; const ha = h.answer.trim(); const c = crit(k.item_id);
-    if (c.startsWith("checklist") && k.judge) { pairs.push({ c, lang: k.language, h: ha, j: k.judge, kind: "categorical" }); if (ha !== k.judge) dis.push({ type: "judge_checklist", ...k, human: ha, human_comment: h.comment, question: h.question }); }
+    if (c.startsWith("assumption_integrity")) { pairs.push({ c, lang: k.language, h: ha, j: k.judge ?? "(none)", kind: "categorical", row: `${k.scenario_id}|${k.run ?? 1}`, item: k.item_id });
+      if (ha !== k.judge) dis.push({ type: "judge_assumption_integrity", ...k, human: ha, human_comment: h.comment, question: h.question }); }
+    else if (c.startsWith("checklist") && k.judge) { pairs.push({ c, lang: k.language, h: ha, j: k.judge, kind: "categorical" }); if (ha !== k.judge) dis.push({ type: "judge_checklist", ...k, human: ha, human_comment: h.comment, question: h.question }); }
     else if (c.startsWith("options") && k.judge) { pairs.push({ c, lang: k.language, h: +ha, j: +k.judge, kind: "ordinal" }); if (Math.abs(+ha - +k.judge) >= 2) dis.push({ type: "judge_rubric", ...k, human: ha, human_comment: h.comment, question: h.question }); }
     else if (c === "next_step_vs_auto_grade") { const hOk = ha !== "wrong"; pairs.push({ c, lang: k.language, h: hOk ? "ok" : "wrong", j: k.auto.auto_pass ? "ok" : "wrong", kind: "categorical" });
       if (hOk !== !!k.auto.auto_pass) dis.push({ type: "answer_key", ...k, judge: `auto_pass=${k.auto.auto_pass} (${k.auto.status}; ${(k.auto.top3 || []).join(",")})`, human: ha, human_comment: h.comment, question: h.question }); }
@@ -161,15 +185,29 @@ if (process.argv[2] === "prepare") {
     const reasons = []; if (chk.length < 20) reasons.push(`checklist items ${chk.length} < 20`); if (chkAg === null || chkAg < 0.8) reasons.push(`checklist agreement ${chkAg} < 0.80`); if (optW1 !== null && optW1 < 0.8) reasons.push(`options within-1 ${optW1.toFixed(3)} < 0.80`);
     return [l, { checklist_items: chk.length, checklist_agreement: chkAg, options_items: opt.length, options_within_1: optW1 === null ? null : +optW1.toFixed(3), passes: reasons.length === 0, reasons }];
   }));
+  // S7 calibration gate (thresholds-v1.json calibration → CAL.assumption_integrity), per language, independent of the
+  // checklist gate: every eligible judged case rated by the human, ≥ 12 item pairs, item agreement ≥ 0.80.
+  const assumption_integrity_gate = Object.fromEntries(LANGS.map(l => {
+    const arr = pairs.filter(p => p.c.startsWith("assumption_integrity") && p.lang === l);
+    const rowsRated = new Set(arr.map(p => p.row)).size, eligible = manifest.aij_eligible_rows?.[l] ?? null, complete = manifest.aij_eligible_complete?.[l] ?? null;
+    const rowsAgree = [...new Set(arr.map(p => p.row))].map(rw => { const it = arr.filter(p => p.row === rw); return it.every(p => p.h === "yes") === it.every(p => p.j === "yes"); });
+    const ag = agreeCat(arr), reasons = [];
+    if (eligible == null) reasons.push("no assumption-integrity judge run linked");
+    else { if (complete !== eligible) reasons.push(`${eligible - complete} eligible case(s) without a complete judge verdict`); if (rowsRated < eligible) reasons.push(`human rated ${rowsRated} of ${eligible} eligible case(s)`); }
+    if (arr.length < 12) reasons.push(`item pairs ${arr.length} < 12`); if (ag === null || ag < 0.8) reasons.push(`item agreement ${ag} < 0.80`);
+    return [l, { eligible_cases: eligible, human_rated_cases: rowsRated, item_pairs: arr.length, item_agreement: ag, cohens_kappa: kappa(arr),
+      case_pass_fail_agreement: rowsAgree.length ? +(rowsAgree.filter(Boolean).length / rowsAgree.length).toFixed(3) : null, passes: reasons.length === 0, reasons }];
+  }));
   const report = { evidence_class: manifest.run_id?.startsWith("ev") ? "human_calibration_of_model_evaluation" : "SYNTHETIC_OR_UNKNOWN_SOURCE — not a result",
     evaluator: receipt.evaluator, source_run_id: manifest.run_id, eval_version: manifest.eval_version, compared_at: new Date().toISOString(),
     rule: "Calibration passes only if BOTH Arabic and English pass independently: checklist agreement ≥ 0.80 on ≥ 20 items per language, and options within ±1 ≥ 0.80 where rated (thresholds-v1.json). Pooled figures are information only.",
-    per_language_gate, calibration_passes: LANGS.every(l => per_language_gate[l].passes), by_criterion, human_only_criteria: human_only,
+    per_language_gate, calibration_passes: LANGS.every(l => per_language_gate[l].passes), assumption_integrity_gate,
+    assumption_integrity_rule: "S7 judge calibrated per language only if every eligible judged case was rated by the human, ≥ 12 item pairs, and item agreement ≥ 0.80 (partial vs yes/no = 0.5); separate from the checklist gate; adjudication must also be complete.", by_criterion, human_only_criteria: human_only,
     disagreements: { total: dis.length, by_type: dis.reduce((m, d) => ((m[d.type] = (m[d.type] || 0) + 1), m), {}), by_language: dis.reduce((m, d) => ((m[d.language] = (m[d.language] || 0) + 1), m), {}) } };
   fs.writeFileSync(path.join(dir, "comparison-report.json"), JSON.stringify(report, null, 1));
   const hdr = ["type", "packet_id", "scenario_id", "language", "item_id", "criterion", "question", "human", "ai_judge_or_auto", "human_comment", "adjudicator", "decision", "rationale", "follow_up"];
   fs.writeFileSync(path.join(dir, "disagreements.csv"), BOM + [hdr, ...dis.map(d => [d.type, d.packet_id, d.scenario_id, d.language, d.item_id, crit(d.item_id), d.question, d.human, d.judge, d.human_comment, "", "", "", ""])].map(r => r.map(csvq).join(",")).join("\n") + "\n");
-  console.log(JSON.stringify({ calibration_passes: report.calibration_passes, per_language_gate }, null, 1)); console.log(`disagreements: ${dis.length} → ${path.join(dir, "disagreements.csv")} (adjudicate, then run 'summarise')`);
+  console.log(JSON.stringify({ calibration_passes: report.calibration_passes, per_language_gate, assumption_integrity_gate }, null, 1)); console.log(`disagreements: ${dis.length} → ${path.join(dir, "disagreements.csv")} (adjudicate, then run 'summarise')`);
 } else if (process.argv[2] === "summarise") {
   // Documents the adjudicated disagreements: every row must have adjudicator, decision and rationale.
   const dir = flag("dir"); const f = path.join(dir, flag("file") || "disagreements.csv");

@@ -10,7 +10,8 @@
 // Usage: node scripts/evidence-report.mjs [--effort=high] [--human=<round dir>] [--pptx=<manual-summary.json>] [--out=reports] [--allow-synthetic]
 import fs from "node:fs";
 import path from "node:path";
-import { checkFrozen, checkSeal, verifyAll } from "../lib/integrity.mjs";
+import { checkFrozen, checkSeal, verifyAll, checkReportingLock } from "../lib/integrity.mjs";
+import { eligibility as aiEligibility, ITEMS as AI_ITEMS } from "../lib/assumption-integrity.mjs";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const flag = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || "").slice(k.length + 3);
 const EFFORT = flag("effort") || "high", HUMAN = flag("human"), PPTX = flag("pptx"), OUT = flag("out") || path.join(root, "reports");
@@ -70,6 +71,18 @@ const critic = JSON.parse(fs.readFileSync(path.join(root, "eval/critic-semantic.
 const CR = Object.fromEntries(critic.map(a => [a.id, a]));
 const A = loadRun("a"), B = loadRun("b"), C = loadRun("c");
 prereq["A: held-out diagnosis & recommendation run"] = !!A; prereq["B: held-out strategic options run"] = !!B; prereq["C: critic run"] = !!C;
+// S7: assumption-integrity judge run, which must have been made on THIS A run under the current reporting lock.
+let AIJ = null;
+if (A && fs.existsSync(RUNS_DIR)) {
+  const files = fs.readdirSync(RUNS_DIR).filter(f => f.startsWith(`ev${EV}-heldout-aij-${EFFORT}-`)).sort();
+  if (files.length) { const f = path.join(RUNS_DIR, files.at(-1)); const d = JSON.parse(fs.readFileSync(f)); const m = d.manifest || {}; const lk = checkReportingLock();
+    const issues = [!String(m.run_id || "").startsWith(`ev${EV}-heldout-aij-`) && "not a real judge run id", m.eval_version !== EV && "eval version mismatch",
+      m.config_hash !== fz.frozen?.combined && "config hash ≠ frozen config", m.source_run_id !== A.manifest.run_id && `judged run ${m.source_run_id} ≠ evaluated A run`,
+      (!lk.ok || m.reporting_lock !== lk.lock.combined) && "made under a different reporting lock"].filter(Boolean);
+    if (issues.length) { if (ALLOW_SYN) { synthetic.push(`${path.basename(f)}: ${issues.join("; ")}`); AIJ = { file: path.relative(root, f), ...d }; } else problems.push(`REFUSED input ${path.basename(f)}: ${issues.join("; ")}`); }
+    else AIJ = { file: path.relative(root, f), ...d }; }
+}
+prereq["S7: assumption-integrity judge run on the evaluated A run"] = !!AIJ;
 const runIds = new Set([A, B, C].filter(Boolean).map(x => x.manifest.run_id));
 const logRecs = fs.existsSync(LOG) ? fs.readFileSync(LOG, "utf8").trim().split("\n").filter(Boolean).map(JSON.parse).filter(r => !r.dry_run && runIds.has(r.run_id)) : [];
 prereq["F: measured cost & latency for those runs"] = logRecs.length > 0;
@@ -85,6 +98,7 @@ prereq["Human calibration completed (blinded, adjudicated)"] = !!(human && human
 let pptx = PPTX && fs.existsSync(PPTX) ? JSON.parse(fs.readFileSync(PPTX)) : null;
 prereq["PowerPoint cross-platform manual test completed"] = pptx?.status === "complete";
 const calibrated = Object.fromEntries(LANGS.map(l => [l, !!human?.per_language_gate?.[l]?.passes && !!humanSum?.complete]));
+const calibratedAI = Object.fromEntries(LANGS.map(l => [l, !!human?.assumption_integrity_gate?.[l]?.passes && !!humanSum?.complete]));
 
 // ---------- A metrics per language × segment
 function aMetrics(rows) {
@@ -137,6 +151,23 @@ function segMeasure(g, l, seg) {
 const segExtra = l => ({ outside_catalogue_identified_any_ngf: srate(aRows.filter(r => r.lang === l && segmentOf(SC[r.id]) === "outside_catalogue"), r => r.ok && r.status === "no_good_fit"),
   case_correct_all: srate(aRows.filter(r => r.lang === l), caseCorrect) });
 
+// ---------- S7 conditional assumption integrity (judge verdicts from AIJ; eligibility re-derived and cross-checked)
+const aiKey = r => `${r.id}|${r.run}`;
+const aiInfo = {};
+if (A && AIJ) {
+  const mine = new Set(aRows.filter(r => aiEligibility(r, SC[r.id]).eligible).map(aiKey)), theirs = new Set(AIJ.rows.filter(r => r.eligible).map(aiKey));
+  if (mine.size !== theirs.size || [...mine].some(k => !theirs.has(k))) problems.push(`S7 eligibility mismatch between the judge run (${theirs.size}) and the A run outputs (${mine.size})`);
+}
+function aiMeasure(l) {
+  if (!AIJ) return null;
+  const amb = AIJ.rows.filter(r => r.lang === l), el = amb.filter(r => r.eligible), done = el.filter(r => r.complete);
+  aiInfo[l] = { ambiguous_rows: amb.length, eligible_rows: el.length, judged_complete: done.length, ineligible_reasons: amb.filter(r => !r.eligible).reduce((m, r) => ((m[r.eligibility_reason] = (m[r.eligibility_reason] || 0) + 1), m), {}),
+    item_yes_rate: Object.fromEntries(AI_ITEMS.map(i => [i.key, srate(done, r => r.verdicts?.[i.key] === "yes")])) };
+  if (!el.length) return { value: null, k: 0, n: 0, n_scenarios: 0, ci95: null, note: "no eligible conditional recommendation (denominator 0) → cannot be evaluated → not established" };
+  if (done.length < el.length) return { value: null, k: 0, n: el.length, n_scenarios: new Set(el.map(r => r.id)).size, ci95: null, note: `${el.length - done.length} eligible run(s) without a complete judge verdict → not established` };
+  return srate(el, r => r.pass === true);
+}
+
 // ---------- B, C, F per language
 function bMetrics(rows) {
   const s = rows.filter(r => r.scores); const crit = ["distinctness", "relevance_to_causes_and_goals", "rationale_soundness", "assessment_plausibility", "trade_off_clarity", "language_quality"];
@@ -176,14 +207,16 @@ function gate(group, g, getter) {
   const r = { group, id: g.id, metric: g.metric, op: g.op, threshold: g.value, status: g.status, per_language: {} };
   for (const l of LANGS) {
     const m = getter(l); let pass = cmp(m?.value, g.op, g.value); let note = "";
-    if (m?.value == null) { pass = null; note = "no data / denominator 0 → missing evidence"; }
+    if (m?.value == null) { pass = null; note = m?.note || "no data / denominator 0 → missing evidence"; }
     if (g.requires === "calibrated_judge" && !calibrated[l]) { pass = null; note = "judge not calibrated for this language → not established"; }
+    if (g.requires === "calibrated_assumption_judge" && !calibratedAI[l]) { pass = null; note = m?.value == null ? (m?.note || "no data → not established") : "assumption-integrity judge not calibrated for this language → not established"; }
     r.per_language[l] = { measure: m, pass, threshold_pass: pass === true, statistically_established: pass === true && established(m, g.op, g.value), note };
   }
   r.passes = LANGS.every(l => r.per_language[l].pass === true); gates.push(r); return r;
 }
 // Segment gates are approved & gating. Prerequisite A missing → recorded as missing evidence (never assumed to pass).
 T.segment_acceptance.forEach(g => gate("S", { ...g, metric: g.id }, l => A ? segMeasure(g, l) : null));
+T.additional_acceptance.forEach(g => gate("S7", { ...g, metric: g.id }, l => aiMeasure(l)));
 if (A) {
   T.A.per_language.forEach(g => gate("A", g, l => aUnion(l, g.applies_to)[g.metric]));
   const cc = Object.fromEntries(LANGS.map(l => [l, segExtra(l).case_correct_all.value]));
@@ -200,7 +233,7 @@ const segInfo = A ? Object.fromEntries(LANGS.map(l => [l, segExtra(l)])) : null;
 const approved = gates.filter(g => g.status === "approved");
 const failed = approved.filter(g => !g.passes); // includes "not established / missing evidence" — never assumed to pass
 const missing = Object.entries(prereq).filter(([, v]) => !v).map(([k]) => k);
-const calibFail = human && !LANGS.every(l => calibrated[l]);
+const calibFail = human && !LANGS.every(l => calibrated[l] && calibratedAI[l]);
 const pptxFail = pptx && pptx.status === "complete" && !pptx.exit_criteria_met;
 let verdict = missing.length || failed.length || problems.length || calibFail || pptxFail ? "NO-GO" : "GO";
 if (synthetic.length) verdict = "INVALID — SYNTHETIC INPUTS (tool test only, not a result)";
@@ -211,6 +244,7 @@ const limitations = ["Held-out set authored by a blind AI author (same model fam
   "S5 is strict: when the deterministic rule decides No Good Fit, the frozen eval-v1 harness generates no user-facing explanation, so such runs count as not communicated (reported separately as 'identified').",
   "S2(c) 'conditional/alternative interpretation' is detected from the model's own fit rating (< high) plus an acceptable approach in the top 3; explicit wording of assumptions is assessed only qualitatively by the blinded human evaluator.",
   "Critic L2/L3 seeded set was written by the rules author (not independent).",
+  "S7: the frozen re-rank schema has no dedicated 'assumptions' or 'if wrong' field, so the judge assesses the free-text reasons and cautions; eligible cases per language are few (≤ 10 runs from 5 ambiguous scenarios), so the S7 estimate is imprecise and may be not established for lack of eligible cases.",
   "Cost per analysis uses the options call as a proxy for framework drafting (no drafting experiment in Phase 0).",
   "Prices are list prices recorded in lib/llm.mjs; verify against the current price list before commercial use."];
 if (human) for (const [c, v] of Object.entries(human.by_criterion || {})) for (const l of LANGS) if (v[l]?.insufficient_sample) limitations.push(`Calibration sample for ${c} (${l}) is small (n=${v[l].n}); agreement for this criterion is indicative only.`);
@@ -226,7 +260,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const stamp = new Date().toISOString().replace(/[:.]/g, "-"); const base = path.join(OUT, `go-no-go-ev${EV}-${EFFORT}-${stamp}${synthetic.length ? "-SYNTHETIC" : ""}`);
 const json = { generated_at: new Date().toISOString(), eval_version: EV, effort: EFFORT, verdict, prerequisites: prereq, problems, synthetic_inputs: synthetic,
   evidence_classes: { E1_model_evaluation_heldout: [A, B, C].filter(Boolean).map(x => x.file), E2_model_evaluation_tuning: "reported separately (never decides)", E3_deterministic_experiments: "doc 13 §A.1, C.1, D, E (no model)", E4_tool_validation: "doc 14 §4.4, §8b", E5_synthetic: synthetic },
-  gates, segment_s3_by_segment: s3BySeg, segment_info: segInfo, nature: T.nature, statistics: T.statistics, a_by_language_segment: aBy, b_by_language: bBy, c_by_language: cBy, f_by_language: fBy, calibration: human, disagreements: humanSum, pptx, limitations, recommendations: recs };
+  gates, s7_detail: aiInfo, s7_judge_run: AIJ?.file ?? null, segment_s3_by_segment: s3BySeg, segment_info: segInfo, nature: T.nature, statistics: T.statistics, a_by_language_segment: aBy, b_by_language: bBy, c_by_language: cBy, f_by_language: fBy, calibration: human, disagreements: humanSum, pptx, limitations, recommendations: recs };
 fs.writeFileSync(base + ".json", JSON.stringify(json, null, 1));
 const W = synthetic.length ? "\n> ⚠️ **SYNTHETIC INPUTS: TOOL TEST ONLY. NOT A RESULT. DO NOT CITE.**\n" : "";
 const md = [];
@@ -249,13 +283,18 @@ md.push("## 4. Segment acceptance gates S1–S6 (approved, gating, per language)
   "Numerators and denominators:", "", "| Gate | Numerator | Denominator |", "|---|---|---|", ...T.segment_acceptance.map(g => `| ${g.id} | ${g.numerator} | ${g.denominator} |`), "");
 if (A) { md.push("S3 reported per segment, and supplementary figures:", "", "| Lang | S3 clear | S3 ambiguous | Outside catalogue identified (any NGF) | Case correct (all segments) |", "|---|---|---|---|---|",
   ...LANGS.map(l => `| ${l.toUpperCase()} | ${fmt(s3BySeg[l].clear)} | ${fmt(s3BySeg[l].ambiguous)} | ${fmt(segInfo[l].outside_catalogue_identified_any_ngf)} | ${fmt(segInfo[l].case_correct_all)} |`), ""); }
+const s7 = T.additional_acceptance[0];
+md.push("## 4a. S7 Conditional Recommendation Assumption Integrity (approved, gating, per language)", "", `Eligible: ${s7.eligible}.`, "", `Numerator: ${s7.numerator}.`, "", `Denominator: ${s7.denominator}.`, "", ...gt("S7"));
+if (AIJ) { md.push("| Lang | Ambiguous runs | Eligible (conditional) | Judged complete | AI1 explicit | AI2 supported / labelled | AI3 change if wrong | Not eligible (reasons) | Judge calibration |", "|---|---|---|---|---|---|---|---|---|",
+  ...LANGS.map(l => { const d = aiInfo[l] || {}; const cg = human?.assumption_integrity_gate?.[l];
+    return `| ${l.toUpperCase()} | ${d.ambiguous_rows ?? "—"} | ${d.eligible_rows ?? "—"} | ${d.judged_complete ?? "—"} | ${AI_ITEMS.map(i => fmt(d.item_yes_rate?.[i.key])).join(" | ")} | ${JSON.stringify(d.ineligible_reasons || {})} | ${cg ? `${cg.passes && humanSum?.complete ? "✅" : "⛔"} agreement ${cg.item_agreement} on ${cg.item_pairs} items; ${cg.human_rated_cases}/${cg.eligible_cases} cases rated${cg.reasons.length ? "; " + cg.reasons.join("; ") : ""}` : "⛔ not calibrated"} |`; }), ""); }
 md.push("## 4b. A: Diagnosis & recommendation (held-out)", "", ...gt("A"));
 md.push("### 4.1 By scenario segment × language", "", "| Segment | Lang | Rows | Pass rate | Top-1 acceptable | Unacceptable in top 3 | Asked (incomplete) | No-fit / decline recall | Stage acc. |", "|---|---|---|---|---|---|---|---|---|");
 if (A) for (const s of SEGS) for (const l of LANGS) { const m = aBy[l][s]; md.push(`| ${s} | ${l.toUpperCase()} | ${m.pass_rate.n} | ${fmt(m.pass_rate)} | ${fmt(m.top1_acceptable)} | ${fmt(m.unacceptable_in_top3)} | ${fmt(m.ask_rate)} | ${fmt(m.nofit_or_decline_recall)} | ${fmt(m.stage_accuracy)} |`); }
 md.push("", "_Row-level figures above are descriptive (information only); gates are in §4 and §4b._", "");
 md.push("## 5. B: Strategic Options", "", ...gt("B"), "## 6. C: AI Critic", "", ...gt("C"), "## 7. F: Cost & latency (measured)", "", ...gt("F"));
 md.push("## 8. Human calibration (blinded)", "");
-if (human) { md.push(`Calibration passes (both languages independently): **${LANGS.every(l => calibrated[l]) ? "yes" : "NO"}**`, "", "| Criterion | Arabic | English |", "|---|---|---|",
+if (human) { md.push(`Calibration passes (both languages independently): **${LANGS.every(l => calibrated[l]) ? "yes" : "NO"}**; S7 assumption-integrity judge calibration: **${LANGS.every(l => calibratedAI[l]) ? "yes" : "NO"}** (${LANGS.map(l => `${l.toUpperCase()}: ${JSON.stringify(human.assumption_integrity_gate?.[l] ?? "missing")}`).join("; ")})`, "", "| Criterion | Arabic | English |", "|---|---|---|",
   ...Object.entries(human.by_criterion).map(([c, v]) => `| ${c} | ${JSON.stringify(v.ar)} | ${JSON.stringify(v.en)} |`), "",
   `Disagreements: ${humanSum ? `${humanSum.total} (adjudicated ${humanSum.adjudicated}); by decision ${JSON.stringify(humanSum.by_decision)}; follow-ups for the next version: ${humanSum.next_version_items?.length ?? 0}` : "not adjudicated"}. Full log: \`disagreements-log.md\`.`, ""); }
 else md.push("_Not available (prerequisite missing)._", "");

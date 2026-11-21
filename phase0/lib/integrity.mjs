@@ -42,6 +42,7 @@ export function evaluationStarted(v) {
 // Reporting layer (thresholds, GO/NO-GO generator, calibration tool, workbook tools): locked separately so the eval-v1
 // scoring freeze stays untouched. Same rule: cannot be re-locked once the evaluation version has results.
 export const REPORTING_FILES = ["eval/thresholds-v1.json", "scripts/evidence-report.mjs", "scripts/human-eval.mjs",
+  "lib/assumption-integrity.mjs", "scripts/assumption-judge.mjs",
   "experiments/e-pptx/summarize_manual_results.py", "experiments/e-pptx/make_results_template.py"];
 const REPORTING_LOCK = new URL("lib/reporting-lock.json", root);
 export function reportingHash() {

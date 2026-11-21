@@ -1,14 +1,16 @@
 {
  "eval_version": 1,
  "files": {
-  "eval/thresholds-v1.json": "1dc2e41ece8e1ba1ffc077d9325a29f39dc6a9a38d63f422d1bd7e516346ddd9",
-  "scripts/evidence-report.mjs": "d07838abfdb2fd017109ef6657215f8da1751d3870d16e10187c93652477678d",
-  "scripts/human-eval.mjs": "6c698a6204445f903b0f78988545afbab836342e8d02679221cd4ac3924786ad",
+  "eval/thresholds-v1.json": "a959ff8b0d2cdbc448fef1989a017d38cf90add35632a66903b426ea508cbc89",
+  "scripts/evidence-report.mjs": "571a3f5e952bcfe7e069ffbb15a082248b7218479b87231c9f0d9b76a6041b2b",
+  "scripts/human-eval.mjs": "cbd33783d35fa6cdc930102bdea2d80876924a8812e6c6a3331e9b3b268c8f5a",
+  "lib/assumption-integrity.mjs": "039fb0da72e65b861fbeb722f7ceeb64b0128b6bfde6b565ec05b23d9490f15d",
+  "scripts/assumption-judge.mjs": "47d71fa6cf007d993b6124396326096034449a0e6069b2e8a1ef8d05e4c64653",
   "experiments/e-pptx/summarize_manual_results.py": "38afb7ff4d3ccbb035fef782039e1049ed662077beee9e897f2557b85cee3aac",
   "experiments/e-pptx/make_results_template.py": "865a821688a40b19dc26171ed61b1a6a291383c8af2d7bd47223a8617980afc8"
  },
- "combined": "14ee8eb6a0f988082ffe67eb5ffe92f901d9874bdc5f17920ab5c8180efe2998",
- "locked_at": "2026-11-21T18:24:32.224Z",
- "git_head": "d67e8ffed236cd384fae2100f774bdddd9a13fb0",
- "reason": "Eval v1 reporting lock: approved segment thresholds S1-S6 (Ambiguous = correct handling), numerator/denominator definitions, effective-n CIs, threshold pass vs statistically established, no compensation, missing evidence -> NO-GO"
+ "combined": "5a92509c37b517a5f911ff26a10ebfea8ee132fb641d08f0f6a43cc8aa438c99",
+ "locked_at": "2026-11-21T18:36:41.451Z",
+ "git_head": "121b5bd65542b2138e25c9750a831cadac2ac388",
+ "reason": "Eval v1 final reporting lock: S7 Conditional Recommendation Assumption Integrity (>=0.90, eligible = ambiguous + conditional recommendation, calibrated AI judge, per language); S1-S6 unchanged; evaluation scope closed"
 }

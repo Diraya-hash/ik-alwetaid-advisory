@@ -36,6 +36,11 @@ An AI system ("the consultant") read each business challenge, diagnosed it, and 
 | **Q5_language** | Language quality | 1–5 | Arabic: natural Modern Standard Arabic business register, correct terms, no literal translation. English: clear professional English |
 | **Q6_usable** | Would you send this to a manager? | yes / with_edits / no | Your overall verdict |
 | **OPT_…** (only some packets) | Options: distinctness, relevance to causes/goals, soundness of rationale, plausibility of the impact/effort/risk/feasibility scores, clarity of trade-offs, language quality | 1–5 each | Scores are the AI's judgement, not facts; check they are reasonable and justified |
+| **AI1_assumptions_explicit** (only packets with a conditional recommendation) | Does the recommendation explicitly state the assumption(s) it depends on, i.e. what must be true for this approach to be right? | yes / partial / no | "no" if the dependence is only implied |
+| **AI2_assumptions_supported_or_unverified** | Is every assumption it relies on either supported by the challenge text, or clearly labelled unverified / to be confirmed? | yes / partial / no | "no" if it relies on anything not in the challenge presented as established, or if no assumption is stated |
+| **AI3_change_if_wrong** | Does it explain how the recommendation would change if those assumptions prove incorrect (another approach, or what to check first)? | yes / partial / no | "no" if no assumption is stated |
+
+**Packets with only AI1–AI3 rows.** Some extra packets ask only these three questions. They cover every case where the AI gave a *conditional* recommendation on an ambiguous request. Judge them against the challenge text alone, exactly as above. Asking a clarifying question instead of recommending is not rated here.
 
 **The available methods** the AI may choose from: SWOT; PEST/STEEPLE; SIPOC; process map (BPMN); value stream map; 5 Whys; cause-and-effect (fishbone); strategic options; impact/effort matrix; risk matrix; stakeholder map; project charter; action plan (with Gantt view); organisation chart; operating model canvas. A good answer may also be "none of these fits well", or "this is out of scope" (legal/medical advice, financial valuation, decisions about named people).
 
@@ -96,6 +101,7 @@ An AI system ("the consultant") read each business challenge, diagnosed it, and 
 - **CHK_surface:** هل ذكر التشخيص هذه النقطة؟ (yes / partial / no)
 - **CHK_hearsay:** هل عومل هذا الرأي أو النقل غير الموثَّق بوصفه غير مُثبت؟ (yes / no)
 - **Q4 الخطوة التالية:** appropriate (ما كنت ستفعله) / acceptable (مقبول وإن فضَّلت غيره) / wrong (مضلِّل). طرح أسئلة على طلب غامض قد يكون الصواب، والتوصية بإطار على طلب غامض خطأ في الغالب.
+- **AI1–AI3 (فقط في الحالات التي قدَّم فيها توصية مشروطة):** AI1 هل صرَّحت التوصية بالافتراضات التي تعتمد عليها؟ AI2 هل كل افتراض مدعوم بمعلومات التحدي أو موسوم صراحةً بأنه غير مُتحقَّق؟ AI3 هل شرحت كيف ستتغير التوصية إذا ثبت خطأ الافتراضات؟ (yes / partial / no؛ أجب «no» إذا لم يُذكر أي افتراض). بعض الملفات الإضافية تحتوي هذه الأسئلة الثلاثة فقط.
 - **Q5 جودة اللغة (١–٥):** عربية فصحى بأسلوب الأعمال، بمصطلحات صحيحة ودون ترجمة حرفية.
 - **Q6 هل ترسله إلى مدير؟** yes / with_edits / no
 - **OPT (في بعض الحالات):** تميُّز الخيارات، وارتباطها بالأسباب والأهداف، وسلامة المبررات، ومعقولية تقديرات الأثر والجهد والمخاطر والجدوى، ووضوح المفاضلات، وجودة اللغة (١–٥ لكل معيار).
@@ -106,7 +112,8 @@ An AI system ("the consultant") read each business challenge, diagnosed it, and 
 
 | Step | Command (inside `phase0/`) | Note |
 |---|---|---|
-| Prepare | `node scripts/human-eval.mjs prepare --a=results/runs/<ev1-heldout-a-…>.json --b=results/runs/<ev1-heldout-b-…>.json --out=human-eval/round-1` | Creates `evaluator/` and `coordinator/` |
+| Judge S7 | `node scripts/assumption-judge.mjs --set=heldout --effort=high` (run by the workflow after experiment A) | Writes `results/runs/ev1-heldout-aij-…json` |
+| Prepare | `node scripts/human-eval.mjs prepare --a=results/runs/<ev1-heldout-a-…>.json --aij=results/runs/<ev1-heldout-aij-…>.json --b=results/runs/<ev1-heldout-b-…>.json --out=human-eval/round-1` | Creates `evaluator/` and `coordinator/` |
 | Share | Send **only** `human-eval/round-1/evaluator/` | Never share `coordinator/` or `results/` |
 | Submit | `node scripts/human-eval.mjs submit --dir=human-eval/round-1 --responses=<returned.csv> --evaluator="<name>"` | Validates every answer and records the SHA-256 |
 | Compare | `node scripts/human-eval.mjs compare --dir=human-eval/round-1` | Refuses to run without a receipt; per criterion × language |
