@@ -219,7 +219,7 @@ The project stays in **Phase 0**. Beta-1 implementation is not started.
 | Requirement | How it is enforced | Where |
 |---|---|---|
 | Calibration reported **by criterion and by language**; disagreements documented with rationales | `human-eval compare` (criterion × language, *n*, agreement, kappa, small-sample flags) and `human-eval summarise` (refuses incomplete adjudication; writes `disagreements-log.md`) | doc 17 §6 |
-| Results **segmented** into clear / ambiguous / incomplete information / outside catalogue / out of scope | Evidence report §4.1 (segment × language with *n* and 95% CI); segment thresholds **proposed**, pending approval | doc 11 §4b, `eval/thresholds-v1.json` |
+| Results **segmented** into clear / ambiguous / incomplete information / outside catalogue / out of scope | Evidence report §4 (segment gates S1–S6 per language: estimate, 95% CI on distinct scenarios, *k/n*, scenarios, threshold pass, statistically established); **approved and gating**, see §8d | doc 11 §4b, `eval/thresholds-v1.json` |
 | **Arabic and English pass independently**; no compensation | Every gate evaluated per language; a gate passes only if both pass; pooled figures never decide. Tested on synthetic data (E5): AR 0.50 / EN 1.00 → gate fails | `thresholds-v1.json` principle; `evidence-report.mjs` |
 | **Evidence classes kept separate** | Classes E1–E5 (doc 11 §4b, doc 13 §0b); only E1 can decide; synthetic inputs refused, or the report is watermarked and its verdict forced to INVALID | `evidence-report.mjs` |
 | **No change to frozen components**; changes need a new evaluation version | Eval-v1 scoring freeze unchanged (`945f2b7b…`); reporting layer locked separately (`176e114b…`); all seals intact; locks refuse changes once v1 has results | `verify-integrity`, CI, pre-commit |
@@ -231,7 +231,22 @@ node scripts/evidence-report.mjs --effort=high --human=human-eval/round-1 --pptx
 ```
 It contains: verdict and reasons; an evidence-class inventory; a prerequisite checklist; every approved gate with Arabic and English values, 95% intervals and pass/fail; segment × language tables; options, critic, cost and latency per language; calibration per criterion × language with the disagreement summary; PowerPoint exit criteria; failures; automatic limitations; and recommendations (any fix → new evaluation version). It is reviewed and signed off by a person before it is published as the GO/NO-GO decision.
 
-**Decision needed (not blocking readiness):** approve or adjust the **proposed per-segment thresholds** in `thresholds-v1.json` (clear top-1 ≥ 0.80; ambiguous top-1 ≥ 0.75; unacceptable ≤ 5%; incomplete asked = 100%; outside-catalogue recall ≥ 0.75; out-of-scope declined = 100%). This must happen **before** the first held-out run, because thresholds are locked once evaluation starts.
+## 8d. Segment thresholds approved and reporting configuration locked for eval v1 (2026-11-21, fourth update)
+
+**Approved** (with the Ambiguous adjustment): S1 clear first framework ≥ 80%; S2 ambiguous **correct handling** ≥ 75% (clarifying questions, conditional recommendations, stated uncertainty or alternatives, or identifying missing information all count; a single framework is not required); S3 unsuitable framework in the top 3 ≤ 5% (clear + ambiguous); S4 incomplete information requests information = 100%; S5 outside catalogue identifies and communicates No Good Fit ≥ 75%; S6 out of scope declined or redirected = 100%. Exact numerators and denominators: doc 11 §4b and `eval/thresholds-v1.json` → `segment_acceptance`.
+
+| Requirement | Implementation |
+|---|---|
+| Exact numerator and denominator for every threshold | Written in `thresholds-v1.json` for every S, A, B, C and F rate gate, and printed in the report |
+| CIs and sample sizes | Each gate shows estimate, 95% Wilson CI (n = distinct scenarios, since repeated runs are not independent), *k/n* runs and scenario count |
+| Threshold pass vs statistical confidence | Two separate flags per gate and language: *threshold pass* (decides) and *statistically established* (information only) |
+| No aggregate compensation | S1–S6 are evaluated per language and per segment; each must pass in Arabic **and** English; pooled numbers never decide |
+| Missing evidence → NO-GO | No data, denominator 0 or an uncalibrated judge → gate ⛔ not passed → NO-GO |
+| Nature of thresholds | Stated in the file and in every report: operational acceptance thresholds, **not** statistically validated performance claims |
+
+Consequential changes in the reporting layer only (the frozen scoring components are unchanged: config hash `945f2b7b…`): A.top1_acceptable, A.top3_hit and A.false_gate_block apply to clear cases only (ambiguity is governed by S2); the cross-language gap uses the segment "case correct" indicators. Known strictness: in the frozen harness a rule-decided No Good Fit has no generated explanation, so it counts against S5; fixing that requires eval v2.
+
+Verified (E4/E5 only, not results): the real state → **NO-GO**, 6 prerequisites missing; a synthetic fixture (scratchpad only) with weak Arabic fails S1/S3/S5 in Arabic while English passes, and the language gap gate fails. The verdict is forced to INVALID on synthetic input. **Reporting layer re-locked for eval v1** (`lib/reporting-lock.json`, combined hash `14ee8eb6…`); any further change needs evaluation version 2.
 
 ## 9. Recommendation
 

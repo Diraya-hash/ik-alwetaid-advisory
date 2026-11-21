@@ -1,56 +1,82 @@
 {
  "version": "thresholds-v1",
  "eval_version": 1,
- "principle": "Every language-level gate is evaluated SEPARATELY for Arabic and English. A gate passes only if it passes in BOTH languages. Pooled (all-language) figures are reported for information only and never decide a gate. Strong performance in one language can never compensate for weak performance in the other.",
- "status_legend": { "approved": "decided by the product owner; gating", "proposed": "reported against, NOT gating until approved" },
+ "approved": "2026-11-21: segment acceptance thresholds approved by the product owner (Ambiguous redefined as 'correct handling of ambiguity')",
+ "nature": "Operational acceptance thresholds for evaluation version 1. They are NOT claims of statistically validated product performance.",
+ "principle": "Every gate is evaluated SEPARATELY per language (Arabic, English) and, for segment gates, per segment. A gate passes only if it passes in EVERY language (and segment) it applies to. Aggregate or pooled figures are reported for information only and can never compensate for a failed language-specific or segment-specific gate. Missing required evidence (no data, denominator 0, judge not calibrated) = gate not passed = NO-GO; nothing is ever assumed to pass.",
+ "statistics": {
+  "unit": "scenario-run (each held-out scenario is run R times; R = 2 by default)",
+  "estimate": "mean over scenarios of each scenario's per-run success rate (equals the run-level rate when every scenario has the same number of eligible runs)",
+  "ci95": "Wilson 95% interval computed on the number of DISTINCT scenarios (effective n), not on runs, because repeated runs of one scenario are not independent",
+  "threshold_pass": "point estimate meets the threshold → the operational gate passes (this alone decides the gate)",
+  "statistically_established": "for '>=': CI lower bound ≥ threshold; for '<=': CI upper bound ≤ threshold. Reported separately; it is NOT required for the gate and is expected to be 'no' for most gates at Phase 0 sample sizes",
+  "reported_with_every_gate": ["numerator (runs)", "denominator (runs)", "distinct scenarios", "estimate", "95% CI", "threshold", "threshold_pass", "statistically_established"]
+ },
  "segments": {
-  "definition": "clear = the seven requested business categories; ambiguous; incomplete_information = gate 'ask' cases; outside_catalogue = no_good_fit cases whose expected domains do not include X.OUT_OF_SCOPE; out_of_scope = expected domain X.OUT_OF_SCOPE (or category out_of_scope)",
+  "definition": "clear = the seven requested business categories; ambiguous = category 'ambiguous'; incomplete_information = expected gate 'ask'; outside_catalogue = no-good-fit cases whose expected domains do not include X.OUT_OF_SCOPE; out_of_scope = expected domain X.OUT_OF_SCOPE or category out_of_scope",
   "order": ["clear", "ambiguous", "incomplete_information", "outside_catalogue", "out_of_scope"]
  },
+ "segment_acceptance": [
+  { "id": "S1.clear_first_framework", "segment": "clear", "op": ">=", "value": 0.80, "status": "approved",
+    "label": "Clear: correct first framework recommendation",
+    "numerator": "clear scenario-runs where status = ok (recommendations shown) AND the rank-1 approach ∈ expected ideal ∪ acceptable (Gantt ≡ Action Plan)",
+    "denominator": "all clear scenario-runs (asking, declining or 'no good fit' on a clear case counts as not correct)" },
+  { "id": "S2.ambiguity_handled", "segment": "ambiguous", "op": ">=", "value": 0.75, "status": "approved",
+    "label": "Ambiguous: correct handling of ambiguity (a single framework is NOT required)",
+    "numerator": "ambiguous scenario-runs with NO unacceptable approach displayed AND status ∉ {no_good_fit, out_of_scope} AND at least one of: (a) clarification — status = insufficient_context with ≥ 1 identified missing item (unknowns); (b) acceptable recommendation — status = ok and rank-1 ∈ ideal ∪ acceptable; (c) conditional/alternative interpretation — status = ok, the model rated its rank-1 fit below 'high' (signalled uncertainty) and the displayed top 3 contains an approach in ideal ∪ acceptable",
+    "denominator": "all ambiguous scenario-runs",
+    "note": "Whether conditional recommendations state their assumptions explicitly is not machine-checkable; the blinded human evaluator's 'next step' rating on sampled ambiguous cases is reported alongside as supporting evidence (does not change the gate)" },
+  { "id": "S3.unsuitable_in_top3", "segment": ["clear", "ambiguous"], "op": "<=", "value": 0.05, "status": "approved",
+    "label": "Clear + Ambiguous: unsuitable framework appearing in the displayed top 3",
+    "numerator": "clear+ambiguous scenario-runs with status = ok whose displayed top 3 contains an approach in the scenario's expected 'unacceptable' list",
+    "denominator": "clear+ambiguous scenario-runs with status = ok (recommendations actually displayed); denominator 0 = missing evidence → NO-GO",
+    "per": "evaluated per language over the combined clear+ambiguous rows, AND reported per segment" },
+  { "id": "S4.incomplete_requests_info", "segment": "incomplete_information", "op": ">=", "value": 1.0, "status": "approved",
+    "label": "Incomplete information: requests the necessary information before any definitive recommendation",
+    "numerator": "incomplete-information scenario-runs with status = insufficient_context (no recommendation displayed) AND ≥ 1 identified missing item (unknowns)",
+    "denominator": "all incomplete-information scenario-runs" },
+  { "id": "S5.outside_catalogue_nofit", "segment": "outside_catalogue", "op": ">=", "value": 0.75, "status": "approved",
+    "label": "Outside catalogue: correctly identifies AND communicates 'No Good Fit'",
+    "numerator": "outside-catalogue scenario-runs with status = no_good_fit AND a non-empty user-facing no-good-fit explanation",
+    "denominator": "all outside-catalogue scenario-runs",
+    "note": "Strict: when the deterministic rule decides No Good Fit, the frozen eval-v1 harness does not call the model to write the explanation, so such runs count as NOT communicated. 'Identified but not communicated' is reported separately. If this causes a failure it is a NO-GO; fixing the harness requires evaluation version 2" },
+  { "id": "S6.out_of_scope_declined", "segment": "out_of_scope", "op": ">=", "value": 1.0, "status": "approved",
+    "label": "Out of scope: correctly declines or redirects",
+    "numerator": "out-of-scope scenario-runs with status ∈ {out_of_scope (declined), no_good_fit (redirected: no method offered)}; any displayed recommendation = fail",
+    "denominator": "all out-of-scope scenario-runs" }
+ ],
  "A": {
   "per_language": [
-   { "id": "A.stage_accuracy", "metric": "stage_accuracy", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.domain_accuracy", "metric": "domain_accuracy", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.top1_acceptable", "metric": "top1_acceptable", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.top3_hit", "metric": "top3_hit", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.unacceptable_in_top3", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.nofit_recall", "metric": "nofit_or_decline_recall", "op": ">=", "value": 0.75, "status": "approved", "applies_to": ["outside_catalogue", "out_of_scope"] },
-   { "id": "A.false_nofit", "metric": "false_nofit_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.ask_rate", "metric": "ask_rate", "op": ">=", "value": 1.0, "status": "approved", "applies_to": ["incomplete_information"] },
-   { "id": "A.false_gate_block", "metric": "false_gate_block_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"] },
-   { "id": "A.typing_violations", "metric": "typing_violation_rate", "op": "<=", "value": 0.02, "status": "approved", "applies_to": ["all"] },
-   { "id": "A.hearsay_handled", "metric": "hearsay_handled", "op": ">=", "value": 0.90, "status": "approved", "applies_to": ["all"], "requires": "calibrated_judge" },
-   { "id": "A.out_of_candidate", "metric": "out_of_candidate_recs", "op": "<=", "value": 0, "status": "approved", "applies_to": ["all"] },
+   { "id": "A.stage_accuracy", "metric": "stage_accuracy", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear", "ambiguous"], "numerator": "runs whose model stage ∈ expected stage_any_of", "denominator": "runs with an expected stage" },
+   { "id": "A.domain_accuracy", "metric": "domain_accuracy", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear", "ambiguous"], "numerator": "runs whose top domain ∈ expected domains (any-of ∪ acceptable)", "denominator": "runs with expected domains" },
+   { "id": "A.top1_acceptable", "metric": "top1_acceptable", "op": ">=", "value": 0.80, "status": "approved", "applies_to": ["clear"], "numerator": "runs with status ok and rank-1 ∈ ideal ∪ acceptable", "denominator": "runs graded as recommendation cases", "change_2026_11_21": "applies to clear only (was clear+ambiguous); ambiguous is governed by S2 so that clarification is never penalised" },
+   { "id": "A.top3_hit", "metric": "top3_hit", "op": ">=", "value": 0.85, "status": "approved", "applies_to": ["clear"], "numerator": "runs with status ok and an ideal approach in the top 3", "denominator": "runs graded as recommendation cases", "change_2026_11_21": "applies to clear only (was clear+ambiguous)" },
+   { "id": "A.false_nofit", "metric": "false_nofit_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear", "ambiguous"], "numerator": "runs with status no_good_fit or out_of_scope", "denominator": "runs graded as recommendation cases" },
+   { "id": "A.false_gate_block", "metric": "false_gate_block_rate", "op": "<=", "value": 0.05, "status": "approved", "applies_to": ["clear"], "numerator": "runs with status insufficient_context", "denominator": "runs graded as recommendation cases", "change_2026_11_21": "applies to clear only (was clear+ambiguous): asking on an ambiguous case is acceptable handling" },
+   { "id": "A.typing_violations", "metric": "typing_violation_rate", "op": "<=", "value": 0.02, "status": "approved", "applies_to": ["all"], "numerator": "user-attributed statements without a verbatim quote", "denominator": "all diagnosis statements" },
+   { "id": "A.hearsay_handled", "metric": "hearsay_handled", "op": ">=", "value": 0.90, "status": "approved", "applies_to": ["all"], "requires": "calibrated_judge", "numerator": "hearsay items judged 'treated as unproven'", "denominator": "hearsay items judged" },
+   { "id": "A.out_of_candidate", "metric": "out_of_candidate_recs", "op": "<=", "value": 0, "status": "approved", "applies_to": ["all"], "numerator": "model recommendations outside the rule-approved candidates", "denominator": "all runs" },
    { "id": "A.must_surface", "metric": "surface_coverage", "op": ">=", "value": 0.85, "status": "approved_target", "applies_to": ["all"], "requires": "calibrated_judge" },
    { "id": "A.top1_stability", "metric": "top1_stability", "op": ">=", "value": 0.85, "status": "approved_target", "applies_to": ["all"] }
   ],
   "cross_language": [
-   { "id": "A.language_gap", "metric": "pass_rate_gap_points", "op": "<=", "value": 10, "status": "approved", "note": "additional to, never instead of, the per-language gates" }
-  ],
-  "per_segment_per_language": [
-   { "id": "S.clear.top1", "segment": "clear", "metric": "top1_acceptable", "op": ">=", "value": 0.80, "status": "proposed" },
-   { "id": "S.clear.unacceptable", "segment": "clear", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "proposed" },
-   { "id": "S.ambiguous.top1", "segment": "ambiguous", "metric": "top1_acceptable", "op": ">=", "value": 0.75, "status": "proposed" },
-   { "id": "S.ambiguous.unacceptable", "segment": "ambiguous", "metric": "unacceptable_in_top3", "op": "<=", "value": 0.05, "status": "proposed" },
-   { "id": "S.incomplete.ask", "segment": "incomplete_information", "metric": "ask_rate", "op": ">=", "value": 1.0, "status": "proposed" },
-   { "id": "S.outside.nofit", "segment": "outside_catalogue", "metric": "nofit_or_decline_recall", "op": ">=", "value": 0.75, "status": "proposed" },
-   { "id": "S.oos.decline", "segment": "out_of_scope", "metric": "nofit_or_decline_recall", "op": ">=", "value": 1.0, "status": "proposed", "note": "out-of-scope requests (financial valuation, named individuals, unlawful aims) must always be declined" }
+   { "id": "A.language_gap", "metric": "case_correct_gap_points", "op": "<=", "value": 10, "status": "approved", "note": "Gap between Arabic and English 'case correct' rates, where case correct = the segment acceptance criterion of the case's own segment (S1/S2/S4/S5/S6). Additional to, never instead of, the per-language gates" }
   ]
  },
  "B": {
   "per_language": [
-   { "id": "B.structural", "metric": "structural_pass", "op": ">=", "value": 0.95, "status": "approved" },
+   { "id": "B.structural", "metric": "structural_pass", "op": ">=", "value": 0.95, "status": "approved", "numerator": "option sets passing the structural checks", "denominator": "option sets generated" },
    { "id": "B.rubric_mean", "metric": "rubric_overall_mean", "op": ">=", "value": 4.0, "status": "approved", "requires": "calibrated_judge" },
    { "id": "B.rubric_min_criterion", "metric": "rubric_min_criterion_mean", "op": ">=", "value": 3.5, "status": "approved", "requires": "calibrated_judge" },
-   { "id": "B.no_fabrication", "metric": "no_fabricated_facts", "op": ">=", "value": 0.95, "status": "approved", "requires": "calibrated_judge" }
+   { "id": "B.no_fabrication", "metric": "no_fabricated_facts", "op": ">=", "value": 0.95, "status": "approved", "requires": "calibrated_judge", "numerator": "option sets judged free of fabricated facts", "denominator": "option sets judged" }
   ]
  },
  "C": {
   "per_language": [
-   { "id": "C.recall", "metric": "recall", "op": ">=", "value": 0.70, "status": "approved" },
-   { "id": "C.serious_precision", "metric": "serious_precision", "op": ">=", "value": 0.80, "status": "approved" },
+   { "id": "C.recall", "metric": "recall", "op": ">=", "value": 0.70, "status": "approved", "numerator": "seeded defects found", "denominator": "seeded defects × runs" },
+   { "id": "C.serious_precision", "metric": "serious_precision", "op": ">=", "value": 0.80, "status": "approved", "numerator": "critical/high findings matching a seeded defect", "denominator": "critical/high findings on seeded artifacts" },
    { "id": "C.false_alarms", "metric": "serious_false_alarms_per_clean_run", "op": "<=", "value": 0.125, "status": "approved", "note": "≤ 1 per 8 clean runs" },
-   { "id": "C.explained", "metric": "explanation_and_correction", "op": ">=", "value": 1.0, "status": "approved" }
+   { "id": "C.explained", "metric": "explanation_and_correction", "op": ">=", "value": 1.0, "status": "approved", "numerator": "critic runs where every finding has an explanation and a correction", "denominator": "critic runs" }
   ]
  },
  "F": {
@@ -58,17 +84,17 @@
    { "id": "F.cost_single", "metric": "cost_per_single_framework_analysis_usd", "op": "<=", "value": 0.90, "status": "approved" },
    { "id": "F.diag_p90", "metric": "diagnosis_latency_p90_ms", "op": "<=", "value": 25000, "status": "approved" },
    { "id": "F.rerank_p90", "metric": "rerank_latency_p90_ms", "op": "<=", "value": 15000, "status": "approved" },
-   { "id": "F.refusal", "metric": "refusal_rate", "op": "<=", "value": 0.01, "status": "approved" },
-   { "id": "F.parse_failure", "metric": "parse_failure_rate", "op": "<=", "value": 0.01, "status": "approved" }
+   { "id": "F.refusal", "metric": "refusal_rate", "op": "<=", "value": 0.01, "status": "approved", "numerator": "calls with stop_reason refusal", "denominator": "all evaluated calls" },
+   { "id": "F.parse_failure", "metric": "parse_failure_rate", "op": "<=", "value": 0.01, "status": "approved", "numerator": "calls with usage but no parsed output", "denominator": "calls with usage" }
   ]
  },
  "calibration": {
   "per_language": [
-   { "id": "Q3.checklist_agreement", "metric": "checklist_agreement", "op": ">=", "value": 0.80, "min_items": 20, "status": "approved", "note": "per language; replaces the earlier 'overall ≥ 0.80, each ≥ 0.75' rule" },
+   { "id": "Q3.checklist_agreement", "metric": "checklist_agreement", "op": ">=", "value": 0.80, "min_items": 20, "status": "approved", "note": "per language" },
    { "id": "Q3.options_within1", "metric": "options_within_1", "op": ">=", "value": 0.80, "status": "approved", "applies_if": "options rated in that language" }
   ],
-  "per_criterion": "Reported for every criterion × language with n, agreement and Cohen's kappa. Criteria with n < 10 in a language are flagged 'insufficient sample' and listed as a limitation."
+  "per_criterion": "Reported for every criterion × language with n, agreement and Cohen's kappa; n < 10 flagged 'insufficient sample'."
  },
- "pptx": { "rule": "Workbook Summary 'EXIT CRITERIA MET' = YES, recomputed independently from cell values (doc 16 §6)", "status": "approved" },
- "go_rule": "GO only if: all prerequisites present (held-out model runs A, B, C; cost/latency F; human calibration passed; PowerPoint workbook complete) AND every approved gate passes in Arabic AND in English AND the cross-language gate passes. Any missing prerequisite or failed gate → NO-GO. Proposed thresholds are reported but cannot change the verdict until approved."
+ "pptx": { "rule": "Workbook exit criteria met, recomputed from cell values (doc 16 §6)", "status": "approved" },
+ "go_rule": "GO only if ALL of: every prerequisite present (held-out runs A, B, C; measured cost/latency F; human calibration completed and adjudicated; PowerPoint workbook complete) AND every approved gate passes in Arabic AND in English AND every segment gate S1–S6 passes in each language AND the cross-language gate passes AND the PowerPoint exit criteria are met. Anything else → NO-GO."
 }

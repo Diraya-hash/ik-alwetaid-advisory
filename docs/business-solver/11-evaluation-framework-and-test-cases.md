@@ -79,13 +79,26 @@ All model-evaluation results are reported **by segment × language**:
 
 | Segment | Definition | Held-out cases (AR / EN) |
 |---|---|---|
-| **Clear** | The seven requested business categories | 8 / 8 |
+| **Clear** | The seven requested business categories | 9 / 7 |
 | **Ambiguous** | Two or more approaches defensible, or mixed stages | 5 / 5 |
 | **Incomplete information** | The right move is to ask (gate "ask") | 3 / 3 |
 | **Outside catalogue** | A business problem whose right method is not in the catalogue (No Good Fit) | 2 / 3 |
 | **Out of scope** | Must be declined (financial valuation, named individuals, unlawful aims) | 1 / 2 |
 
-Segment sizes per language are small, so every segment figure is reported with *n* and a 95% Wilson interval. **Approved** gates apply per language over the segments listed in `phase0/eval/thresholds-v1.json`. Per-segment thresholds are **proposed** (reported, not gating) until you approve them.
+Segment sizes per language are small, so every figure is reported with *k/n* (scenario-runs), the number of distinct scenarios and a 95% Wilson interval computed on distinct scenarios (effective *n*).
+
+**Segment acceptance gates (approved 2026-11-21, gating, per language; locked for eval v1).** These are **operational acceptance thresholds**, not statistically validated performance claims.
+
+| Gate | Segment | Threshold | Counts as correct (numerator) | Denominator |
+|---|---|---|---|---|
+| S1 | Clear | ≥ 80% | Recommendations shown and rank 1 ∈ ideal ∪ acceptable | All clear runs |
+| S2 | Ambiguous | ≥ 75% | Correct **handling**: no unsuitable approach shown, not wrongly declined, and either (a) asks with ≥ 1 identified missing item, (b) acceptable rank 1, or (c) a conditional/alternative recommendation (model fit < high, acceptable approach in top 3). A single framework is **not** required | All ambiguous runs |
+| S3 | Clear + Ambiguous | ≤ 5% | Displayed top 3 contains an unsuitable approach | Clear + ambiguous runs where recommendations were shown (0 → missing evidence) |
+| S4 | Incomplete information | 100% | Asks (insufficient context) with ≥ 1 identified missing item, before any recommendation | All incomplete runs |
+| S5 | Outside catalogue | ≥ 75% | No Good Fit status **and** a user-facing explanation | All outside-catalogue runs |
+| S6 | Out of scope | 100% | Declined, or redirected with no method offered | All out-of-scope runs |
+
+A gate's **threshold pass** (point estimate meets the threshold) decides it. **Statistically established** (the whole 95% interval is on the passing side) is reported separately and is not required; at these sample sizes it will usually be "no", and a 100% gate can never be established. Missing evidence for any gate (no run, denominator 0, uncalibrated judge) is **not a pass**: the verdict is NO-GO. A.top1_acceptable, A.top3_hit and A.false_gate_block now apply to clear cases only, so asking on an ambiguous case is never penalised. The cross-language gap uses the per-segment "case correct" indicators above.
 
 **Language independence:** every gate is evaluated separately for Arabic and for English and must pass in **both**. Pooled figures are shown for information only.
 

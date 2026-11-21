@@ -26,7 +26,16 @@ const wilson = (k, n) => { if (!n) return null; const z = 1.96, p = k / n, d = 1
 const rate = (arr, f) => arr.length ? { value: +(arr.filter(f).length / arr.length).toFixed(3), k: arr.filter(f).length, n: arr.length, ci95: wilson(arr.filter(f).length, arr.length) } : { value: null, n: 0 };
 const mean = (arr, f) => { const v = arr.map(f).filter(x => x != null && !isNaN(x)); return v.length ? { value: +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(3), n: v.length } : { value: null, n: 0 }; };
 const cmp = (v, op, t) => v == null ? null : op === ">=" ? v >= t : v <= t;
-const fmt = m => m?.value == null ? "—" : `${m.value}${m.ci95 ? ` [${m.ci95[0]}–${m.ci95[1]}]` : ""} (n=${m.n})`;
+const fmt = m => m?.value == null ? "—" : `${m.value}${m.ci95 ? ` [${m.ci95[0]}–${m.ci95[1]}]` : ""} (${m.k != null ? `${m.k}/` : "n="}${m.n}${m.n_scenarios != null ? `; ${m.n_scenarios} scen.` : ""})`;
+// Scenario-aware rate (thresholds-v1 "statistics"): estimate = mean over scenarios of per-scenario success rate;
+// Wilson 95% CI on the number of DISTINCT scenarios (effective n), because repeated runs are not independent.
+function srate(rows, f) {
+  if (!rows.length) return { value: null, k: 0, n: 0, n_scenarios: 0, ci95: null };
+  const by = {}; for (const r of rows) (by[r.id] ||= []).push(f(r) ? 1 : 0);
+  const per = Object.values(by).map(v => v.reduce((a, b) => a + b, 0) / v.length), ns = per.length, est = per.reduce((a, b) => a + b, 0) / ns;
+  return { value: +est.toFixed(3), k: rows.filter(f).length, n: rows.length, n_scenarios: ns, ci95: wilson(est * ns, ns) };
+}
+const established = (m, op, t) => { if (m?.value == null || !m.ci95) return false; if (op === ">=" && t >= 1) return false; return op === ">=" ? m.ci95[0] >= t : m.ci95[1] <= t; };
 function segmentOf(sc) {
   const e = sc.expected; const doms = e.domains_any_of || [];
   if (e.gate === "ask" || sc.category === "insufficient_context") return "incomplete_information";
@@ -99,6 +108,35 @@ const aRows = A ? A.rows.filter(r => SC[r.id]) : [];
 const aBy = Object.fromEntries(LANGS.map(l => [l, Object.fromEntries([...SEGS.map(s => [s, aMetrics(aRows.filter(r => r.lang === l && segmentOf(SC[r.id]) === s))]), ["all", aMetrics(aRows.filter(r => r.lang === l))]])]));
 const aUnion = (l, segs) => segs.includes("all") ? aMetrics(aRows.filter(r => r.lang === l)) : aMetrics(aRows.filter(r => r.lang === l && segs.includes(segmentOf(SC[r.id]))));
 
+// ---------- segment acceptance indicators (S1–S6; definitions in thresholds-v1.json segment_acceptance)
+const alias = id => (id === "fw_gantt" ? "fw_action_plan" : id);
+const recOf = r => SC[r.id].expected.recommendation || {};
+const goodSet = r => new Set([...(recOf(r).ideal || []), ...(recOf(r).acceptable || [])].map(alias));
+const top3Of = r => (r.top3 || []).map(alias);
+const hasUnacceptable = r => r.status === "ok" && top3Of(r).some(t => (recOf(r).unacceptable || []).map(alias).includes(t));
+const unknownsN = r => (r.output?.unknowns || []).length;
+const IND = {
+  S1: r => r.ok && r.status === "ok" && goodSet(r).has(top3Of(r)[0]),
+  S2: r => r.ok && !hasUnacceptable(r) && !["no_good_fit", "out_of_scope"].includes(r.status) && (
+    (r.status === "insufficient_context" && unknownsN(r) >= 1) ||
+    (r.status === "ok" && goodSet(r).has(top3Of(r)[0])) ||
+    (r.status === "ok" && r.llmFits?.[0] && r.llmFits[0] !== "high" && top3Of(r).some(t => goodSet(r).has(t)))),
+  S3: r => hasUnacceptable(r),
+  S4: r => r.ok && r.status === "insufficient_context" && unknownsN(r) >= 1,
+  S5: r => r.ok && r.status === "no_good_fit" && !!String(r.output?.no_good_fit_explanation || "").trim(),
+  S6: r => r.ok && ["out_of_scope", "no_good_fit"].includes(r.status),
+};
+const SEG_IND = { clear: "S1", ambiguous: "S2", incomplete_information: "S4", outside_catalogue: "S5", out_of_scope: "S6" };
+const caseCorrect = r => IND[SEG_IND[segmentOf(SC[r.id])]](r);
+function segMeasure(g, l, seg) {
+  const segs = [].concat(seg ?? g.segment); const key = g.id.split(".")[0];
+  let rows = aRows.filter(r => r.lang === l && segs.includes(segmentOf(SC[r.id])));
+  if (key === "S3") rows = rows.filter(r => r.ok && r.status === "ok");
+  return srate(rows, IND[key]);
+}
+const segExtra = l => ({ outside_catalogue_identified_any_ngf: srate(aRows.filter(r => r.lang === l && segmentOf(SC[r.id]) === "outside_catalogue"), r => r.ok && r.status === "no_good_fit"),
+  case_correct_all: srate(aRows.filter(r => r.lang === l), caseCorrect) });
+
 // ---------- B, C, F per language
 function bMetrics(rows) {
   const s = rows.filter(r => r.scores); const crit = ["distinctness", "relevance_to_causes_and_goals", "rationale_soundness", "assessment_plausibility", "trade_off_clarity", "language_quality"];
@@ -138,25 +176,29 @@ function gate(group, g, getter) {
   const r = { group, id: g.id, metric: g.metric, op: g.op, threshold: g.value, status: g.status, per_language: {} };
   for (const l of LANGS) {
     const m = getter(l); let pass = cmp(m?.value, g.op, g.value); let note = "";
-    if (m?.value == null) { pass = null; note = "no data"; }
+    if (m?.value == null) { pass = null; note = "no data / denominator 0 → missing evidence"; }
     if (g.requires === "calibrated_judge" && !calibrated[l]) { pass = null; note = "judge not calibrated for this language → not established"; }
-    r.per_language[l] = { measure: m, pass, note };
+    r.per_language[l] = { measure: m, pass, threshold_pass: pass === true, statistically_established: pass === true && established(m, g.op, g.value), note };
   }
   r.passes = LANGS.every(l => r.per_language[l].pass === true); gates.push(r); return r;
 }
+// Segment gates are approved & gating. Prerequisite A missing → recorded as missing evidence (never assumed to pass).
+T.segment_acceptance.forEach(g => gate("S", { ...g, metric: g.id }, l => A ? segMeasure(g, l) : null));
 if (A) {
   T.A.per_language.forEach(g => gate("A", g, l => aUnion(l, g.applies_to)[g.metric]));
-  const gap = aBy.ar.all.pass_rate.value != null && aBy.en.all.pass_rate.value != null ? +Math.abs(100 * (aBy.ar.all.pass_rate.value - aBy.en.all.pass_rate.value)).toFixed(1) : null;
+  const cc = Object.fromEntries(LANGS.map(l => [l, segExtra(l).case_correct_all.value]));
+  const gap = cc.ar != null && cc.en != null ? +Math.abs(100 * (cc.ar - cc.en)).toFixed(1) : null;
   const g = T.A.cross_language[0]; gates.push({ group: "A", id: g.id, metric: g.metric, op: g.op, threshold: g.value, status: g.status, cross_language: { value: gap }, passes: cmp(gap, g.op, g.value) === true });
 }
 if (B) T.B.per_language.forEach(g => gate("B", g, l => bBy[l]?.[g.metric]));
 if (C) T.C.per_language.forEach(g => gate("C", g, l => cBy[l]?.[g.metric]));
 if (logRecs.length) T.F.per_language.forEach(g => gate("F", g, l => fBy[l]?.[g.metric]));
-const segGates = A ? T.A.per_segment_per_language.map(g => ({ ...g, per_language: Object.fromEntries(LANGS.map(l => { const m = aBy[l][g.segment][g.metric]; return [l, { measure: m, pass: cmp(m?.value, g.op, g.value) }]; })) })) : [];
+const s3BySeg = A ? Object.fromEntries(LANGS.map(l => [l, Object.fromEntries(["clear", "ambiguous"].map(s => [s, segMeasure(T.segment_acceptance.find(g => g.id.startsWith("S3")), l, s)]))])) : null;
+const segInfo = A ? Object.fromEntries(LANGS.map(l => [l, segExtra(l)])) : null;
 
 // ---------- verdict
 const approved = gates.filter(g => g.status === "approved");
-const failed = approved.filter(g => !g.passes);
+const failed = approved.filter(g => !g.passes); // includes "not established / missing evidence" — never assumed to pass
 const missing = Object.entries(prereq).filter(([, v]) => !v).map(([k]) => k);
 const calibFail = human && !LANGS.every(l => calibrated[l]);
 const pptxFail = pptx && pptx.status === "complete" && !pptx.exit_criteria_met;
@@ -165,7 +207,9 @@ if (synthetic.length) verdict = "INVALID — SYNTHETIC INPUTS (tool test only, n
 
 // ---------- limitations & recommendations (auto)
 const limitations = ["Held-out set authored by a blind AI author (same model family as the rules author); human SME review recorded separately.",
-  "Segment-level samples are small per language (held-out: clear 8, ambiguous 5, incomplete 3, outside-catalogue 2–3, out-of-scope 1–2 per language); 95% intervals are wide and segment thresholds are 'proposed' (not gating).",
+  "Thresholds are OPERATIONAL ACCEPTANCE THRESHOLDS for eval v1, not statistically validated product-performance claims. Segment samples are small per language (held-out: clear 9 AR / 7 EN, ambiguous 5, incomplete 3, outside-catalogue 2–3, out-of-scope 1–2 scenarios); 95% intervals use distinct scenarios as n and are wide, so a threshold pass is usually NOT statistically established.",
+  "S5 is strict: when the deterministic rule decides No Good Fit, the frozen eval-v1 harness generates no user-facing explanation, so such runs count as not communicated (reported separately as 'identified').",
+  "S2(c) 'conditional/alternative interpretation' is detected from the model's own fit rating (< high) plus an acceptable approach in the top 3; explicit wording of assumptions is assessed only qualitatively by the blinded human evaluator.",
   "Critic L2/L3 seeded set was written by the rules author (not independent).",
   "Cost per analysis uses the options call as a proxy for framework drafting (no drafting experiment in Phase 0).",
   "Prices are list prices recorded in lib/llm.mjs; verify against the current price list before commercial use."];
@@ -182,29 +226,33 @@ fs.mkdirSync(OUT, { recursive: true });
 const stamp = new Date().toISOString().replace(/[:.]/g, "-"); const base = path.join(OUT, `go-no-go-ev${EV}-${EFFORT}-${stamp}${synthetic.length ? "-SYNTHETIC" : ""}`);
 const json = { generated_at: new Date().toISOString(), eval_version: EV, effort: EFFORT, verdict, prerequisites: prereq, problems, synthetic_inputs: synthetic,
   evidence_classes: { E1_model_evaluation_heldout: [A, B, C].filter(Boolean).map(x => x.file), E2_model_evaluation_tuning: "reported separately (never decides)", E3_deterministic_experiments: "doc 13 §A.1, C.1, D, E (no model)", E4_tool_validation: "doc 14 §4.4, §8b", E5_synthetic: synthetic },
-  gates, segment_gates: segGates, a_by_language_segment: aBy, b_by_language: bBy, c_by_language: cBy, f_by_language: fBy, calibration: human, disagreements: humanSum, pptx, limitations, recommendations: recs };
+  gates, segment_s3_by_segment: s3BySeg, segment_info: segInfo, nature: T.nature, statistics: T.statistics, a_by_language_segment: aBy, b_by_language: bBy, c_by_language: cBy, f_by_language: fBy, calibration: human, disagreements: humanSum, pptx, limitations, recommendations: recs };
 fs.writeFileSync(base + ".json", JSON.stringify(json, null, 1));
 const W = synthetic.length ? "\n> ⚠️ **SYNTHETIC INPUTS: TOOL TEST ONLY. NOT A RESULT. DO NOT CITE.**\n" : "";
 const md = [];
 md.push(`# Consolidated GO / NO-GO Evidence Report: eval v${EV} (${EFFORT} effort)`, W, `Generated ${json.generated_at}. Thresholds: \`eval/thresholds-v1.json\`. Rule: every gate must pass in **Arabic and in English independently**; pooled figures never decide.`, "");
 md.push(`## 1. Verdict: **${verdict}**`, "");
 if (missing.length) md.push("**Missing prerequisites:**", ...missing.map(m => `- ${m}`), "");
-if (failed.length) md.push("**Failed approved gates:**", ...failed.map(g => `- ${g.id} (${g.metric} ${g.op} ${g.threshold}): ${g.cross_language ? "gap " + g.cross_language.value : LANGS.map(l => `${l.toUpperCase()} ${g.per_language[l].pass === true ? "pass" : g.per_language[l].pass === false ? "FAIL" : "not established (" + g.per_language[l].note + ")"}`).join(", ")}`), "");
+if (failed.length) md.push("**Failed approved gates:**", ...failed.map(g => `- ${g.id} (${g.metric} ${g.op} ${g.threshold}): ${g.cross_language ? "gap " + g.cross_language.value : LANGS.map(l => `${l.toUpperCase()} ${g.per_language[l].pass === true ? "pass" : g.per_language[l].pass === false ? "FAIL" : "⛔ " + g.per_language[l].note}`).join(", ")}`), "");
 if (problems.length) md.push("**Input / integrity problems:**", ...problems.map(p => `- ${p}`), "");
 md.push("## 2. Evidence classes (kept separate)", "", "| Class | What | Used for the verdict? |", "|---|---|---|",
   `| E1 Model evaluation: held-out | ${json.evidence_classes.E1_model_evaluation_heldout.join(", ") || "none"} | **Yes** |`, "| E2 Model evaluation: tuning (in-sample) | Separate runs on the tuning set | No (information) |",
   "| E3 Deterministic experiments (no model) | Rules oracle/perturbation, Critic L1, BPMN layout, PPTX automated checks | No (supporting) |", "| E4 Tool validation | Harness, integrity, security, workbook checks | No |",
   `| E5 Synthetic tests | ${synthetic.length ? synthetic.join("; ") : "none used"} | **Never** |`, "");
 md.push("## 3. Prerequisites", "", "| Prerequisite | Status |", "|---|---|", ...Object.entries(prereq).map(([k, v]) => `| ${k} | ${v ? "✅" : "⛔ missing"} |`), "");
+const cell = p => p.pass === true ? `✅ pass · ${p.statistically_established ? "established" : "not established"}` : p.pass === false ? "❌ FAIL" : "⛔ " + p.note;
 const gt = grp => { const rows = gates.filter(g => g.group === grp); if (!rows.length) return ["_No data (prerequisite missing)._", ""];
-  return ["| Gate | Metric | Threshold | Status | Arabic | | English | |", "|---|---|---|---|---|---|---|---|",
-    ...rows.map(g => g.cross_language ? `| ${g.id} | ${g.metric} | ${g.op} ${g.threshold} | ${g.status} | gap: ${g.cross_language.value ?? "—"} | ${g.passes ? "✅" : "❌"} | | |`
-      : `| ${g.id} | ${g.metric} | ${g.op} ${g.threshold} | ${g.status} | ${fmt(g.per_language.ar.measure)} | ${g.per_language.ar.pass === true ? "✅" : g.per_language.ar.pass === false ? "❌" : "◻ " + g.per_language.ar.note} | ${fmt(g.per_language.en.measure)} | ${g.per_language.en.pass === true ? "✅" : g.per_language.en.pass === false ? "❌" : "◻ " + g.per_language.en.note} |`), ""]; };
-md.push("## 4. A: Diagnosis & recommendation (held-out)", "", ...gt("A"));
+  return ["| Gate | Metric | Threshold | Status | Arabic: estimate [95% CI] (k/n; scenarios) | Arabic gate | English: estimate [95% CI] (k/n; scenarios) | English gate |", "|---|---|---|---|---|---|---|---|",
+    ...rows.map(g => g.cross_language ? `| ${g.id} | ${g.metric} | ${g.op} ${g.threshold} | ${g.status} | gap: ${g.cross_language.value ?? "—"} points | ${g.passes ? "✅" : "❌ / ⛔ missing"} | | |`
+      : `| ${g.id} | ${g.metric} | ${g.op} ${g.threshold} | ${g.status} | ${fmt(g.per_language.ar.measure)} | ${cell(g.per_language.ar)} | ${fmt(g.per_language.en.measure)} | ${cell(g.per_language.en)} |`), ""]; };
+md.push("## 4. Segment acceptance gates S1–S6 (approved, gating, per language)", "", `> ${T.nature} “Threshold pass” = the point estimate meets the threshold (decides the gate). “Established” = the 95% CI (n = distinct scenarios) lies entirely on the passing side; reported for information, not required. A 100% gate can never be statistically established. Missing evidence = ⛔ = NO-GO.`, "", ...gt("S"),
+  "Numerators and denominators:", "", "| Gate | Numerator | Denominator |", "|---|---|---|", ...T.segment_acceptance.map(g => `| ${g.id} | ${g.numerator} | ${g.denominator} |`), "");
+if (A) { md.push("S3 reported per segment, and supplementary figures:", "", "| Lang | S3 clear | S3 ambiguous | Outside catalogue identified (any NGF) | Case correct (all segments) |", "|---|---|---|---|---|",
+  ...LANGS.map(l => `| ${l.toUpperCase()} | ${fmt(s3BySeg[l].clear)} | ${fmt(s3BySeg[l].ambiguous)} | ${fmt(segInfo[l].outside_catalogue_identified_any_ngf)} | ${fmt(segInfo[l].case_correct_all)} |`), ""); }
+md.push("## 4b. A: Diagnosis & recommendation (held-out)", "", ...gt("A"));
 md.push("### 4.1 By scenario segment × language", "", "| Segment | Lang | Rows | Pass rate | Top-1 acceptable | Unacceptable in top 3 | Asked (incomplete) | No-fit / decline recall | Stage acc. |", "|---|---|---|---|---|---|---|---|---|");
 if (A) for (const s of SEGS) for (const l of LANGS) { const m = aBy[l][s]; md.push(`| ${s} | ${l.toUpperCase()} | ${m.pass_rate.n} | ${fmt(m.pass_rate)} | ${fmt(m.top1_acceptable)} | ${fmt(m.unacceptable_in_top3)} | ${fmt(m.ask_rate)} | ${fmt(m.nofit_or_decline_recall)} | ${fmt(m.stage_accuracy)} |`); }
-md.push("", "Segment thresholds (status **proposed**: reported, not gating until approved):", "", "| Gate | Segment | Metric | Threshold | Arabic | English |", "|---|---|---|---|---|---|",
-  ...segGates.map(g => `| ${g.id} | ${g.segment} | ${g.metric} | ${g.op} ${g.value} | ${fmt(g.per_language.ar.measure)} ${g.per_language.ar.pass === true ? "✅" : g.per_language.ar.pass === false ? "❌" : ""} | ${fmt(g.per_language.en.measure)} ${g.per_language.en.pass === true ? "✅" : g.per_language.en.pass === false ? "❌" : ""} |`), "");
+md.push("", "_Row-level figures above are descriptive (information only); gates are in §4 and §4b._", "");
 md.push("## 5. B: Strategic Options", "", ...gt("B"), "## 6. C: AI Critic", "", ...gt("C"), "## 7. F: Cost & latency (measured)", "", ...gt("F"));
 md.push("## 8. Human calibration (blinded)", "");
 if (human) { md.push(`Calibration passes (both languages independently): **${LANGS.every(l => calibrated[l]) ? "yes" : "NO"}**`, "", "| Criterion | Arabic | English |", "|---|---|---|",
