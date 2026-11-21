@@ -31,6 +31,8 @@
 | DR-23 | **[v0.2]** One layout service (headless Chromium) computes diagram geometry for screen and all exports | §6.4a |
 | DR-24 | **[v0.2]** Native generation by default; other-language export through explicit, labelled translated versions | §3.6 |
 | DR-25 | **[v0.2]** Deployment profiles incl. a KSA in-Kingdom profile; the Model Gateway fails closed when no compliant route exists | §7.1 |
+| DR-26 | **[2026-11-21] PowerPoint export runs in a separate Python service** (`bps-export-pptx`, python-pptx): stateless, no DB/AI access, internal-only, fail-closed validation, versioned JSON-Schema contract. Amends DR-02 ("TypeScript everywhere") for this one service. Reason: Phase 0 showed `pptxgenjs` cannot attach connectors to shapes | doc 15 |
+| DR-27 | **[2026-11-21] Recommendation rule set v0.3b**: the model may downgrade to No Good Fit, never upgrade or force a framework | 04 §5.7 |
 
 ---
 

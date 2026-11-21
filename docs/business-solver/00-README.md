@@ -30,7 +30,10 @@
 | 10 | [Phase 0 Execution Plan](10-phase-0-execution-plan.md) | Scope lock, experiments A–F, tasks with owners, dependencies, acceptance criteria, effort, risks, Phase 0 decisions | Phase 0 |
 | 11 | [Evaluation Framework & Test Cases](11-evaluation-framework-and-test-cases.md) | 29 scenarios (7 categories + No Good Fit + insufficient context; 11 Arabic), metrics, graders, limitations | Phase 0 |
 | 12 | [Technical Proofs of Concept](12-technical-proof-of-concepts.md) | Specs and quantitative exit thresholds for A–F | Phase 0 |
-| 13 | [Phase 0 Results](13-phase-0-results.md) | Measured results, findings, GO/NO-GO for Beta-1 (updated as experiments run) | Phase 0, update 1 |
+| 13 | [Phase 0 Results](13-phase-0-results.md) | Measured results, findings, GO/NO-GO for Beta-1 (updated as experiments run) | Phase 0, update 2 |
+| 14 | [**Phase 0 Decision Report**](14-phase-0-decision-report.md) | Approved decisions, outstanding experiments, measured results, risks, Beta-1 readiness criteria, 3-engineer plan, API key security | **Current decision baseline** |
+| 15 | [PowerPoint Export Service Contract](15-pptx-export-service-contract.md) | Python service boundary, API, schemas, validation gates, fonts, versioning | v1.0 draft |
+| 16 | [PowerPoint Manual Validation Protocol](16-pptx-manual-validation-protocol.md) | PowerPoint Win/Mac + Keynote test matrix, validation pack, recording template, exit criteria | Ready to run |
 
 Phase 0 prototypes live in [`/phase0`](../../phase0/README.md), isolated from production code.
 
@@ -70,10 +73,10 @@ The reference PDF *"50 Business Diagrams for Strategic Planning"* (Creately; © 
 
 | # | Decision | When |
 |---|---|---|
-| P0-D0 | API access for model-based Phase 0 experiments (`ANTHROPIC_API_KEY` env var) | Now: blocks A.2, B, C.2, F |
-| P0-D1 | GA plan with 3 engineers: GA week 28 with all 15, or week 24 with 13 (BPMN + VSM at GA+1) | Gate 0 |
-| P0-D2 | PPTX technology: Python export sidecar (python-pptx) vs TS OOXML emitter | Gate 0 |
-| P0-D3 | Recommender rule set v0.3b (LLM may downgrade to No Good Fit, never upgrade) | After held-out run |
+| **P0-D0** | API access for model-based experiments via a **restricted, reviewer-gated environment secret** (doc 14 §4) | **Now**: blocks A.2, B, C.2, F and Gate 0 |
+| ~~P0-D1~~ | Approved 2026-11-21: GA week 24 with 13 frameworks; BPMN + VSM ≈ week 28 | — |
+| ~~P0-D2~~ | Approved: Python export service with a documented contract (doc 15) | — |
+| ~~P0-D3~~ | Approved: rule set v0.3b (frozen) | — |
 | D11 | Pricing levels | After cost measurement (F) and beta usage |
 | D13 | Brand name | Product owner (deliberately undecided) |
 | ~~D8~~ | Resolved by scope lock: native editable PPTX for all visuals | — |

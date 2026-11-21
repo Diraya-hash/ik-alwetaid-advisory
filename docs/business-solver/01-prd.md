@@ -223,7 +223,8 @@ Priority: **M** = must for GA · **S** = should for GA · **L** = later (phase n
 | 8 frameworks: SWOT, PEST/STEEPLE, 5 Whys, Cause & Effect, SIPOC, Impact/Effort, Risk Matrix, Action Plan (table) | Beta-1 | Covers understand, map, root cause, prioritise, risk, plan |
 | **Strategic Options** | Beta-1 | Closes the "what should we do?" gap (D4) |
 | PDF + PNG/SVG export (AR/EN) | Beta-1 | |
-| 7 more: Stakeholder Map, Project Charter, Gantt (view), BPMN, VSM, Org Chart, Operating Model Canvas | Beta-2 | Complex renderers |
+| 5 more: Stakeholder Map, Project Charter, Gantt (view), Org Chart, Operating Model Canvas → **13 frameworks at GA** | Beta-2 | Approved 2026-11-21 (doc 14 A3) |
+| BPMN and Value Stream Mapping | **GA+1 (≈ week 28)** | Deferred until connector-routing defects are fixed and BPMN passes visual and structural validation (doc 14 §5.3) |
 | Chaining via ports | Beta-2 | Must for GA |
 | Critic Project level + pre-export review | Beta-2 | D3 |
 | Problem-Solving Summary | Beta-2 | Closure (H14) |

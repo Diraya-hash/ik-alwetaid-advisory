@@ -207,12 +207,15 @@ Input: diagnosis, top-8 candidates with the Stage B breakdown, cached catalogue,
 
 - Refs must resolve; candidate membership is checked. Diversity: ≤ 2 of the top 3 from the same family.
 - `final(a) = 0.6·norm(score_B) + 0.4·rank_LLM_score`. Bands: High ≥ 0.70 · Medium 0.45–0.70 · Low < 0.45.
-- **No Good Fit rule (deterministic, cannot be overridden by the LLM):**
+- **No Good Fit rule (v0.3b, approved 2026-11-21; replaces the v0.2 rule).** Asymmetric: rules decide the clear cases, and the model may **downgrade** to No Good Fit but **never upgrade** and never force an unsuitable framework:
   ```
-  no_good_fit iff  max_a final(a) < 0.45
-               ∨  (no candidate with R(a) ≥ 0.75 after the clarification rounds are used up)
-               ∨  primary domain ∈ categories with no active approach above 0.3 affinity
+  rule_ngf      iff  max_a norm(score_B(a)) < 0.45
+                ∨   primary domain ∈ categories with no active approach above 0.3 affinity
+  probable_ngf  iff  no approach has stage fit ≥ 0.6 (primary OR secondary stage) AND domain affinity ≥ 0.5   → flag only
+  final status  =   no_good_fit  if rule_ngf ∨ LLM re-rank returns no_good_fit
+                    ok           otherwise (LLM recommends only from rule-approved candidates; membership checked in code)
   ```
+  Also part of v0.3b: candidates with normalised score < 0.40 are not displayed, and the sufficiency gate treats symptom/impact as optional for decision- and design-type stages (§4). Evidence: doc 13 §A.1–A.1b. Frozen in `phase0/lib/frozen-config.json`.
   The LLM still writes the `no_good_fit` explanation and names the closest approaches with their limitations. **The UI never shows a "recommended" card in this state.** It offers Strategic Options (if relevant), the manual library, or refining the problem.
 - **Demand log:** every `no_good_fit` and every 👎 with reason `not_relevant` writes `{taxonomy codes, stage, slots}` to `ai.demand_signals`. This drives which pending catalogue methods get activated first (03 §7.3).
 - **Never force a recommendation:** rank-1 with `fit = low` is shown as "possible but weak", with the caution first.

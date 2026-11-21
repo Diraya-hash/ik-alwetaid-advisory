@@ -242,3 +242,4 @@ node experiments/f-cost-latency.mjs
 | Update | Date | Content |
 |---|---|---|
 | 1 | 2026-11-19 | A.1, A.1b, C.1, D, E (automated) executed; A.2, B, C.2, F blocked on API access; GO/NO-GO: NO-GO pending evidence |
+| 2 | 2026-11-21 | **No model measurements (still no API access).** Added: blind-authored held-out set (40; 20 AR) sealed; config frozen with enforced integrity checks; held-out dry run 40/40; PowerPoint validation packs (2 × 10 slides): 0 pictures, 16/16 connectors attached, 170/170 Arabic paragraphs RTL, 0 overflow, LibreOffice render 10/10; font finding (Arabic web subset lacks Latin digits → full fonts required); secret scans clean incl. full git history. NO-GO unchanged (doc 14) |

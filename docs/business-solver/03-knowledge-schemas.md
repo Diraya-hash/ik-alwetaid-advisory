@@ -401,8 +401,8 @@ As in v0.1, plus:
 | fw_gantt | Gantt Chart | مخطط جانت | project_planning | **alias entry → opens fw_action_plan in `gantt` view** | — | Beta-2 |
 | fw_stakeholder_map | Stakeholder Map | خريطة أصحاب المصلحة | stakeholder_org | matrix_2x2_scatter | power_interest · influence_support | Beta-2 |
 | fw_project_charter | Project Charter | ميثاق المشروع | project_planning | document_blocks | — | Beta-2 |
-| fw_bpmn | BPMN (core subset) | نمذجة إجراءات الأعمال (BPMN) | process | process_flow_swimlane | — | Beta-2 |
-| fw_vsm | Value Stream Mapping | خريطة تدفق القيمة | process | value_stream | data-light · data-rich | Beta-2 |
+| fw_bpmn | BPMN (core subset) | نمذجة إجراءات الأعمال (BPMN) | process | process_flow_swimlane | — | **GA+1 (≈ week 28)**: deferred until routing defects are fixed and re-entry criteria pass (doc 14 §5.3) |
+| fw_vsm | Value Stream Mapping | خريطة تدفق القيمة | process | value_stream | data-light · data-rich | **GA+1 (≈ week 28)** (doc 14 §1, A4) |
 | fw_org_chart | Organizational Chart | الهيكل التنظيمي | stakeholder_org | hierarchy_tree | role-based (default) · named | Beta-2 |
 | fw_op_model_canvas | Operating Model Canvas | لوحة نموذج التشغيل | operating_model | canvas_blocks | — | Beta-2 |
 

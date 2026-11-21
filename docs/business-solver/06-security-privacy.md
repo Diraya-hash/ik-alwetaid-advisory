@@ -45,6 +45,14 @@ Users will describe **sensitive internal business problems**: restructurings, pe
 - **GCC focus:** design to meet KSA **PDPL** and UAE **PDPL** requirements (lawful basis, cross-border transfer conditions, data-subject rights, breach notification), plus sector regulators (e.g. NCA ECC controls for government-sector customers in KSA). Formal legal review is a Phase 0 task. **This document is not legal advice.**
 - EU customers: GDPR (DPA, SCCs, sub-processor list, DPIA template).
 
+### 4.0 API credentials for model access [2026-11-21]
+Model API keys are handled per doc 14 §4:
+- **Phase 0 evaluation:** a dedicated workspace key with a spend limit, held only as a reviewer-gated GitHub Actions *environment secret* (`phase0-eval`).
+- **Production:** keys in the cloud secrets manager, injected into the Model Gateway at runtime (02 §4.1).
+- **Never** in source, `.env` files in the repo, logs, results, chat, or shared environments.
+
+Controls: redaction in the gateway, a secret scanner over files and full git history, a pre-commit hook, and CI scans of results before commit.
+
 ### 4.1 KSA in-Kingdom option [v0.2]
 
 The architecture supports a **`ksa-sovereign` deployment profile** (02 §7.1): data plane in-Kingdom, inference only via an in-Kingdom compliant route, Model Gateway failing closed, content-free telemetry only. Before offering it to a customer:

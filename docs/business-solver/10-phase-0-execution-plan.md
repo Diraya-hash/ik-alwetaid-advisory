@@ -1,5 +1,7 @@
 # 10: Phase 0 Execution Plan: Foundations & De-risking
 
+> **Update 2026-11-21:** decisions P0-D1 (GA week 24, 13 frameworks; BPMN/VSM ≈ week 28), P0-D2 (Python export service) and P0-D3 (rules v0.3b) are approved. The held-out set is blind-authored and sealed, and the configuration is frozen. P0-D0 (API access) is still open. Current status and criteria: **doc 14**.
+
 > Status: **authorised 2026-11-19.** Baseline: design pack v0.2 (+ information model v0.3, doc 03 §3).
 > Objective: **prove that we can build a reliable AI management consultant before investing in the full product.** Phase 0 tests the core intelligence and the hardest technical claims against measurable thresholds (doc 12). It does not just set up infrastructure.
 > Prototypes live in `/phase0`, isolated from any production app (own `package.json`, never imported by `apps/*`).
