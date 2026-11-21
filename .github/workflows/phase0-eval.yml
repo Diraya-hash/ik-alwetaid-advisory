@@ -1,0 +1,92 @@
+# Phase 0 model-based evaluation (doc 14 §4). Runs ONLY on manual dispatch, ONLY in the protected
+# GitHub environment "phase0-eval" (required reviewer approval), and reads the API key ONLY from that
+# environment's secret. The key is never written to files, logs or results; results are secret-scanned
+# before they are committed to a separate results branch.
+name: phase0-eval
+
+on:
+  workflow_dispatch:
+    inputs:
+      experiments:
+        description: "Experiments to run"
+        type: choice
+        options: [all, a, b, c]
+        default: all
+      set:
+        description: "Evaluation set (heldout requires frozen config + intact seal)"
+        type: choice
+        options: [heldout, tuning]
+        default: heldout
+      effort:
+        description: "Model effort level"
+        type: choice
+        options: [high, medium, low]
+        default: high
+      runs:
+        description: "Repetitions per case (1-3)"
+        type: choice
+        options: ["2", "1", "3"]
+        default: "2"
+      max_usd:
+        description: "Spending cap per experiment process (USD)"
+        type: choice
+        options: ["15", "5", "30"]
+        default: "15"
+
+permissions:
+  contents: write   # only to push the results branch
+
+concurrency:
+  group: phase0-eval
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    environment: phase0-eval
+    timeout-minutes: 150
+    defaults:
+      run:
+        working-directory: phase0
+    env:
+      EXPERIMENTS: ${{ inputs.experiments }}
+      EVAL_SET: ${{ inputs.set }}
+      EFFORT: ${{ inputs.effort }}
+      RUNS: ${{ inputs.runs }}
+      MAX_USD: ${{ inputs.max_usd }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install (lockfile only)
+        run: npm ci --no-audit --no-fund
+      - name: Secret hygiene (repository)
+        run: bash scripts/check-no-secrets.sh
+      - name: Integrity check (frozen config + seal)
+        run: |
+          node -e 'import("./lib/integrity.mjs").then(m=>{const f=m.checkFrozen();console.log("config frozen:",f.ok,f.reason||"");if(!f.ok&&process.env.EVAL_SET==="heldout")process.exit(2)})'
+      - name: Run model experiments
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ "$EXPERIMENTS" = "all" ]; then list="a b c"; else list="$EXPERIMENTS"; fi
+          for e in $list; do
+            node experiments/llm-suite.mjs "$e" --set="$EVAL_SET" --effort="$EFFORT" --runs="$RUNS" --max-usd="$MAX_USD"
+          done
+          node experiments/f-cost-latency.mjs
+      - name: Secret hygiene (results)
+        run: bash scripts/check-no-secrets.sh results
+      - name: Commit results to a dedicated results branch
+        run: |
+          set -euo pipefail
+          branch="phase0-eval-results/run-${GITHUB_RUN_ID}"
+          git config user.name "phase0-eval-bot"
+          git config user.email "phase0-eval-bot@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -f results/llm-*.json results/llm-runs.jsonl results/f-cost-latency.json || true
+          git commit -m "Phase 0 eval results: set=${EVAL_SET} effort=${EFFORT} runs=${RUNS} (run ${GITHUB_RUN_ID})" || { echo "nothing to commit"; exit 0; }
+          git push origin "$branch"

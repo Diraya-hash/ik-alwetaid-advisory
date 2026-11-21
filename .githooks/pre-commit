@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Opt-in pre-commit hook: blocks commits that add credential-like content.
+# Enable once per clone:  git config core.hooksPath .githooks
+set -euo pipefail
+bash "$(git rev-parse --show-toplevel)/phase0/scripts/check-no-secrets.sh" --staged

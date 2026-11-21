@@ -1,0 +1,14 @@
+{
+ "files": {
+  "catalogue.mjs": "05af36a08b971873bac2c819d8a697e6338e208989056070b701cc02d0bf2cd7",
+  "recommender.mjs": "a3a0a55a3efd7438c4c55d99072d1f72673f8b2874faf9aa980b2fda49e16bcf",
+  "schemas.mjs": "0fc5026f9f08c969796a1cdf0bf591bb412e8e6ce178db33712c5d0a9fda9945",
+  "prompts.mjs": "2edc33072313f8e1fdec045e41e7382b4ce887d92f9e679a77fc7f3eb972ebc8",
+  "critic-rules.mjs": "cf6f23f874edf86796bdf67a60cf11feafefe5d38412ebc8a0f353ec2e1f1d48"
+ },
+ "combined": "7df429b05a26e1a02d9cf4215a35b267cfe76854f8d462302205459b12cad480",
+ "frozen_at": "2026-11-21T17:49:31.378Z",
+ "git_head": "fede2a8436ddeea9b0b305a2a23e48a72d7f4a1f",
+ "reason": "Phase 0: recommender v0.3b approved 2026-11-21; prompts, schemas and critic rules v1 frozen before any held-out scoring",
+ "recommender_rule_set": "v0.3b"
+}

@@ -1,0 +1,6 @@
+# Credentials must never be committed (doc 14 §4)
+.env
+.env.*
+!.env.example
+*.pem
+*.key

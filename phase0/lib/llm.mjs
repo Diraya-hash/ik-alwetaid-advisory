@@ -15,6 +15,15 @@ export const PRICES = {
 const LOG = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../results/llm-runs.jsonl");
 
 export const DRY_RUN = process.argv.includes("--dry-run") || !process.env.ANTHROPIC_API_KEY;
+const argv = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || "").split("=")[1];
+const SET = argv("set") || "tuning";
+// Hard spending cap per process (default US$15). Exceeding it stops the run; partial logs are kept.
+const MAX_USD = +(argv("max-usd") || 15);
+let spent = 0;
+export const spentUsd = () => spent;
+// Credential hygiene (doc 14 §4): the key is read only by the SDK from the environment; nothing that looks like a
+// key or an auth header is ever written to logs or results.
+export const redact = x => String(x ?? "").replace(/sk-ant-[A-Za-z0-9_\-]+/g, "[REDACTED]").replace(/(x-api-key|authorization)["':\s]+[^\s"',}]+/gi, "$1: [REDACTED]");
 let client = null;
 const getClient = () => (client ||= new Anthropic());
 
@@ -39,13 +48,15 @@ export async function structured({ route, scenario, model = MODELS.main, effort 
   }
   const t0 = Date.now(); let res, error = null;
   try { res = await getClient().messages.parse(req); }
-  catch (e) { error = { name: e?.constructor?.name, status: e?.status, message: String(e?.message).slice(0, 300) }; }
+  catch (e) { error = { name: e?.constructor?.name, status: e?.status, message: redact(e?.message).slice(0, 300) }; }
   const latency = Date.now() - t0;
   const u = res?.usage;
-  const rec = { at: new Date().toISOString(), route, scenario, model, effort, latency_ms: latency, stop_reason: res?.stop_reason ?? null,
+  const rec = { at: new Date().toISOString(), set: SET, route, scenario, model, served_model: res?.model ?? null, effort, latency_ms: latency, stop_reason: res?.stop_reason ?? null,
     refusal_category: res?.stop_details?.category ?? null, parsed_ok: !!res?.parsed_output, error,
     usage: u ? { input: u.input_tokens, output: u.output_tokens, cache_read: u.cache_read_input_tokens, cache_write: u.cache_creation_input_tokens } : null,
     cost_usd: cost(model, u) };
   fs.appendFileSync(LOG, JSON.stringify(rec) + "\n");
+  spent += rec.cost_usd || 0;
+  if (spent > MAX_USD) { console.error(`Budget cap reached: spent $${spent.toFixed(2)} > $${MAX_USD}. Stopping; partial logs kept.`); process.exit(3); }
   return { parsed: res?.stop_reason === "refusal" ? null : res?.parsed_output ?? null, record: rec };
 }

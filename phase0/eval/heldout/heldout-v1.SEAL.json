@@ -1,0 +1,23 @@
+{
+ "file": "eval/heldout/heldout-v1.json",
+ "sha256": "c020635a78fe43a3a7cb8947753f21cc487e00ece676058e5b01c0adcde18e38",
+ "sealed_at": "2026-11-21T17:53:27.455Z",
+ "git_head": "fede2a8436ddeea9b0b305a2a23e48a72d7f4a1f",
+ "provenance": "Blind AI author: context-isolated agent instructed not to read rules, matrices, prompts, the tuning set or results; authored 2026-11-21; pending human SME review",
+ "scenarios": 40,
+ "arabic": 20,
+ "by_category": {
+  "no_good_fit": 5,
+  "root_cause_analysis": 3,
+  "risk_assessment": 2,
+  "ambiguous": 10,
+  "out_of_scope": 3,
+  "stakeholder_management": 2,
+  "project_execution": 2,
+  "insufficient_context": 6,
+  "organisational_restructuring": 2,
+  "process_inefficiency": 3,
+  "strategic_planning": 2
+ },
+ "rule": "Do not modify. Do not use to tune rules, prompts or matrices. Score only with a frozen configuration."
+}

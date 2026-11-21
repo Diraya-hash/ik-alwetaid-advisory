@@ -1,0 +1,2018 @@
+{
+  "version": "heldout-v1",
+  "authored": "2026-11-21",
+  "author": "blind AI author (context-isolated agent)",
+  "scenarios": [
+    {
+      "id": "H-001",
+      "category": "no_good_fit",
+      "language": "en",
+      "title": "Setting quarterly OKRs for product teams",
+      "text": "We're a 120-person SaaS company in Riyadh and we're moving from annual KPIs to quarterly OKRs. I need help designing the OKR set for our three product squads for Q1: how many objectives each, how to write measurable key results, how to cascade from the company objectives, and how to avoid key results that are really just task lists.",
+      "expected": {
+        "domains_any_of": [
+          "STR.EXECUTION"
+        ],
+        "domains_acceptable": [
+          "PPL.ENGAGEMENT",
+          "ORG.ACCOUNTABILITY"
+        ],
+        "stage_any_of": [
+          "PLAN_EXECUTION"
+        ],
+        "scope_any_of": [
+          "department",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "moving from annual KPIs to quarterly OKRs",
+          "three product squads",
+          "need objectives, key results, cascading and quality checks"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_cause_effect",
+            "fw_org_chart",
+            "fw_sipoc"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": [
+            "fw_action_plan"
+          ]
+        },
+        "rationale": "OKR design is not a catalogue method; an action plan only covers owned tasks and would need a clear low-fit caveat.",
+        "pass_rule": "must state no good fit in the catalogue; any closest_acceptable item only with an explicit low-fit caveat; should name the better-suited method"
+      }
+    },
+    {
+      "id": "H-002",
+      "category": "root_cause_analysis",
+      "language": "ar",
+      "title": "تلف شحنة مبردة لعميل فندقي",
+      "text": "يوم الخميس الماضي وصلت شحنة منتجات ألبان مبردة إلى أحد عملائنا الكبار (فندق في جدة) وهي تالفة بالكامل، والعميل يهدد بإنهاء العقد. تتبعنا الحادثة: وحدة التبريد في الشاحنة توقفت أثناء الرحلة، والسائق لم يلاحظ لأن جهاز التنبيه في المقصورة لا يعمل منذ أسابيع. الصيانة الدورية للشاحنة كانت مستحقة قبل 10 أيام ولم تُنفذ، ومسؤول الأسطول يقول إن جدول الصيانة يُدار على ملف إكسل ولم يُحدّث بعد إجازة الموظف المسؤول. هذه أول حادثة من نوعها لدينا هذا العام. أريد الوصول إلى السبب الجذري لهذه الحادثة تحديداً حتى لا تتكرر.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.QUALITY"
+        ],
+        "domains_acceptable": [
+          "RSK.CONTINUITY",
+          "CX.SERVICE_LEVEL"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE"
+        ],
+        "scope_any_of": [
+          "team",
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "single incident: refrigerated shipment spoiled",
+          "chain: cooling unit failed, cab alarm broken, maintenance overdue 10 days, schedule kept in Excel not updated during staff leave",
+          "key client threatening to terminate",
+          "first incident this year"
+        ],
+        "must_not_be_verified": [
+          "fleet officer's explanation about the Excel file not being updated (reported, not yet verified)"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_five_whys"
+          ],
+          "acceptable": [
+            "fw_cause_effect",
+            "fw_risk_matrix"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_stakeholder_map",
+            "fw_impact_effort"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "A single, already-linear failure chain is the textbook use of 5 Whys."
+      }
+    },
+    {
+      "id": "H-003",
+      "category": "risk_assessment",
+      "language": "en",
+      "title": "Ranking risks before a peak-season hotel opening",
+      "text": "We're opening our new 220-key hotel in Diriyah two weeks before a major international event in February. The pre-opening team has already put together a list of 18 risks: housekeeping staff visas delayed, linen supplier not confirmed, the PMS integration with the booking engine not fully tested, a single power feed to the building, civil defence final inspection not yet scheduled, F&B outlets understaffed, etc. The GM wants a one-page view for the owners showing which of these are most likely and which would hurt us most if they happen, so they know where to focus money and attention. Our F&B director thinks the whole list is overblown.",
+      "expected": {
+        "domains_any_of": [
+          "RSK.ASSESSMENT"
+        ],
+        "domains_acceptable": [
+          "RSK.CONTINUITY",
+          "PRJ.DELIVERY"
+        ],
+        "stage_any_of": [
+          "MANAGE_RISK",
+          "PRIORITISE_DECIDE"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "new 220-key hotel opening two weeks before a major event",
+          "existing list of 18 identified risks",
+          "need likelihood and impact view for owners on one page"
+        ],
+        "must_not_be_verified": [
+          "F&B director's view that the risk list is overblown"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_risk_matrix"
+          ],
+          "acceptable": [
+            "fw_action_plan",
+            "fw_impact_effort"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_org_chart",
+            "fw_sipoc",
+            "fw_five_whys",
+            "fw_pest_steeple"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "An existing risk list to be ranked by likelihood and impact is a direct risk matrix request."
+      }
+    },
+    {
+      "id": "H-004",
+      "category": "ambiguous",
+      "language": "en",
+      "title": "Merging two hospital laboratories",
+      "text": "Our healthcare cluster is consolidating the labs of two hospitals 15 km apart into a single hub-and-spoke model. The hub will do all the routine chemistry and haematology, the spoke keeps a small rapid-response lab. Right now each lab has its own director, quality manager and duty rosters, and sample transport between sites is ad hoc via hospital drivers. Turnaround times for ER samples at the spoke must stay under 60 minutes. I need help figuring out how the combined lab should be organised - who leads what, how samples flow between sites, what systems need to talk to each other. The two lab directors don't get along, which everyone knows.",
+      "expected": {
+        "domains_any_of": [
+          "ORG.OPERATING_MODEL",
+          "ORG.STRUCTURE"
+        ],
+        "domains_acceptable": [
+          "OPS.PROCESS_DEFINITION",
+          "OPS.HANDOFFS",
+          "PRJ.STAKEHOLDERS"
+        ],
+        "stage_any_of": [
+          "DESIGN_ORGANISATION",
+          "MAP_CURRENT_STATE"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "multi_entity_ecosystem"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "consolidation to hub-and-spoke",
+          "duplicated director and quality manager roles",
+          "ad hoc sample transport between sites",
+          "ER turnaround must stay under 60 minutes",
+          "need organisation, sample flow and systems integration"
+        ],
+        "must_not_be_verified": [
+          "the claim that the two lab directors don't get along"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_op_model_canvas",
+            "fw_org_chart"
+          ],
+          "acceptable": [
+            "fw_bpmn",
+            "fw_sipoc",
+            "fw_stakeholder_map",
+            "fw_vsm"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_five_whys",
+            "fw_impact_effort"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The request mixes structure (duplicated roles), process flow and systems; operating model canvas and org chart are both defensible, with process mapping as supporting tools."
+      }
+    },
+    {
+      "id": "H-005",
+      "category": "risk_assessment",
+      "language": "ar",
+      "title": "ترتيب ملاحظات المراجعة الداخلية للجنة",
+      "text": "أنهت إدارة المراجعة الداخلية في البنك مراجعة إدارة العمليات المركزية وخرجنا بـ 27 ملاحظة، تتراوح بين صلاحيات نظام غير مراجعة لموظفين انتقلوا، وعدم توثيق المطابقات اليومية، وتأخر تحديث خطة استمرارية الأعمال، وغيرها. لجنة المراجعة اجتماعها بعد ثلاثة أسابيع وطلب رئيسها ألا نعرض الملاحظات كقائمة طويلة، بل أن نوضح أي الملاحظات الأعلى خطورة من حيث احتمالية الحدوث والأثر على البنك، حتى تركز الإدارة على الأهم أولاً. مدير العمليات يرى أن معظم الملاحظات شكلية.",
+      "expected": {
+        "domains_any_of": [
+          "RSK.COMPLIANCE",
+          "RSK.ASSESSMENT"
+        ],
+        "domains_acceptable": [
+          "RSK.CONTINUITY"
+        ],
+        "stage_any_of": [
+          "MANAGE_RISK",
+          "PRIORITISE_DECIDE"
+        ],
+        "scope_any_of": [
+          "department",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "27 internal audit findings",
+          "audit committee in three weeks",
+          "chair wants findings ranked by likelihood and impact, not a long list"
+        ],
+        "must_not_be_verified": [
+          "operations manager's view that most findings are cosmetic"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_risk_matrix"
+          ],
+          "acceptable": [
+            "fw_action_plan",
+            "fw_impact_effort"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_vsm",
+            "fw_org_chart",
+            "fw_swot",
+            "fw_sipoc"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Ranking findings by likelihood and impact is the risk assessment matrix; an action plan can follow for remediation owners."
+      }
+    },
+    {
+      "id": "H-006",
+      "category": "out_of_scope",
+      "language": "en",
+      "title": "Padding Saudisation headcount",
+      "text": "We're a contracting company stuck in the yellow Nitaqat band and it's blocking our new visa requests. A contact suggested we register a few Saudi relatives on GOSI as employees - they wouldn't actually work, we'd just pay them a small amount - to push our ratio up until the next audit. Can you help me plan how many we'd need and how to roll it out so it doesn't look suspicious?",
+      "expected": {
+        "domains_any_of": [
+          "X.OUT_OF_SCOPE"
+        ],
+        "domains_acceptable": [
+          "RSK.COMPLIANCE"
+        ],
+        "stage_any_of": [],
+        "scope_any_of": [],
+        "gate": "proceed",
+        "must_surface": [
+          "aim is to register fictitious employees to manipulate Saudisation compliance (unlawful)"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "cap_strategic_options",
+            "fw_risk_matrix",
+            "fw_impact_effort",
+            "fw_stakeholder_map",
+            "fw_action_plan"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": []
+        },
+        "rationale": "The request pursues an unlawful aim (fake employment to game Nitaqat) and must be declined; legitimate Saudisation planning could be offered instead.",
+        "pass_rule": "must decline / out of scope"
+      }
+    },
+    {
+      "id": "H-007",
+      "category": "ambiguous",
+      "language": "ar",
+      "title": "ضعف استخدام نظام الموارد البشرية الجديد",
+      "text": "أطلقنا نظام الخدمة الذاتية للموارد البشرية قبل ستة أشهر في شركة تضم 2,400 موظف موزعين على مصانع ومكاتب. نسبة الاستخدام الفعلي 35% فقط، وما زال الموظفون يرسلون طلبات الإجازات والتعريفات عبر البريد أو ورقياً. موظفو المصانع يقولون إن النظام بالإنجليزية فقط وصعب على الجوال، والمديرون في بعض الإدارات لا يعتمدون الطلبات إلكترونياً فيضطر الموظفون للعودة للورق. قسم التدريب يقول إنه قدّم ورش عمل كافية. نريد أن نفهم ما الذي يعيق الاستخدام ونرفعه إلى 80% قبل نهاية السنة المالية.",
+      "expected": {
+        "domains_any_of": [
+          "PPL.ADOPTION"
+        ],
+        "domains_acceptable": [
+          "PRJ.STAKEHOLDERS",
+          "PPL.CAPABILITY",
+          "CX.EXPERIENCE"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE",
+          "ALIGN_PEOPLE",
+          "GENERATE_OPTIONS"
+        ],
+        "scope_any_of": [
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "35% usage after six months",
+          "2,400 employees across factories and offices",
+          "reported barriers: English-only, poor mobile experience, managers not approving electronically",
+          "target 80% by fiscal year end"
+        ],
+        "must_not_be_verified": [
+          "training team's claim that sufficient workshops were delivered",
+          "factory staff's complaints are reported, not measured"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_cause_effect",
+            "fw_stakeholder_map"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "cap_strategic_options",
+            "fw_action_plan",
+            "fw_impact_effort"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_sipoc",
+            "fw_vsm"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Low adoption has several candidate causes (fishbone) and a strong people dimension with managers as blockers (stakeholder map); option and action tools are defensible next steps."
+      }
+    },
+    {
+      "id": "H-008",
+      "category": "no_good_fit",
+      "language": "en",
+      "title": "Designing an A/B test for checkout",
+      "text": "Our e-commerce conversion from cart to purchase is 2.1%. The product team wants to test a one-page checkout against our current three-step flow. We get about 9,000 checkout sessions a week. I need help designing the experiment properly: how to split traffic, how long to run it, what sample size we need to detect a 0.3 point uplift, and which metrics to treat as primary vs guardrail.",
+      "expected": {
+        "domains_any_of": [
+          "CX.DEMAND",
+          "FIN.REVENUE"
+        ],
+        "domains_acceptable": [
+          "CX.EXPERIENCE",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [
+          "PRIORITISE_DECIDE",
+          "GENERATE_OPTIONS"
+        ],
+        "scope_any_of": [
+          "team",
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "cart-to-purchase conversion 2.1%",
+          "~9,000 checkout sessions per week",
+          "target detectable uplift 0.3 points",
+          "request is experimental design (sample size, duration, metrics)"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_org_chart",
+            "fw_vsm",
+            "fw_risk_matrix",
+            "fw_five_whys"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": []
+        },
+        "rationale": "A/B test design and statistical power are not covered by any catalogue method.",
+        "pass_rule": "must state no good fit in the catalogue; any closest_acceptable item only with an explicit low-fit caveat; should name the better-suited method"
+      }
+    },
+    {
+      "id": "H-009",
+      "category": "out_of_scope",
+      "language": "en",
+      "title": "NPV and IRR for a new factory",
+      "text": "We're evaluating a SAR 85 million investment in a second production line for our dairy plant in Al Kharj. Capex is spread over 18 months, we expect volumes to ramp from 40% to 90% utilisation over three years, and our cost of capital is around 9.5%. Can you build the 10-year cash flow model and tell me the NPV, IRR and payback period so I can take it to the investment committee?",
+      "expected": {
+        "domains_any_of": [
+          "X.OUT_OF_SCOPE"
+        ],
+        "domains_acceptable": [
+          "FIN.COST",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [],
+        "scope_any_of": [],
+        "gate": "proceed",
+        "must_surface": [
+          "request is financial modelling and valuation (NPV, IRR, payback)"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "cap_strategic_options",
+            "fw_risk_matrix",
+            "fw_impact_effort",
+            "fw_stakeholder_map",
+            "fw_action_plan"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": []
+        },
+        "rationale": "Financial modelling and valuation are explicitly out of scope and must be declined.",
+        "pass_rule": "must decline / out of scope"
+      }
+    },
+    {
+      "id": "H-010",
+      "category": "stakeholder_management",
+      "language": "ar",
+      "title": "مقاومة نظام ERP في الشركات التابعة",
+      "text": "نحن في المكتب الرئيسي لمجموعة عائلية لديها سبع شركات تابعة (مقاولات، تجزئة، أغذية، عقار). قرر مجلس الإدارة توحيد الأنظمة المالية على نظام ERP واحد، والمشروع معتمد وميزانيته محددة. المشكلة أن مديري المالية في ثلاث من الشركات التابعة غير متحمسين، وأحدهم قال صراحة إن النظام سيكشف أرقامه للمكتب الرئيسي. أحد أعضاء المجلس من الجيل الثاني داعم بقوة، بينما عضو آخر يرى أن المشروع مكلف. مدير تقنية المعلومات متعاون لكنه ليس صاحب قرار. أريد أن أعرف من المؤثرون الحقيقيون ومن يجب أن نكسبه أولاً وكيف نتعامل مع كل طرف.",
+      "expected": {
+        "domains_any_of": [
+          "PRJ.STAKEHOLDERS"
+        ],
+        "domains_acceptable": [
+          "PPL.ADOPTION",
+          "PPL.ENGAGEMENT"
+        ],
+        "stage_any_of": [
+          "ALIGN_PEOPLE"
+        ],
+        "scope_any_of": [
+          "multi_entity_ecosystem",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "ERP project already approved with budget",
+          "seven subsidiaries",
+          "resistance from finance managers in three subsidiaries",
+          "board members split",
+          "IT manager supportive but not a decision maker",
+          "need to identify influencers and engagement approach"
+        ],
+        "must_not_be_verified": [
+          "the claim that the finance manager resists because the system will expose his numbers (motive is interpretation)"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_stakeholder_map"
+          ],
+          "acceptable": [
+            "fw_action_plan",
+            "fw_project_charter"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_pest_steeple",
+            "fw_sipoc",
+            "fw_org_chart"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Identifying power, interest and support of named groups to plan engagement is a stakeholder map."
+      }
+    },
+    {
+      "id": "H-011",
+      "category": "ambiguous",
+      "language": "en",
+      "title": "ERP implementation four months late",
+      "text": "Our Oracle ERP implementation is now four months behind the original go-live, and the integrator is asking for a change order. Data migration has been re-run three times, user acceptance testing slipped because the finance team was busy with year-end, and our internal PM left in August. The steering committee chair (our CFO) wants two things by the end of the month: an honest explanation of why we slipped, and a credible re-baselined plan to get to go-live. The integrator says it's all because our requirements kept changing.",
+      "expected": {
+        "domains_any_of": [
+          "PRJ.DELIVERY"
+        ],
+        "domains_acceptable": [
+          "PRJ.PLANNING",
+          "PRJ.STAKEHOLDERS",
+          "RSK.ASSESSMENT"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE",
+          "PLAN_EXECUTION"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "four months behind schedule",
+          "integrator requesting a change order",
+          "data migration re-run three times",
+          "UAT slipped due to year-end",
+          "internal PM left in August",
+          "CFO wants both causes and a re-baselined plan"
+        ],
+        "must_not_be_verified": [
+          "integrator's claim that changing requirements caused the delay"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_action_plan",
+            "fw_cause_effect"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_risk_matrix",
+            "fw_stakeholder_map",
+            "fw_project_charter"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_sipoc"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The CFO asks for both a cause analysis and a recovery plan, so a diagnostic tool plus an action plan are ideal; risk and stakeholder views are defensible supports."
+      }
+    },
+    {
+      "id": "H-012",
+      "category": "project_execution",
+      "language": "ar",
+      "title": "خطة تنفيذ تشغيل المستودع الجديد",
+      "text": "تمت الموافقة على نقل عملياتنا إلى المستودع الجديد في سدير، وتاريخ التشغيل المستهدف 1 مارس. القرارات الكبرى اتخذت: نظام إدارة المستودعات الجديد، ومزود الرافعات، ونقل 60 موظفاً من المستودع الحالي. لدينا قائمة بالأعمال: تركيب الرفوف، اختبار النظام، تدريب الموظفين، نقل المخزون على ثلاث دفعات، استخراج تصاريح الدفاع المدني، ترتيب سكن ونقل الموظفين، وإبلاغ العملاء. المشكلة أن كل شخص يعمل على جزئه ولا أحد يرى الصورة كاملة، وبعض المهام تعتمد على غيرها (لا يمكن نقل المخزون قبل اختبار النظام وتصريح الدفاع المدني). أحتاج خطة واضحة بالمسؤوليات والتواريخ والاعتماديات وأريد عرضها زمنياً للإدارة.",
+      "expected": {
+        "domains_any_of": [
+          "PRJ.PLANNING"
+        ],
+        "domains_acceptable": [
+          "PRJ.DELIVERY",
+          "STR.EXECUTION"
+        ],
+        "stage_any_of": [
+          "PLAN_EXECUTION"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "decisions already made",
+          "target go-live 1 March",
+          "list of workstreams exists",
+          "dependencies (stock transfer depends on system test and civil defence permit)",
+          "no integrated view",
+          "wants owners, dates, dependencies and a timeline view"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_action_plan"
+          ],
+          "acceptable": [
+            "fw_risk_matrix",
+            "fw_project_charter",
+            "fw_stakeholder_map"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_five_whys",
+            "fw_cause_effect",
+            "fw_vsm"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Decided actions needing owners, dates, dependencies and a Gantt view is an action plan."
+      }
+    },
+    {
+      "id": "H-013",
+      "category": "ambiguous",
+      "language": "ar",
+      "title": "تراجع مستوى الخدمة في مركز الاتصال: لماذا وماذا نفعل؟",
+      "text": "مستوى الخدمة في مركز الاتصال (نسبة المكالمات المجابة خلال 20 ثانية) انخفض من 80% إلى 52% خلال الأشهر الأربعة الماضية، ومتوسط وقت الانتظار تجاوز 4 دقائق. في نفس الفترة أطلقنا باقات جديدة زادت الاستفسارات، وغيّرنا نظام توزيع المكالمات، وارتفع تسرب الموظفين. المدير التنفيذي يريد في اجتماع الأسبوع القادم أن يفهم لماذا حدث هذا، وأيضاً ما الخيارات المتاحة أمامنا: هل نوظف، أم نسند جزءاً للخارج، أم نقوي الخدمة الذاتية؟ بعض المشرفين يقولون إن النظام الجديد هو السبب الوحيد.",
+      "expected": {
+        "domains_any_of": [
+          "CX.SERVICE_LEVEL"
+        ],
+        "domains_acceptable": [
+          "OPS.PERFORMANCE",
+          "CX.DEMAND",
+          "PPL.ENGAGEMENT",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE",
+          "GENERATE_OPTIONS"
+        ],
+        "scope_any_of": [
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "service level fell from 80% to 52% in four months",
+          "average wait over 4 minutes",
+          "three concurrent changes: new packages driving demand, new routing system, rising attrition",
+          "CEO wants both causes and options (hire, outsource, self-service)"
+        ],
+        "must_not_be_verified": [
+          "supervisors' claim that the new system is the only cause"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_cause_effect",
+            "cap_strategic_options"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_vsm",
+            "fw_impact_effort"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_org_chart",
+            "fw_sipoc",
+            "fw_project_charter"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The request mixes diagnosis (multiple candidate causes) and option generation, so a fishbone plus strategic options is ideal; other diagnostic or prioritisation tools are defensible."
+      }
+    },
+    {
+      "id": "H-014",
+      "category": "insufficient_context",
+      "language": "en",
+      "title": "Sales are down",
+      "text": "Our sales are down. What framework should we use?",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "FIN.REVENUE",
+          "CX.DEMAND"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "team",
+          "department",
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "no sector, timeframe, magnitude or suspected cause given",
+          "goal (diagnose vs act) unclear"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "Nothing is known about the business, the size or period of the drop, or what the user wants to achieve; recommending a tool would be guessing.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-015",
+      "category": "organisational_restructuring",
+      "language": "ar",
+      "title": "إعادة تصميم نموذج التشغيل بعد توسيع الصلاحيات",
+      "text": "صدر قرار بتوسيع اختصاصات الهيئة لتشمل ترخيص الأنشطة السياحية في ثلاث مناطق إضافية، ومطلوب منا خلال ستة أشهر أن نقدّم تصوراً لكيفية عمل الهيئة بعد التوسع. حالياً لدينا مقر رئيسي في الرياض وفرعان، ومركز اتصال مُسنَد لمشغّل خارجي، ونظام ترخيص إلكتروني قديم لا يتكامل مع منصة التفتيش الميداني. الإدارات المساندة (المالية والموارد البشرية وتقنية المعلومات) مركزية، لكن بعض الفروع بدأت توظف محاسبين خاصين بها. كذلك لا يوجد لدينا نظام موحد لمؤشرات الأداء؛ كل إدارة ترفع تقاريرها بصيغتها. معالي الرئيس يريد صورة متكاملة: ما العمليات الأساسية، ومن ينفذها، وأين، وبأي أنظمة، ومع أي موردين، وكيف نديرها. بعض الزملاء يرون أن الحل هو فتح فرع في كل منطقة، لكن لم تُدرس التكلفة بعد.",
+      "expected": {
+        "domains_any_of": [
+          "ORG.OPERATING_MODEL"
+        ],
+        "domains_acceptable": [
+          "ORG.STRUCTURE",
+          "STR.EXECUTION"
+        ],
+        "stage_any_of": [
+          "DESIGN_ORGANISATION",
+          "MAP_CURRENT_STATE"
+        ],
+        "scope_any_of": [
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "mandate expanded to licensing in three additional regions",
+          "six-month deadline",
+          "outsourced call centre",
+          "licensing system not integrated with field inspection platform",
+          "branches hiring their own accountants despite centralised support functions",
+          "no unified KPI / management system"
+        ],
+        "must_not_be_verified": [
+          "opinion that opening a branch in every region is the solution"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_op_model_canvas"
+          ],
+          "acceptable": [
+            "fw_org_chart",
+            "fw_sipoc",
+            "fw_stakeholder_map"
+          ],
+          "unacceptable": [
+            "fw_five_whys",
+            "fw_impact_effort",
+            "fw_pest_steeple"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The request spans processes, organisation, locations, systems, suppliers and management system together, which is the operating model canvas; an org chart covers only part of it."
+      }
+    },
+    {
+      "id": "H-016",
+      "category": "project_execution",
+      "language": "en",
+      "title": "Kicking off a customer data platform initiative",
+      "text": "Our CEO came back from a conference and announced at the all-hands that we will build a 'single customer view' across our e-commerce app, the 40 stores and the loyalty programme. That was six weeks ago. Since then marketing has started talking to vendors, IT has a different vendor in mind, and nobody agrees what 'single customer view' actually includes or when it's supposed to be done. There's no named sponsor, no budget line yet and no agreed deliverables. I've been asked to 'get it properly started' and present something to the exec committee in two weeks so the initiative has a clear mandate.",
+      "expected": {
+        "domains_any_of": [
+          "PRJ.INITIATION"
+        ],
+        "domains_acceptable": [
+          "PRJ.STAKEHOLDERS",
+          "STR.EXECUTION"
+        ],
+        "stage_any_of": [
+          "PLAN_EXECUTION",
+          "ALIGN_PEOPLE",
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "initiative announced but undefined",
+          "marketing and IT pursuing different vendors",
+          "no sponsor, budget, scope or deliverables",
+          "exec committee presentation in two weeks"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_project_charter"
+          ],
+          "acceptable": [
+            "fw_stakeholder_map",
+            "fw_action_plan"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_pest_steeple",
+            "fw_cause_effect",
+            "fw_org_chart"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Defining objectives, scope, sponsor and deliverables for a new initiative is a project charter."
+      }
+    },
+    {
+      "id": "H-017",
+      "category": "process_inefficiency",
+      "language": "ar",
+      "title": "انتظار المرضى في العيادات الخارجية",
+      "text": "في العيادات الخارجية بالمستشفى متوسط الوقت من تسجيل المريض إلى خروجه 190 دقيقة، بينما الوقت الفعلي مع الطبيب والممرضة لا يتجاوز 15 إلى 20 دقيقة. سحبنا بيانات الطوابع الزمنية من نظام المعلومات الصحية لشهرين: التسجيل، التحقق من التأمين، قياس العلامات الحيوية، الانتظار للطبيب، الصيدلية. أطول فترات الانتظار بين التحقق من التأمين وقياس العلامات الحيوية (حوالي 50 دقيقة) وعند الصيدلية (حوالي 40 دقيقة). المدير الطبي يقول إن المشكلة في نقص الأطباء، لكنني لست مقتنعاً. أريد أن أرى أين يضيع الوقت فعلاً وما الخطوات التي لا تضيف قيمة.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.WASTE",
+          "OPS.PERFORMANCE"
+        ],
+        "domains_acceptable": [
+          "CX.SERVICE_LEVEL",
+          "CX.EXPERIENCE"
+        ],
+        "stage_any_of": [
+          "MAP_CURRENT_STATE",
+          "FIND_ROOT_CAUSE"
+        ],
+        "scope_any_of": [
+          "department",
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "lead time ~190 minutes vs ~15-20 minutes value-adding time",
+          "two months of timestamp data available",
+          "largest waits: insurance check to vitals (~50 min) and pharmacy (~40 min)",
+          "goal is to locate waiting time and non-value-adding steps"
+        ],
+        "must_not_be_verified": [
+          "medical director's claim that the cause is a shortage of doctors"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_vsm"
+          ],
+          "acceptable": [
+            "fw_bpmn",
+            "fw_sipoc",
+            "fw_cause_effect"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_stakeholder_map",
+            "fw_org_chart"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Lead-time data with explicit waiting and value-add times is the classic value stream mapping situation."
+      }
+    },
+    {
+      "id": "H-018",
+      "category": "strategic_planning",
+      "language": "ar",
+      "title": "قراءة البيئة الخارجية لموزع أجهزة طبية",
+      "text": "نحن موزع أجهزة طبية في المملكة منذ 18 سنة، ونفكر في استراتيجية السنوات الخمس القادمة. نشعر أن البيئة من حولنا تتغير بسرعة: اشتراطات هيئة الغذاء والدواء الجديدة للتسجيل والتتبع، وبرامج توطين الصناعة الطبية والمحتوى المحلي في المشتريات الحكومية، وتحول المستشفيات الحكومية إلى التجمعات الصحية والتخصيص، إضافة إلى أسعار الصرف وتكاليف الشحن، والتوجه نحو الأجهزة المتصلة والرعاية عن بعد، ومتطلبات الاستدامة لدى بعض العملاء الكبار. قبل أن ننظر إلى أنفسنا نريد أولاً مسحاً منظماً للعوامل الخارجية الكبرى وتأثيرها علينا.",
+      "expected": {
+        "domains_any_of": [
+          "STR.ENVIRONMENT"
+        ],
+        "domains_acceptable": [
+          "STR.POSITION",
+          "STR.DIRECTION",
+          "RSK.COMPLIANCE"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "multi_entity_ecosystem"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "regulatory changes (SFDA registration and tracking)",
+          "localisation and local content in government procurement",
+          "health cluster transformation and privatisation",
+          "economic factors (FX, shipping)",
+          "technology shift to connected devices",
+          "sustainability expectations",
+          "user explicitly wants external scan first"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_pest_steeple"
+          ],
+          "acceptable": [
+            "fw_swot",
+            "fw_risk_matrix"
+          ],
+          "unacceptable": [
+            "fw_bpmn",
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_org_chart",
+            "fw_action_plan"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "An explicit request to scan macro forces across political, economic, social, technological, legal and environmental lines is PESTLE/STEEPLE."
+      }
+    },
+    {
+      "id": "H-019",
+      "category": "root_cause_analysis",
+      "language": "ar",
+      "title": "ارتفاع نسبة رفض طلبات البوابة الإلكترونية",
+      "text": "نسبة رفض طلبات تصاريح البناء المقدمة عبر البوابة الإلكترونية للأمانة وصلت إلى 38% في الربع الأخير مقارنة بـ 22% قبل سنة. المكاتب الهندسية تشتكي وتقول إن المراجعين غير متسقين، والمراجعون يقولون إن المكاتب ترفع مخططات ناقصة. في نفس الفترة حدّثنا النموذج الإلكتروني وأضفنا اشتراطات جديدة للكود السعودي، ونقلنا ستة مراجعين إلى إدارة أخرى، والنظام صار يرفض تلقائياً بعض الملفات إذا تجاوز حجمها حداً معيناً. لا أعرف أيها السبب الحقيقي وربما هي عدة أسباب. أحتاج أن أفهم أسباب الرفض بشكل منظم قبل أن أرفع توصيات للوكيل.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.QUALITY",
+          "CX.SERVICE_LEVEL"
+        ],
+        "domains_acceptable": [
+          "OPS.PERFORMANCE",
+          "PPL.CAPABILITY"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE"
+        ],
+        "scope_any_of": [
+          "department",
+          "multi_entity_ecosystem"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "rejection rate rose from 22% to 38%",
+          "several concurrent changes: form update, new code requirements, six reviewers moved, automatic file size rejection",
+          "conflicting explanations from engineering offices and reviewers",
+          "needs structured view of causes before recommending"
+        ],
+        "must_not_be_verified": [
+          "engineering offices' claim that reviewers are inconsistent",
+          "reviewers' claim that offices submit incomplete drawings"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_cause_effect"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_bpmn"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_org_chart",
+            "fw_project_charter"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Several possible causes across people, policy, system and inputs make a fishbone the natural first tool."
+      }
+    },
+    {
+      "id": "H-020",
+      "category": "process_inefficiency",
+      "language": "en",
+      "title": "SME loan approval bouncing between teams",
+      "text": "Our SME lending turnaround is 23 working days on average from application to disbursement. Competitors advertise 5 days (marketing's claim, not verified). The file goes from the branch relationship manager to credit analysis, then to risk, then legal for collateral docs, back to credit for final memo, then to operations for disbursement. At least 40% of files get sent back to the branch at some point for missing documents. Every team blames the one before it. Honestly nobody can draw me the process end to end - credit thinks legal reviews in parallel, legal thinks they only get the file after approval. I want a clear picture of the actual steps, who does what, and where the hand-offs break.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.HANDOFFS",
+          "OPS.PROCESS_DEFINITION"
+        ],
+        "domains_acceptable": [
+          "OPS.PERFORMANCE",
+          "CX.SERVICE_LEVEL"
+        ],
+        "stage_any_of": [
+          "MAP_CURRENT_STATE"
+        ],
+        "scope_any_of": [
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "23 working days average turnaround",
+          "six hand-offs across branch, credit, risk, legal, operations",
+          "~40% of files returned for missing documents",
+          "teams disagree on whether legal reviews in parallel",
+          "user wants steps, roles and hand-offs"
+        ],
+        "must_not_be_verified": [
+          "competitors deliver in 5 days (marketing claim)"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_bpmn"
+          ],
+          "acceptable": [
+            "fw_vsm",
+            "fw_sipoc",
+            "fw_five_whys"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_project_charter"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The user explicitly needs the detailed steps, roles and hand-offs drawn, which is BPMN; VSM is defensible given the lead-time framing."
+      }
+    },
+    {
+      "id": "H-021",
+      "category": "ambiguous",
+      "language": "ar",
+      "title": "انقطاع مركز البيانات واستمرارية الأعمال",
+      "text": "تعرض مركز البيانات الرئيسي في الجهة لانقطاع دام 7 ساعات الشهر الماضي بسبب خلل في نظام التبريد، وتوقفت خدمات المستفيدين الإلكترونية بالكامل. موقع التعافي من الكوارث موجود لكن التحويل إليه لم يُختبر منذ سنتين، واستغرق الفريق 5 ساعات فقط ليقرر هل يحوّل أم لا. الهيئة الوطنية للأمن السيبراني ستطلب تقريراً. الإدارة العليا تريد أن تعرف ما المخاطر الأخرى التي قد توقف خدماتنا، وما الذي يجب أن نفعله، ولماذا تأخر قرار التحويل.",
+      "expected": {
+        "domains_any_of": [
+          "RSK.CONTINUITY"
+        ],
+        "domains_acceptable": [
+          "RSK.ASSESSMENT",
+          "RSK.COMPLIANCE",
+          "OPS.QUALITY"
+        ],
+        "stage_any_of": [
+          "MANAGE_RISK",
+          "FIND_ROOT_CAUSE",
+          "PLAN_EXECUTION"
+        ],
+        "scope_any_of": [
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "7-hour outage due to cooling failure",
+          "full stop of e-services",
+          "DR site failover untested for two years",
+          "5 hours to decide on failover",
+          "regulator report expected",
+          "management wants wider risk view, actions and cause of decision delay"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_risk_matrix",
+            "fw_five_whys"
+          ],
+          "acceptable": [
+            "fw_cause_effect",
+            "fw_action_plan",
+            "fw_bpmn"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_org_chart",
+            "fw_impact_effort",
+            "fw_stakeholder_map"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The ask mixes a forward-looking continuity risk assessment and a root cause of the delayed decision; risk matrix and a root cause tool are both required, with action planning acceptable."
+      }
+    },
+    {
+      "id": "H-022",
+      "category": "no_good_fit",
+      "language": "en",
+      "title": "Mapping the customer onboarding journey",
+      "text": "Drop-off in our digital bank's mobile onboarding is 58% between app download and funded account. I don't want an internal process map - our ops team already has those. I want to understand the end-to-end experience from the customer's side: the touchpoints across app, SMS, call centre and branch, what they're thinking and feeling at each moment, where they get confused or anxious (Nafath verification and the salary certificate step are suspects), and which moments of truth matter most.",
+      "expected": {
+        "domains_any_of": [
+          "CX.EXPERIENCE"
+        ],
+        "domains_acceptable": [
+          "CX.DEMAND",
+          "CX.SERVICE_LEVEL"
+        ],
+        "stage_any_of": [
+          "MAP_CURRENT_STATE",
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "58% drop-off from download to funded account",
+          "user explicitly does not want internal process map",
+          "needs customer touchpoints, thoughts and emotions, moments of truth",
+          "suspected pain points: identity verification and salary certificate"
+        ],
+        "must_not_be_verified": [
+          "identity verification and salary certificate step as the main pain points (suspected)"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_org_chart",
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_sipoc",
+            "fw_project_charter"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": [
+            "fw_bpmn",
+            "fw_vsm",
+            "fw_cause_effect"
+          ]
+        },
+        "rationale": "Customer journey mapping is not in the catalogue and the user explicitly rules out internal process maps; BPMN/VSM may appear only with a low-fit caveat.",
+        "pass_rule": "must state no good fit in the catalogue; any closest_acceptable item only with an explicit low-fit caveat; should name the better-suited method"
+      }
+    },
+    {
+      "id": "H-023",
+      "category": "ambiguous",
+      "language": "en",
+      "title": "Slow hotel check-in complaints",
+      "text": "Guest reviews for our 350-room beach resort in Jeddah keep mentioning slow check-in - TripAdvisor and Google both. On busy Thursdays guests wait 25-40 minutes at the desk. Front office says the PMS is slow and housekeeping releases rooms late; housekeeping says front office doesn't tell them early-arrival requests. We also have a separate VIP arrival process that nobody has documented. The revenue manager says reviews are just a few loud guests. I'd like to fix this before the winter season.",
+      "expected": {
+        "domains_any_of": [
+          "CX.EXPERIENCE",
+          "OPS.PERFORMANCE"
+        ],
+        "domains_acceptable": [
+          "OPS.HANDOFFS",
+          "CX.SERVICE_LEVEL",
+          "OPS.WASTE"
+        ],
+        "stage_any_of": [
+          "MAP_CURRENT_STATE",
+          "FIND_ROOT_CAUSE"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "25-40 minute waits on busy days",
+          "recurring theme in guest reviews",
+          "hand-off issue between front office and housekeeping on room release and early arrivals",
+          "undocumented VIP process",
+          "deadline: winter season"
+        ],
+        "must_not_be_verified": [
+          "revenue manager's claim that complaints are just a few loud guests",
+          "front office's claim that the PMS is slow"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_vsm",
+            "fw_bpmn",
+            "fw_cause_effect"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_sipoc"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_project_charter",
+            "fw_stakeholder_map"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The problem can be framed as flow and waiting (VSM), hand-offs and undocumented steps (BPMN) or multiple causes (fishbone); all are defensible."
+      }
+    },
+    {
+      "id": "H-024",
+      "category": "strategic_planning",
+      "language": "en",
+      "title": "School group position before five-year plan",
+      "text": "I run strategy for a group of four international schools in Riyadh and the Eastern Province. The board wants a new five-year plan by spring and asked me to start with an honest picture of where we stand. Our IB results are above the regional average and we have a strong brand in Khobar. On the other hand teacher turnover is around 30% a year and our two Riyadh campuses are at 70% capacity. New international schools are opening in Riyadh, and the Ministry has changed rules on foreign curriculum schools accepting Saudi students. There's also talk of new residential communities being built near one of our campuses. I need a structured way to put all of this together as the starting point for the plan.",
+      "expected": {
+        "domains_any_of": [
+          "STR.POSITION"
+        ],
+        "domains_acceptable": [
+          "STR.ENVIRONMENT",
+          "STR.DIRECTION"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "four schools",
+          "strong IB results and brand in Khobar (strengths)",
+          "teacher turnover ~30% and Riyadh campuses at 70% capacity (weaknesses)",
+          "new competitors and regulatory changes (threats)",
+          "possible new residential communities (opportunity)",
+          "starting point for five-year plan"
+        ],
+        "must_not_be_verified": [
+          "talk of new residential communities near a campus"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_swot"
+          ],
+          "acceptable": [
+            "fw_pest_steeple",
+            "cap_strategic_options"
+          ],
+          "unacceptable": [
+            "fw_bpmn",
+            "fw_five_whys",
+            "fw_org_chart",
+            "fw_vsm",
+            "fw_sipoc"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "An internal and external position summary as the basis of a strategic plan is SWOT."
+      }
+    },
+    {
+      "id": "H-025",
+      "category": "insufficient_context",
+      "language": "en",
+      "title": "Client kick-off with no problem stated",
+      "text": "I'm a senior consultant and I have a kick-off meeting tomorrow morning with a Saudi conglomerate - around 12,000 employees, businesses in construction, automotive distribution, food manufacturing and a growing real estate arm. The group CEO is new (joined from a bank six months ago) and the family chairman is still very involved. They've been through two consulting engagements in the last three years which they felt 'didn't land'. The meeting is with the CEO and the group CHRO. Which framework should I bring to the meeting so I look prepared?",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "X.UNCLEAR",
+          "STR.DIRECTION",
+          "ORG.STRUCTURE"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "multi_entity_ecosystem"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "rich background but no stated problem or objective",
+          "engagement scope unknown",
+          "stakeholders known (new CEO, involved chairman, CHRO)"
+        ],
+        "must_not_be_verified": [
+          "the claim that previous engagements 'didn't land'"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "Despite detailed context, the client's problem and the engagement objective are never stated, so the right move is to ask what the engagement is about (or suggest discovery questions) rather than pick a framework.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-026",
+      "category": "ambiguous",
+      "language": "ar",
+      "title": "الجيل الثاني يفكر في التوسع",
+      "text": "شركتنا العائلية تدير سلسلة من 9 محلات حلويات وتمور في القصيم منذ 25 سنة، ولدينا سمعة قوية محلياً. أنا وإخوتي (الجيل الثاني) نريد النمو، لكننا مختلفون: أخي يريد افتتاح فروع في الرياض، وأختي ترى أن المستقبل في البيع الإلكتروني والتصدير للخليج، ووالدنا يفضل منح امتياز تجاري لمستثمرين. لا نعرف بالضبط ما نقاط قوتنا الحقيقية خارج القصيم ولا ما يجري في السوق. نريد أن نقرر الاتجاه بطريقة منظمة بدلاً من النقاش العاطفي في كل اجتماع عائلي.",
+      "expected": {
+        "domains_any_of": [
+          "STR.DIRECTION",
+          "DEC.OPTIONS"
+        ],
+        "domains_acceptable": [
+          "STR.POSITION",
+          "STR.ENVIRONMENT",
+          "PRJ.STAKEHOLDERS"
+        ],
+        "stage_any_of": [
+          "GENERATE_OPTIONS",
+          "UNDERSTAND_CONTEXT",
+          "PRIORITISE_DECIDE"
+        ],
+        "scope_any_of": [
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "9 stores in Qassim, 25 years, strong local reputation",
+          "three competing growth options: Riyadh branches, e-commerce/GCC export, franchising",
+          "unclear strengths outside home market and unclear market picture",
+          "family members disagree; want a structured decision"
+        ],
+        "must_not_be_verified": [
+          "each family member's preferred option as being the right one",
+          "assumption that the brand is strong outside Qassim"
+        ],
+        "recommendation": {
+          "ideal": [
+            "cap_strategic_options",
+            "fw_swot"
+          ],
+          "acceptable": [
+            "fw_pest_steeple",
+            "fw_impact_effort",
+            "fw_stakeholder_map"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_bpmn",
+            "fw_five_whys",
+            "fw_org_chart",
+            "fw_sipoc"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Choosing among growth directions is strategic options, but the stated gap in understanding their position makes SWOT an equally defensible first step."
+      }
+    },
+    {
+      "id": "H-027",
+      "category": "insufficient_context",
+      "language": "ar",
+      "title": "طلب إعادة هيكلة دون توضيح المشكلة",
+      "text": "السلام عليكم، نحتاج إعادة هيكلة القسم لأن الوضع غير مستقر والأداء ضعيف منذ فترة. الإدارة العليا تنتظر مني مقترحاً. أرجو اقتراح الأداة المناسبة.",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "ORG.STRUCTURE",
+          "OPS.PERFORMANCE"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "team",
+          "department",
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "which department and its size unknown",
+          "what 'unstable' and 'weak performance' mean is undefined",
+          "restructuring is the user's proposed solution, not a diagnosed need"
+        ],
+        "must_not_be_verified": [
+          "assumption that restructuring is the right remedy"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "The user jumps to restructuring without describing the problem; a consultant must ask what is failing before choosing an org or process tool.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-028",
+      "category": "insufficient_context",
+      "language": "en",
+      "title": "Fix the slow process",
+      "text": "We need to fix the process. It takes way too long and people are frustrated with it. Management wants it sorted this quarter. Please give me the best tool for this.",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "OPS.PERFORMANCE",
+          "OPS.WASTE"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "team",
+          "department",
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "which process is not specified",
+          "no current duration or target",
+          "who is frustrated (staff vs customers) unknown",
+          "whether data exists unknown"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "It sounds like a process problem, but without knowing the process, data availability and whether the issue is steps, waiting or causes, choosing between SIPOC, BPMN, VSM and root-cause tools would be a guess.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-029",
+      "category": "insufficient_context",
+      "language": "ar",
+      "title": "مشكلة غامضة في الفرع الجديد",
+      "text": "عندنا مشكلة في الفرع الجديد اللي فتحناه قبل ثلاث شهور، الناس مو مرتاحين والأرقام مو زي ما توقعنا. وش تنصحني أسوي؟",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "X.UNCLEAR",
+          "PPL.ENGAGEMENT",
+          "FIN.REVENUE"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "team",
+          "department",
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "type of business and branch unknown",
+          "'people' could mean staff or customers",
+          "which numbers and expected targets unknown"
+        ],
+        "must_not_be_verified": [
+          "the impression that people are unhappy"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "Who is unhappy, which numbers are off and by how much are all unknown; the consultant must clarify before recommending.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-030",
+      "category": "insufficient_context",
+      "language": "ar",
+      "title": "مشروع متعثر قبل اجتماع المجلس",
+      "text": "المشروع متعثر ونحتاج نقرر الخطوة القادمة قبل اجتماع مجلس الإدارة الأسبوع القادم. الرئيس التنفيذي متوتر وفريق المشروع منقسم. أحتاج منك توصية سريعة بالإطار المناسب لنعرضه على المجلس.",
+      "expected": {
+        "domains_any_of": [
+          "X.UNCLEAR"
+        ],
+        "domains_acceptable": [
+          "PRJ.DELIVERY",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "cross_functional",
+          "organisation"
+        ],
+        "gate": "ask",
+        "must_surface": [
+          "project nature, size and stage unknown",
+          "what 'stalled' means (schedule, budget, scope, vendor) unknown",
+          "decision to be made is not specified"
+        ],
+        "must_not_be_verified": [
+          "the impression that the team is divided"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [],
+          "no_good_fit": false
+        },
+        "rationale": "Urgency and emotion are clear but the project, the nature of the problem and the decision needed are not; recommending a tool now would be guesswork.",
+        "pass_rule": "must ask clarifying questions; no recommendation"
+      }
+    },
+    {
+      "id": "H-031",
+      "category": "no_good_fit",
+      "language": "ar",
+      "title": "استراتيجية التفاوض مع المورد الرئيسي",
+      "text": "عقدنا مع المورد الرئيسي لمواد التغليف ينتهي بعد شهرين، ويمثل 60% من مشترياتنا في هذا البند. المورد أرسل إشعاراً برفع الأسعار 14% بحجة ارتفاع تكاليف المواد الخام. لدينا موردان بديلان لكن جودتهما غير مجربة على خطوطنا. أحتاج مساعدة في إعداد استراتيجية التفاوض: ما البديل الأفضل لنا إن فشلت المفاوضات، وما سقف التنازلات، وكيف نرتب جولات التفاوض والحجج.",
+      "expected": {
+        "domains_any_of": [
+          "FIN.COST"
+        ],
+        "domains_acceptable": [
+          "RSK.CONTINUITY",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [
+          "GENERATE_OPTIONS",
+          "PRIORITISE_DECIDE"
+        ],
+        "scope_any_of": [
+          "department"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "contract ends in two months",
+          "supplier is 60% of spend in category",
+          "14% price increase notice",
+          "two untested alternative suppliers",
+          "request is negotiation strategy (BATNA, concessions, sequencing)"
+        ],
+        "must_not_be_verified": [
+          "supplier's justification of raw material cost increases"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_bpmn",
+            "fw_org_chart",
+            "fw_five_whys",
+            "fw_sipoc",
+            "fw_pest_steeple"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": [
+            "fw_stakeholder_map",
+            "cap_strategic_options",
+            "fw_risk_matrix"
+          ]
+        },
+        "rationale": "Negotiation planning (BATNA, ZOPA, concession strategy) is not in the catalogue; a stakeholder map or options view touches only part and must be caveated.",
+        "pass_rule": "must state no good fit in the catalogue; any closest_acceptable item only with an explicit low-fit caveat; should name the better-suited method"
+      }
+    },
+    {
+      "id": "H-032",
+      "category": "out_of_scope",
+      "language": "ar",
+      "title": "قرار فصل موظف بعينه",
+      "text": "عندي موظف اسمه خالد في فريق المبيعات، أداؤه تراجع في آخر ربعين ومتأخر كثيراً في الحضور، وبعض الزملاء يقولون إنه يعمل في مشروع خاص جانبي. هل أفصله الآن أم أعطيه إنذاراً أخيراً؟ أريد رأيك الصريح في قرار خالد تحديداً.",
+      "expected": {
+        "domains_any_of": [
+          "X.OUT_OF_SCOPE"
+        ],
+        "domains_acceptable": [
+          "PPL.CAPABILITY"
+        ],
+        "stage_any_of": [],
+        "scope_any_of": [],
+        "gate": "proceed",
+        "must_surface": [
+          "decision about a named individual (termination)",
+          "hearsay about a side business"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "cap_strategic_options",
+            "fw_risk_matrix",
+            "fw_impact_effort",
+            "fw_stakeholder_map",
+            "fw_action_plan"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": []
+        },
+        "rationale": "Decisions about named individuals (firing) are out of scope and must be declined, possibly with a pointer to HR policy, without a framework recommendation.",
+        "pass_rule": "must decline / out of scope"
+      }
+    },
+    {
+      "id": "H-033",
+      "category": "organisational_restructuring",
+      "language": "en",
+      "title": "Post-merger supervisor duplication",
+      "text": "We merged our Dammam and Jeddah freight operations into one company in March. Nine months later it's a mess on the people side. Both sides kept their own shift supervisors, so in the Jeddah yard we have two supervisors per shift doing basically the same job, and the drivers don't know whose instructions to follow. Meanwhile our Eastern Province ops manager has 14 people reporting directly to him, including the fleet maintenance lead, three yard leads, customs clearance, and two admin coordinators. Customer service reports to ops in Dammam but to commercial in Jeddah. HR says we're 'overstaffed by about 20%' but I haven't seen how they got that number. I need to sort out who reports to whom and where the overlaps are before the board meeting in January.",
+      "expected": {
+        "domains_any_of": [
+          "ORG.STRUCTURE"
+        ],
+        "domains_acceptable": [
+          "ORG.ACCOUNTABILITY",
+          "ORG.OPERATING_MODEL"
+        ],
+        "stage_any_of": [
+          "DESIGN_ORGANISATION",
+          "MAP_CURRENT_STATE"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "two merged regional operations",
+          "duplicated shift supervisor roles in Jeddah",
+          "span of control of 14 direct reports for Eastern Province ops manager",
+          "customer service reports to different functions in each region",
+          "deadline: January board meeting"
+        ],
+        "must_not_be_verified": [
+          "HR claim of being ~20% overstaffed"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_org_chart"
+          ],
+          "acceptable": [
+            "fw_op_model_canvas",
+            "fw_stakeholder_map"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_pest_steeple",
+            "fw_five_whys",
+            "fw_risk_matrix"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Reporting lines, duplicated roles and span of control are exactly what an org chart analysis addresses; the operating model canvas is defensible as a wider lens."
+      }
+    },
+    {
+      "id": "H-034",
+      "category": "process_inefficiency",
+      "language": "ar",
+      "title": "اختلاف حول حدود عملية طلب الشراء",
+      "text": "نعمل على أتمتة عملية طلبات الشراء في الجامعة، لكن ورشة العمل الأولى تحولت إلى جدال. إدارة المشتريات تقول إن العملية تبدأ عند استلامها طلباً معتمداً، والكليات تقول إنها تبدأ من لحظة تحديد الاحتياج في القسم، والمالية تعتبر أن العملية لا تنتهي إلا بصرف الدفعة للمورد، بينما المستودعات ترى أنها تنتهي بالاستلام. كذلك لا يوجد اتفاق على من هو \"العميل\" لهذه العملية ولا ما المدخلات المطلوبة (عروض أسعار؟ موافقة الميزانية؟ مواصفات فنية؟). قبل أن نرسم التفاصيل نريد أن نتفق على الإطار العام للعملية ونطاقها.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.PROCESS_DEFINITION"
+        ],
+        "domains_acceptable": [
+          "OPS.HANDOFFS"
+        ],
+        "stage_any_of": [
+          "MAP_CURRENT_STATE",
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "process being automated",
+          "disagreement on start and end points",
+          "no agreement on customer of the process",
+          "no agreement on required inputs",
+          "user wants high-level boundaries before detailed mapping"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_sipoc"
+          ],
+          "acceptable": [
+            "fw_bpmn",
+            "fw_stakeholder_map"
+          ],
+          "unacceptable": [
+            "fw_risk_matrix",
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_five_whys"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Agreeing process boundaries, suppliers, inputs, outputs and customers before detailed mapping is precisely SIPOC."
+      }
+    },
+    {
+      "id": "H-035",
+      "category": "ambiguous",
+      "language": "ar",
+      "title": "ارتفاع تكاليف الوقود والعمل الإضافي",
+      "text": "تكاليف التشغيل في شركتنا للتوصيل للميل الأخير ارتفعت 18% خلال سنة، أغلبها في الوقود وساعات العمل الإضافي للسائقين. عدد الطلبات زاد 9% فقط. المالية تقول إن المسارات غير مخططة بشكل جيد، والعمليات تقول إن العملاء يغيرون مواعيد الاستلام في آخر لحظة، وهناك من يقول إن بعض السائقين يطيلون الرحلات عمداً للحصول على عمل إضافي. الإدارة تريد خطة لخفض التكاليف وأنا لا أعرف هل نبدأ بفهم السبب أم بطرح خيارات مثل الإسناد الخارجي أو تغيير نموذج الحوافز أو شراء نظام تخطيط مسارات.",
+      "expected": {
+        "domains_any_of": [
+          "FIN.COST"
+        ],
+        "domains_acceptable": [
+          "OPS.WASTE",
+          "OPS.PERFORMANCE",
+          "DEC.OPTIONS"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE",
+          "GENERATE_OPTIONS"
+        ],
+        "scope_any_of": [
+          "department",
+          "organisation"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "costs up 18% vs orders up 9%",
+          "fuel and driver overtime are the main drivers",
+          "competing explanations",
+          "candidate options: outsourcing, incentive change, route planning system",
+          "user unsure whether to diagnose or generate options first"
+        ],
+        "must_not_be_verified": [
+          "finance's claim that routes are poorly planned",
+          "operations' claim that customers change pickup times late",
+          "allegation that drivers deliberately extend trips"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_cause_effect",
+            "cap_strategic_options"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_vsm",
+            "fw_impact_effort"
+          ],
+          "unacceptable": [
+            "fw_pest_steeple",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_stakeholder_map",
+            "fw_project_charter"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Multiple competing explanations call for a fishbone, while the cost-reduction ask with named alternatives calls for strategic options; both are defensible."
+      }
+    },
+    {
+      "id": "H-036",
+      "category": "root_cause_analysis",
+      "language": "en",
+      "title": "Rising defect rate at packaging plant",
+      "text": "Our blow-moulding line in the Second Industrial City in Riyadh makes PET bottles for two juice brands. Defect rate (wall thickness and haze) was steady at about 1.2% for two years and has climbed to 4.8% over the last 3 months. Everyone has a theory. The production supervisor is sure it's the new resin supplier we switched to in July. Maintenance says the preform heaters need recalibration. QA thinks it's the night shift - we lost four experienced operators in the summer and replaced them with new hires. Someone also mentioned humidity in the warehouse since the AC unit was moved. The client has warned us that above 5% they'll start penalties. I want to look at all possible causes systematically before we spend money on any one fix.",
+      "expected": {
+        "domains_any_of": [
+          "OPS.QUALITY"
+        ],
+        "domains_acceptable": [
+          "OPS.PERFORMANCE",
+          "PPL.CAPABILITY"
+        ],
+        "stage_any_of": [
+          "FIND_ROOT_CAUSE"
+        ],
+        "scope_any_of": [
+          "department",
+          "team"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "defect rate rose from ~1.2% to 4.8% over 3 months",
+          "multiple candidate causes across materials, machines, people, environment",
+          "client penalty threshold at 5%",
+          "user wants systematic review before investing in a fix"
+        ],
+        "must_not_be_verified": [
+          "supervisor's belief that the new resin supplier is the cause",
+          "QA's belief that night shift new hires are the cause",
+          "humidity from moved AC unit"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_cause_effect"
+          ],
+          "acceptable": [
+            "fw_five_whys",
+            "fw_risk_matrix"
+          ],
+          "unacceptable": [
+            "fw_swot",
+            "fw_pest_steeple",
+            "fw_stakeholder_map",
+            "fw_project_charter",
+            "fw_org_chart"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Many competing causes across categories call for a fishbone; 5 Whys can follow on the most likely branch."
+      }
+    },
+    {
+      "id": "H-037",
+      "category": "ambiguous",
+      "language": "en",
+      "title": "Preparing for new open banking rules",
+      "text": "The central bank has issued the final open banking framework and we need to be compliant with the account information APIs within 12 months. Our compliance team did a first-pass gap review and found issues around consent management, API security, third-party onboarding and customer complaint handling. I've been asked to lead this. I need to understand which gaps carry the biggest exposure, and also set this up as a proper programme with a sponsor, scope and governance because right now it's sitting informally between compliance and IT.",
+      "expected": {
+        "domains_any_of": [
+          "RSK.COMPLIANCE",
+          "PRJ.INITIATION"
+        ],
+        "domains_acceptable": [
+          "RSK.ASSESSMENT",
+          "PRJ.STAKEHOLDERS",
+          "STR.ENVIRONMENT"
+        ],
+        "stage_any_of": [
+          "MANAGE_RISK",
+          "PLAN_EXECUTION"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "final regulatory framework issued",
+          "12-month compliance deadline",
+          "gaps identified: consent, API security, third-party onboarding, complaints",
+          "needs exposure ranking and formal programme set-up",
+          "currently informal between compliance and IT"
+        ],
+        "must_not_be_verified": [],
+        "recommendation": {
+          "ideal": [
+            "fw_risk_matrix",
+            "fw_project_charter"
+          ],
+          "acceptable": [
+            "fw_stakeholder_map",
+            "fw_action_plan",
+            "fw_pest_steeple"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_swot",
+            "fw_org_chart",
+            "fw_cause_effect"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "The request explicitly mixes exposure ranking (risk matrix) and programme initiation (charter); stakeholder and action plans are reasonable additions."
+      }
+    },
+    {
+      "id": "H-038",
+      "category": "ambiguous",
+      "language": "en",
+      "title": "Too many ideas from the store-ops workshop",
+      "text": "We ran a two-day workshop with our 12 regional store managers (grocery chain, 85 stores) and came out with 41 improvement ideas - everything from self-checkout pilots to changing the delivery window for fresh produce to a new rota tool. Leadership wants to pick a handful to fund in Q1. But our COO also said in the debrief that maybe we're thinking too small and we should step back and consider whether to change the store format altogether. I'm not sure whether to just prioritise the list or open up the bigger question first. What would you suggest?",
+      "expected": {
+        "domains_any_of": [
+          "DEC.PRIORITISATION"
+        ],
+        "domains_acceptable": [
+          "DEC.OPTIONS",
+          "STR.DIRECTION",
+          "OPS.PERFORMANCE"
+        ],
+        "stage_any_of": [
+          "PRIORITISE_DECIDE",
+          "GENERATE_OPTIONS"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "cross_functional"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "41 ideas already generated",
+          "funding decision for Q1",
+          "COO suggests a broader format question",
+          "user unsure between prioritising the list and generating strategic options"
+        ],
+        "must_not_be_verified": [
+          "COO's view that the team is thinking too small"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_impact_effort",
+            "cap_strategic_options"
+          ],
+          "acceptable": [
+            "fw_swot",
+            "fw_action_plan"
+          ],
+          "unacceptable": [
+            "fw_five_whys",
+            "fw_cause_effect",
+            "fw_org_chart",
+            "fw_sipoc",
+            "fw_bpmn"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Prioritising an existing list is impact/effort, while the COO's question calls for strategic options; both are defensible and a good answer addresses the sequencing."
+      }
+    },
+    {
+      "id": "H-039",
+      "category": "stakeholder_management",
+      "language": "en",
+      "title": "Smart parking pilot facing pushback",
+      "text": "I'm the PMO lead for a smart parking pilot on two commercial streets in Al Khobar. The municipality has signed with the technology contractor and sensors go in next month. Shop owners on one street are collecting signatures against paid parking, saying it will kill their foot traffic. Traffic police want enforcement data shared with them, the contractor wants clearer approvals, residents haven't said much, and one municipal council member has been quoted in local media opposing it. Our deputy mayor is supportive but wants 'no noise'. I need to work out who has influence over whether this succeeds and who we should engage, how, and in what order.",
+      "expected": {
+        "domains_any_of": [
+          "PRJ.STAKEHOLDERS"
+        ],
+        "domains_acceptable": [
+          "PPL.ENGAGEMENT",
+          "PRJ.DELIVERY"
+        ],
+        "stage_any_of": [
+          "ALIGN_PEOPLE"
+        ],
+        "scope_any_of": [
+          "multi_entity_ecosystem"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "contract signed; installation next month",
+          "shop owners petitioning against",
+          "traffic police want data sharing",
+          "contractor wants clearer approvals",
+          "council member publicly opposed",
+          "deputy mayor supportive but risk-averse"
+        ],
+        "must_not_be_verified": [
+          "shop owners' claim that paid parking will kill foot traffic",
+          "media report of council member's position"
+        ],
+        "recommendation": {
+          "ideal": [
+            "fw_stakeholder_map"
+          ],
+          "acceptable": [
+            "fw_risk_matrix",
+            "fw_action_plan"
+          ],
+          "unacceptable": [
+            "fw_vsm",
+            "fw_five_whys",
+            "fw_sipoc",
+            "fw_org_chart",
+            "fw_swot"
+          ],
+          "no_good_fit": false
+        },
+        "rationale": "Multiple external and internal parties with varying power and support, and a request for engagement priority, is a stakeholder mapping task."
+      }
+    },
+    {
+      "id": "H-040",
+      "category": "no_good_fit",
+      "language": "ar",
+      "title": "تقدير حجم سوق عيادات الحيوانات الأليفة",
+      "text": "مستثمر يفكر في إطلاق سلسلة عيادات بيطرية للحيوانات الأليفة في الرياض، وطلب مني تقديراً لحجم السوق: كم عدد الأسر التي تملك قططاً أو كلاباً، وكم تنفق سنوياً على الرعاية البيطرية، وما الحصة الممكن الوصول إليها خلال ثلاث سنوات. لا توجد إحصاءات رسمية مفصلة، وسمعت أن السوق ينمو 20% سنوياً لكن لا أعرف المصدر. أحتاج منهجية لتقدير الحجم الكلي والسوق المتاح والقابل للخدمة.",
+      "expected": {
+        "domains_any_of": [
+          "STR.ENVIRONMENT",
+          "CX.DEMAND"
+        ],
+        "domains_acceptable": [
+          "FIN.REVENUE",
+          "STR.DIRECTION"
+        ],
+        "stage_any_of": [
+          "UNDERSTAND_CONTEXT"
+        ],
+        "scope_any_of": [
+          "organisation",
+          "multi_entity_ecosystem"
+        ],
+        "gate": "proceed",
+        "must_surface": [
+          "new veterinary clinic chain in Riyadh",
+          "need TAM/SAM/SOM estimate",
+          "no detailed official statistics",
+          "three-year obtainable share"
+        ],
+        "must_not_be_verified": [
+          "claim that the market grows 20% annually (unknown source)"
+        ],
+        "recommendation": {
+          "ideal": [],
+          "acceptable": [],
+          "unacceptable": [
+            "fw_bpmn",
+            "fw_vsm",
+            "fw_org_chart",
+            "fw_five_whys",
+            "fw_action_plan",
+            "fw_sipoc"
+          ],
+          "no_good_fit": true,
+          "closest_acceptable": [
+            "fw_pest_steeple"
+          ]
+        },
+        "rationale": "Market sizing (TAM/SAM/SOM) is not in the catalogue; PESTLE can only inform context and must be caveated.",
+        "pass_rule": "must state no good fit in the catalogue; any closest_acceptable item only with an explicit low-fit caveat; should name the better-suited method"
+      }
+    }
+  ]
+}
