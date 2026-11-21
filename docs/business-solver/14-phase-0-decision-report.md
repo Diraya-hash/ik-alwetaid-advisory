@@ -25,11 +25,11 @@ Carried over from earlier approvals: decisions D1–D7, D9 and D12; information 
 
 | Exp. | Capability | Prepared | Blocked by | Run command (inside `phase0/`) | Est. effort once unblocked |
 |---|---|---|---|---|---|
-| A.2 | Problem diagnosis + framework recommendation (end to end) | ✅ Harness; tuning set (29) and **sealed held-out set (40)**; graders; judge-calibration kit | API key | `node experiments/llm-suite.mjs a --set=heldout --effort=high --runs=2` (and `--effort=medium`) | ½ day |
+| A.2 | Problem diagnosis + framework recommendation (end to end) | ✅ Harness; tuning set (29) and **sealed held-out set (40)**; graders; blinded human-evaluation tool (doc 17) | API key | `node experiments/llm-suite.mjs a --set=heldout --effort=high --runs=2` (and `--effort=medium`) | ½ day |
 | B | Strategic Options | ✅ Harness; 8 tuning + 6 held-out scenarios | API key | `… b --set=heldout …` | ¼ day |
 | C.2 | AI Critic, framework & project levels | ✅ Harness; 16 seeded artifacts (authored by the rules author; not independent, see R6) | API key | `… c …` | ¼ day |
 | F | Cost & latency | ✅ Aggregator; every call logs latency, tokens, cache use, stop reason, cost | Runs of A, B, C | `node experiments/f-cost-latency.mjs` | ¼ day |
-| EV-5 | LLM-judge calibration against human grades | ✅ Export/score tool (`scripts/judge-calibration.mjs`) | A.2 results + a human grader | export 40 items → grade → score (target ≥ 0.80) | ½ day (human) |
+| EV-5 | Human evaluation (20 scenarios) & AI-judge calibration | ✅ **Evaluator guide (doc 17, AR/EN)**; blinded tool `scripts/human-eval.mjs` (prepare → submit with SHA-256 receipt → compare); disagreement log with adjudication fields. Tested end to end on a synthetic fixture | A.2/B held-out results + an evaluator | Doc 17 §8 | 3–4 h evaluator + ½ day adjudication |
 | SME | Human review of the held-out set | ✅ Set sealed; review = errata list, never edits | SME availability | Review `eval/heldout/heldout-v1.json`; record disagreements in `heldout-v1.REVIEW.md` | 1 day |
 | E.2 | Manual PowerPoint (Windows, Mac) + Keynote validation | ✅ Validation pack (AR/EN, 10 slides each, steps in speaker notes); protocol doc 16 | Machines + testers | Doc 16 | 1 day |
 | D-3 | BPMN port-aware router + incremental layout | Not started (deferred with BPMN to GA+1) | Prioritisation | — | 6–8 pd |
@@ -44,9 +44,10 @@ Carried over from earlier approvals: decisions D1–D7, D9 and D12; information 
 | Composition | 40 scenarios, **20 Arabic / 20 English**: 16 clear (all 7 requested categories, ≥ 2 each), **10 ambiguous**, **6 incomplete-information (must ask)**, **5 out-of-catalogue (No Good Fit)**, **3 out-of-scope** | `heldout-v1.SEAL.json` |
 | Structural validation | 40/40 valid; all framework ids valid; no id listed as both acceptable and unacceptable; ask-cases carry no recommendations | Validation run 2026-11-21 (content not printed or inspected by the rules author) |
 | Sealing | SHA-256 `c020635a…de18e38` recorded and committed **before any scoring** | `phase0/eval/heldout/heldout-v1.SEAL.json` |
-| Configuration freeze | Rules, matrices, schemas, prompts and critic rules hash-locked **before the held-out set was received** (commit `586e120` contains both) | `phase0/lib/frozen-config.json` |
-| Enforcement | The suite **refuses** to score the held-out set if the config hash or the seal doesn't match (exit code 2) | `lib/integrity.mjs`; tested |
-| Usage rule | The held-out set is never used to change rules or prompts. If a fix is needed after held-out results, re-freeze, document the reason here, and report results as v2 against a **new** held-out set | This section |
+| Configuration freeze | **Eval version 1.** Rules, matrices, schemas, prompts and critic rules were hash-locked **before the held-out set was received**. On 2026-11-21, **before any model result existed**, the freeze scope was widened to include the graders, metrics and pricing table (`llm-suite.mjs`, `f-cost-latency.mjs`, `llm.mjs`). Rule and prompt files are byte-identical to the first freeze (verified); both freezes are recorded | `lib/frozen-config.json` (combined `945f2b7b…`), `lib/frozen-config-history.jsonl` |
+| All sets sealed | Tuning set (29), held-out (40), critic seeded set (16), certainty set (40). Sealed sets can never be re-sealed: a change needs a new versioned file | `eval/**/*.SEAL.json` |
+| Enforcement | The suite refuses to run **any** experiment if the config or any seal it uses doesn't match. `freeze-config` refuses to re-freeze once the version has a model result (`--new-eval-version=N` required). Results go to immutable per-run files `results/runs/ev<N>-<set>-<exp>-<effort>-<time>.json`, and every call log carries `run_id` and `eval_version`. CI and the pre-commit hook run `verify-integrity` | Negative tests 2026-11-21: tampered set → refused; tampered prompt → refused; re-freeze after results → refused; re-seal → refused |
+| Usage rule | Once evaluation starts, **no change** to test scenarios, expected answers, scoring rules, graders or prompts within that version. Any change creates **eval version N+1**, with its own freeze, a new sealed held-out set where the old one has been seen, and separately reported results. Human-review errata and judge disagreements are collected for the next version, never applied in place | This section, doc 17 §6 |
 
 **Limitation (honest):** the blind author is the same model family as the rules author, so biases may be correlated. A human SME review (errata only, no edits) is required before held-out results count for Gate 0. A second, human-authored set remains desirable before GA.
 
@@ -120,7 +121,7 @@ GO for Beta-1 requires **every** criterion below to be met and recorded in doc 1
 |---|---|---|
 | Q1 | Held-out set sealed before scoring; config frozen; integrity checks pass | ✅ met |
 | Q2 | Human SME review of the held-out set completed (errata documented; disputed cases excluded or re-graded, never rules changed) | ⏳ |
-| Q3 | LLM judge calibrated against human grades (≥ 0.80 agreement on ≥ 20 items per judged metric) | ⏳ |
+| Q3 | AI judge calibrated against the blinded human evaluator: checklist agreement ≥ 0.80 on ≥ 20 items, **Arabic and English each ≥ 0.75**, options rubric within ±1 for ≥ 80% (doc 17 §6) | ⏳ (guide, tool and workbook ready) |
 | Q4 | Results reported with sample sizes and 95% confidence intervals; in-sample and held-out reported separately | ⏳ (method ready) |
 | Q5 | Trust-model invariants I1–I10 have passing property tests in the statement library | ⏳ (Phase 0 foundation task E-5) |
 
@@ -195,6 +196,23 @@ All numbers come from committed code and files in `phase0/results/`. Details: do
 | Font finding | Arabic web-subset font lacks Latin digits (verified), which caused letter-spaced digits in render → ship full fonts + glyph-coverage check | Measured |
 | Harness | Held-out dry run builds 40/40 diagnosis requests; options harness selects 6 held-out scenarios | Verified (no model calls) |
 | Security | Secret scan clean: tracked files, **full git history**, results; detector and redaction verified | Measured |
+
+## 8b. Status update 2026-11-21 (second update)
+
+- **API:** still no credential in the build environment. No bypass attempted. Model experiments remain ready (protected-environment workflow, spending cap, redaction, run manifests).
+- **Human evaluation:** evaluator guide (doc 17) and blinded tooling are ready. Blinding is enforced by process, and the tool was tested end to end on a synthetic fixture: no verdicts in the evaluator folder; compare refused before submission; tampered responses and re-submission refused.
+- **PowerPoint:** Windows/Mac/Keynote packs are ready, plus a consolidated six-dimension results workbook with automatic exit criteria (doc 16 §4).
+- **Integrity:** every set is sealed; the eval-v1 freeze covers rules, prompts, schemas, graders and pricing; versioned immutable runs; negative tests passed.
+- **No new measured results.** Synthetic tests verify the tools only and are not reported as results.
+
+**Next milestone, consolidated GO/NO-GO report.** It will be produced only after **all** of the following are done:
+1. Model-based experiments A, B and C completed on the sealed held-out set (eval v1).
+2. Human evaluator calibration completed (Q3).
+3. Arabic **and** English each meet their documented thresholds (§5.1).
+4. PowerPoint manual testing completed (P1; workbook says *EXIT CRITERIA MET: YES*, or failures documented).
+5. Actual cost and latency measured (F).
+
+The project stays in **Phase 0**. Beta-1 implementation is not started.
 
 ## 9. Recommendation
 

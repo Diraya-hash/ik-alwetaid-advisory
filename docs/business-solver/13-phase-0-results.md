@@ -242,4 +242,5 @@ node experiments/f-cost-latency.mjs
 | Update | Date | Content |
 |---|---|---|
 | 1 | 2026-11-19 | A.1, A.1b, C.1, D, E (automated) executed; A.2, B, C.2, F blocked on API access; GO/NO-GO: NO-GO pending evidence |
+| 3 | 2026-11-21 | **No new measurements.** Prepared and verified (synthetic tests only, not results): blinded human-evaluation tool + guide (doc 17); six-dimension PowerPoint results workbook; integrity hardening (all sets sealed, eval-v1 freeze incl. graders/pricing, versioned immutable runs, negative tests passed). Project remains in Phase 0 |
 | 2 | 2026-11-21 | **No model measurements (still no API access).** Added: blind-authored held-out set (40; 20 AR) sealed; config frozen with enforced integrity checks; held-out dry run 40/40; PowerPoint validation packs (2 × 10 slides): 0 pictures, 16/16 connectors attached, 170/170 Arabic paragraphs RTL, 0 overflow, LibreOffice render 10/10; font finding (Arabic web subset lacks Latin digits → full fonts required); secret scans clean incl. full git history. NO-GO unchanged (doc 14) |
