@@ -13,11 +13,13 @@ export function ConfirmButton({
   onConfirm,
   children,
   label,
+  variant = "danger",
 }: {
   question: string;
   onConfirm: () => void;
   children: React.ReactNode;
   label?: string;
+  variant?: "danger" | "secondary";
 }) {
   const { t } = useI18n();
   const [asking, setAsking] = useState(false);
@@ -28,7 +30,7 @@ export function ConfirmButton({
 
   if (!asking) {
     return (
-      <Button variant="danger" onClick={() => setAsking(true)} aria-label={label}>
+      <Button variant={variant} size={variant === "secondary" ? "sm" : "md"} onClick={() => setAsking(true)} aria-label={label}>
         {children}
       </Button>
     );

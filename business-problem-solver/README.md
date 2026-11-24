@@ -8,7 +8,7 @@ Bilingual (Arabic RTL / English LTR) web application. Describe a business challe
 review a diagnosis that separates verified facts, unverified claims and assumptions, and receive explainable framework
 recommendations, including "we need more information first" and "no good fit" when that is the honest answer.
 
-## Status: M1 in progress (deterministic, no AI calls)
+## Status: M1 complete (deterministic, no AI calls)
 
 | Step | State |
 |---|---|
@@ -16,8 +16,8 @@ recommendations, including "we need more information first" and "no good fit" wh
 | 2. Home page and challenge composer | ✅ |
 | 3. Guided intake (6 steps, suggestions read from the description) and structured diagnosis | ✅ |
 | 4. Recommendation engine: TypeScript port of the Phase 0 engine (rules v0.3b), verified identical on 87 parity cases; explanations for every recommended and rejected framework | ✅ |
-| 5. Interactive builders: SWOT, 5 Whys, cause-and-effect, impact/effort, action plan | next |
-| 6. Project workspace exports (report/PDF, PNG, CSV) and version history UI | next |
+| 5. Interactive builders: SWOT (implications linked to findings), 5 Whys (branching; root causes never stronger than their weakest step), fishbone (editable RTL/LTR diagram, configurable categories), impact/effort (drag or keyboard), action plan (owners, dates, dependencies, status, indicators, links to findings), each with live consultant review | ✅ |
+| 6. Version history (save, compare, restore with undo); professional report (print to PDF), PNG diagrams, action-plan CSV, project JSON | ✅ |
 
 Local-first: projects are stored only in this browser (autosave, version snapshots, hourly automatic backup, quarantine and
 recovery of unreadable data, JSON import/export). There is no cloud sync in M1.
