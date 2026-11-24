@@ -32,25 +32,25 @@ export function Timeline({ plan, svgRef, title }: { plan: Plan; svgRef?: React.R
   if (!rows.length) return <p className="text-[13px] text-ink-subtle">{t.plan.noDates}</p>;
   const t0 = Math.min(...rows.map((a) => Date.parse(a.start)));
   const t1 = Math.max(...rows.map((a) => Date.parse(a.due)), plan.deadline ? Date.parse(plan.deadline) : 0) + DAY;
-  const W = 900, LABEL = 260, ROW = 30, H = rows.length * ROW + 44;
+  const W = 900, LABEL = 280, ROW = 38, H = rows.length * ROW + 44;
   const sx = (ms: number) => { const v = ((ms - t0) / (t1 - t0)) * (W - LABEL - 70); return rtl ? W - LABEL - 10 - v : LABEL + 10 + v; };
   const color: Record<Action["status"], string> = { done: "fill-primary", in_progress: "fill-gold", not_started: "fill-system", blocked: "fill-danger" };
   return (
     <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={title} className="h-auto w-full" direction={rtl ? "rtl" : "ltr"}>
       <title>{title}</title>
-      <text x={rtl ? W - LABEL - 10 : LABEL + 10} y={14} fontSize={11} textAnchor="start" className="fill-ink-subtle">{date(t0)}</text>
-      <text x={rtl ? 10 : W - 10} y={14} fontSize={11} textAnchor="end" className="fill-ink-subtle">{date(t1 - DAY)}</text>
+      <text x={rtl ? W - LABEL - 10 : LABEL + 10} y={16} fontSize={14} textAnchor="start" className="fill-ink-subtle">{date(t0)}</text>
+      <text x={rtl ? 10 : W - 10} y={16} fontSize={14} textAnchor="end" className="fill-ink-subtle">{date(t1 - DAY)}</text>
       {rows.map((a, i) => {
         const y = 28 + i * ROW;
         const x1 = sx(Date.parse(a.start)), x2 = sx(Date.parse(a.due) + DAY);
         return (
           <g key={a.id}>
-            <text x={rtl ? W - 8 : 8} y={y + 15} fontSize={12} textAnchor="start" className="fill-ink">{a.title.length > 34 ? `${a.title.slice(0, 33)}…` : a.title}</text>
-            <rect x={Math.min(x1, x2)} y={y + 4} width={Math.max(4, Math.abs(x2 - x1))} height={16} rx={4} className={color[a.status]} />
+            <text x={rtl ? W - 8 : 8} y={y + 18} fontSize={15} textAnchor="start" className="fill-ink">{a.title.length > 30 ? `${a.title.slice(0, 29)}…` : a.title}</text>
+            <rect x={Math.min(x1, x2)} y={y + 5} width={Math.max(4, Math.abs(x2 - x1))} height={20} rx={4} className={color[a.status]} />
           </g>
         );
       })}
-      {plan.deadline && (() => { const x = sx(Date.parse(plan.deadline) + DAY); return <g><line x1={x} x2={x} y1={20} y2={H - 4} className="stroke-danger" strokeDasharray="4 3" strokeWidth={1.5} /><text x={x} y={H - 6} fontSize={10} textAnchor="middle" className="fill-danger">{t.plan.deadline}</text></g>; })()}
+      {plan.deadline && (() => { const x = sx(Date.parse(plan.deadline) + DAY); return <g><line x1={x} x2={x} y1={20} y2={H - 4} className="stroke-danger" strokeDasharray="4 3" strokeWidth={1.5} /><text x={x} y={H - 6} fontSize={13} textAnchor="middle" className="fill-danger">{t.plan.deadline}</text></g>; })()}
     </svg>
   );
 }
