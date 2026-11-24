@@ -36,6 +36,7 @@
 | 16 | [PowerPoint Manual Validation Protocol](16-pptx-manual-validation-protocol.md) | PowerPoint Win/Mac + Keynote test matrix, validation packs, **consolidated six-dimension results workbook**, exit criteria | Ready to run |
 | — | Evaluation reporting | Per-language independent gates, 5-segment reporting, evidence classes E1–E5, consolidated GO/NO-GO generator: doc 14 §8c | Ready |
 | 17 | [Human Evaluator Guide](17-human-evaluator-guide.md) | 20-scenario blinded human review: criteria, scoring, examples, Arabic/English instructions, disagreement adjudication, coordinator steps | Ready to run |
+| 18 | [Phase 0 Operational Readiness](18-phase-0-operational-readiness.md) | Blockers, workflow hardening, your account-level steps with links, assignment templates (`templates/`), consolidated readiness checklist | Ready: awaiting your actions |
 
 Phase 0 prototypes live in [`/phase0`](../../phase0/README.md), isolated from production code.
 

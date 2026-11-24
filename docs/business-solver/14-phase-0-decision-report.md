@@ -62,11 +62,11 @@ Carried over from earlier approvals: decisions D1–D7, D9 and D12; information 
 1. **Anthropic Console:** create a dedicated workspace (e.g. `bps-phase0-eval`) with a monthly spend limit. Create an API key in that workspace named `bps-phase0-eval-<yyyymm>`. Copy it once; don't store it anywhere else.
 2. **GitHub → repository Settings → Environments → New environment `phase0-eval`:**
    - **Required reviewers:** the product lead (and one alternate).
-   - **Deployment branches:** selected branches only (`main` and the Phase 0 branch).
+   - **Deployment branches:** selected branches only (`main`). Step-by-step with links: doc 18 §3.
    - **Environment secret** `ANTHROPIC_API_KEY`: paste the key here, in the GitHub UI only.
    - On private repositories, environment protection rules depend on the GitHub plan; verify yours supports required reviewers.
 3. The workflow `.github/workflows/phase0-eval.yml` is already in the repository. GitHub only lists manually dispatched workflows that exist on the **default branch**, so merge that file (with `phase0/`) to the default branch through a reviewed PR.
-4. **Run it:** Actions → `phase0-eval` → Run workflow (choose set, effort, runs, budget). The reviewer approves the job; only then is the secret released to it.
+4. **Run it:** Actions → `phase0-eval` → Run workflow. The defaults are the approved eval-v1 configuration: held-out set, high effort, 3 runs; caps A $30, B/C/S7 $10 each; ceiling $60 (doc 18 §2). The reviewer approves the job; only then is the secret released to it.
 5. **What the workflow guarantees:**
    - Inputs are choice lists (no free-text injection).
    - The key is passed only to the experiment step as an environment variable; GitHub masks it in logs.

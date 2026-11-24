@@ -2,3 +2,6 @@ node_modules/
 results/**/*.pdf
 results/tmp/
 __pycache__/
+# Human-evaluation rounds are NEVER committed: coordinator/ holds the AI-judge verdicts and the repository is public
+# (doc 17 §2, doc 18 §3). Keep rounds in private storage controlled by the coordinator.
+human-eval/

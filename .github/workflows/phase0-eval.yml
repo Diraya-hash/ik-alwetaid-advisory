@@ -1,7 +1,10 @@
 # Phase 0 model-based evaluation (doc 14 §4). Runs ONLY on manual dispatch, ONLY in the protected
 # GitHub environment "phase0-eval" (required reviewer approval), and reads the API key ONLY from that
 # environment's secret. The key is never written to files, logs or results; results are secret-scanned
-# before they are committed to a separate results branch.
+# before they are committed to a separate results branch (never main).
+#
+# Defaults are the approved eval-v1 execution configuration (doc 18): held-out set, high effort, 3 runs,
+# spending caps A = $30, B = $10, C = $10, S7 judge = $10 (hard ceiling $60 per dispatch).
 name: phase0-eval
 
 on:
@@ -23,15 +26,15 @@ on:
         options: [high, medium, low]
         default: high
       runs:
-        description: "Repetitions per case (1-3)"
+        description: "Repetitions per case (approved eval-v1 configuration: 3)"
         type: choice
-        options: ["2", "1", "3"]
-        default: "2"
+        options: ["3", "2", "1"]
+        default: "3"
       max_usd:
-        description: "Spending cap per experiment process (USD)"
+        description: "Spending cap for experiment A (USD); B, C and the S7 judge are capped at $10 each"
         type: choice
-        options: ["15", "5", "30"]
-        default: "15"
+        options: ["30", "15", "5"]
+        default: "30"
 
 permissions:
   contents: write   # only to push the results branch
@@ -44,7 +47,7 @@ jobs:
   evaluate:
     runs-on: ubuntu-latest
     environment: phase0-eval
-    timeout-minutes: 150
+    timeout-minutes: 330   # 3 runs of A, B, C + S7 judge run sequentially (estimated ~2-3 h)
     defaults:
       run:
         working-directory: phase0
@@ -54,6 +57,7 @@ jobs:
       EFFORT: ${{ inputs.effort }}
       RUNS: ${{ inputs.runs }}
       MAX_USD: ${{ inputs.max_usd }}
+      SMALL_CAP_USD: "10"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,36 +65,60 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Preflight (key present, without revealing it)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::error::Environment secret ANTHROPIC_API_KEY is not set on environment 'phase0-eval'. Stopping before any step (no dry run, no cost)."
+            exit 1
+          fi
+          echo "API key present (value not shown)."
       - name: Install (lockfile only)
         run: npm ci --no-audit --no-fund
       - name: Secret hygiene (repository)
         run: bash scripts/check-no-secrets.sh
-      - name: Integrity check (frozen config + all sealed sets)
+      - name: Integrity check (frozen config, reporting lock, all sealed sets)
         run: node scripts/verify-integrity.mjs
       - name: Run model experiments
+        id: experiments
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           set -euo pipefail
           if [ "$EXPERIMENTS" = "all" ]; then list="a b c"; else list="$EXPERIMENTS"; fi
           for e in $list; do
-            node experiments/llm-suite.mjs "$e" --set="$EVAL_SET" --effort="$EFFORT" --runs="$RUNS" --max-usd="$MAX_USD"
+            cap="$SMALL_CAP_USD"; [ "$e" = "a" ] && cap="$MAX_USD"
+            node experiments/llm-suite.mjs "$e" --set="$EVAL_SET" --effort="$EFFORT" --runs="$RUNS" --max-usd="$cap"
           done
-          case " $list " in *" a "*) if [ "$EVAL_SET" = "heldout" ]; then node scripts/assumption-judge.mjs --set=heldout --effort="$EFFORT" --max-usd="$MAX_USD"; fi;; esac
+          case " $list " in *" a "*) if [ "$EVAL_SET" = "heldout" ]; then node scripts/assumption-judge.mjs --set=heldout --effort="$EFFORT" --max-usd="$SMALL_CAP_USD"; fi;; esac
           node experiments/f-cost-latency.mjs --set="$EVAL_SET"
       - name: Evidence report (model evidence only; NO-GO until human calibration and PowerPoint results are added)
+        if: always()
         run: node scripts/evidence-report.mjs --effort="$EFFORT" --out=reports || true
       - name: Secret hygiene (results)
+        id: scan
+        if: always()
         run: |
-          bash scripts/check-no-secrets.sh results
-          bash scripts/check-no-secrets.sh reports
+          set -euo pipefail
+          for d in results reports; do if [ -d "$d" ]; then bash scripts/check-no-secrets.sh "$d"; fi; done
+          echo "results scan clean"
+      # Also runs when an experiment stopped early (e.g. spending cap), so partial measurements are kept and
+      # reported honestly; it never runs if the results secret scan failed.
       - name: Commit results to a dedicated results branch
+        if: always() && steps.scan.outcome == 'success'
         run: |
           set -euo pipefail
           branch="phase0-eval-results/run-${GITHUB_RUN_ID}"
           git config user.name "phase0-eval-bot"
           git config user.email "phase0-eval-bot@users.noreply.github.com"
           git checkout -b "$branch"
-          git add -f results/runs/*.json results/llm-runs.jsonl results/f-cost-latency.json reports/*.md reports/*.json || true
-          git commit -m "Phase 0 eval results: set=${EVAL_SET} effort=${EFFORT} runs=${RUNS} (run ${GITHUB_RUN_ID})" || { echo "nothing to commit"; exit 0; }
+          shopt -s nullglob
+          files=(results/runs/*.json results/llm-runs.jsonl results/f-cost-latency.json reports/*.md reports/*.json)
+          existing=(); for f in "${files[@]}"; do [ -e "$f" ] && existing+=("$f"); done
+          if [ ${#existing[@]} -eq 0 ]; then echo "nothing to commit"; exit 0; fi
+          git add -f "${existing[@]}"
+          status="complete"; [ "${{ steps.experiments.outcome }}" = "success" ] || status="INCOMPLETE (${{ steps.experiments.outcome }})"
+          git commit -m "Phase 0 eval results: set=${EVAL_SET} effort=${EFFORT} runs=${RUNS} status=${status} (run ${GITHUB_RUN_ID})"
           git push origin "$branch"
+          echo "Results pushed to branch $branch (status: $status)"
