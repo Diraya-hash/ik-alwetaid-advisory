@@ -1,0 +1,80 @@
+/*
+ * Business Problem Solver design tokens.
+ * Identity: Deep Green #0E3B2E · Emerald #0B6B4E · Ivory #F8F5EE · Beige #F1ECE1 · Quiet Gold #B8954A.
+ * Gold is an accent: decorative at #B8954A, and #7A5E1E where it carries text (AA).
+ * Semantic colours (verified, unverified, assumption, danger, warning) are functional, not brand.
+ * Values are RGB channels so Tailwind can apply alpha. Components never use raw hex values.
+ */
+:root {
+  --bg: 248 245 238;            /* #F8F5EE ivory */
+  --surface: 255 253 248;       /* #FFFDF8 */
+  --surface-2: 243 238 227;     /* #F3EEE3 beige */
+  --surface-3: 236 230 216;     /* #ECE6D8 */
+  --border: 228 220 203;        /* #E4DCCB */
+  --border-strong: 200 188 160; /* #C8BCA0 */
+  --text: 18 38 30;             /* #12261E */
+  --text-muted: 58 77 68;       /* #3A4D44 */
+  --text-subtle: 82 97 89;      /* #526159 */
+  --primary: 11 107 78;         /* #0B6B4E emerald */
+  --primary-hover: 10 79 58;    /* #0A4F3A */
+  --primary-fg: 255 253 248;
+  --primary-soft: 228 239 232;  /* #E4EFE8 */
+  --primary-soft-fg: 10 79 58;
+  --deep: 14 59 46;             /* #0E3B2E deep green */
+  --deep-fg: 243 238 226;       /* #F3EEE2 */
+  --gold: 184 149 74;           /* #B8954A decorative */
+  --gold-text: 122 94 30;       /* #7A5E1E */
+  --gold-soft: 245 237 216;     /* #F5EDD8 */
+  --gold-on-deep: 217 191 127;  /* #D9BF7F: gold text on deep green */
+  --fact: 11 107 78;            --fact-soft: 228 239 232;
+  --claim: 138 82 8;            --claim-soft: 251 239 218;
+  --assumption: 102 64 156;     --assumption-soft: 238 232 248;
+  --system: 71 85 80;           --system-soft: 234 236 232;
+  --danger: 176 32 32;          --danger-soft: 251 230 228;
+  --warning: 138 82 8;          --warning-soft: 251 239 218;
+  --shadow: 14 40 30;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 9 24 18;                /* #091812 */
+  --surface: 15 35 27;          /* #0F231B */
+  --surface-2: 20 45 35;        /* #142D23 */
+  --surface-3: 26 56 44;        /* #1A382C */
+  --border: 36 70 57;           /* #244639 */
+  --border-strong: 55 95 79;    /* #375F4F */
+  --text: 243 238 226;          /* #F3EEE2 */
+  --text-muted: 214 207 190;    /* #D6CFBE */
+  --text-subtle: 176 186 172;   /* #B0BAAC */
+  --primary: 98 205 160;        /* #62CDA0 */
+  --primary-hover: 148 222 190;
+  --primary-fg: 9 24 18;
+  --primary-soft: 18 62 47;     /* #123E2F */
+  --primary-soft-fg: 168 230 203;
+  --deep: 14 59 46;
+  --deep-fg: 243 238 226;
+  --gold: 214 182 108;          /* #D6B66C */
+  --gold-text: 222 192 120;
+  --gold-soft: 58 47 22;
+  --gold-on-deep: 217 191 127;
+  --fact: 98 205 160;           --fact-soft: 18 62 47;
+  --claim: 240 186 106;         --claim-soft: 62 44 16;
+  --assumption: 196 170 248;    --assumption-soft: 48 36 82;
+  --system: 170 184 176;        --system-soft: 30 46 40;
+  --danger: 248 140 136;        --danger-soft: 72 24 26;
+  --warning: 240 186 106;       --warning-soft: 62 44 16;
+  --shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+/* Typography per script. English display headings use a serif for a consulting register; Arabic stays in Plex. */
+html[lang="en"] {
+  --font-sans: "Inter Variable", "Inter", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
+  --tracking-tight: -0.018em;
+}
+html[lang="ar"] {
+  --font-sans: "IBM Plex Sans Arabic", "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans Arabic", "Inter Variable", ui-sans-serif, sans-serif;
+  --tracking-tight: 0;
+}

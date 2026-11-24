@@ -1,0 +1,5584 @@
+{
+ "source": "phase0/lib/recommender.mjs (eval v1 frozen)",
+ "generated": "2026-11-24",
+ "cases": [
+  {
+   "id": "ORG-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "ORG.STRUCTURE",
+     "ORG.ACCOUNTABILITY"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "reporting_lines",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_org_chart",
+      0.881
+     ],
+     [
+      "fw_op_model_canvas",
+      0.624
+     ],
+     [
+      "fw_stakeholder_map",
+      0.455
+     ],
+     [
+      "fw_project_charter",
+      0.243
+     ],
+     [
+      "fw_sipoc",
+      0.24
+     ],
+     [
+      "fw_swot",
+      0.226
+     ],
+     [
+      "fw_action_plan",
+      0.226
+     ],
+     [
+      "cap_strategic_options",
+      0.21
+     ],
+     [
+      "fw_bpmn",
+      0.207
+     ],
+     [
+      "fw_cause_effect",
+      0.16
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_vsm",
+      0.14
+     ],
+     [
+      "fw_impact_effort",
+      0.124
+     ]
+    ],
+    "suff": 1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "ORG.STRUCTURE",
+     "ORG.ACCOUNTABILITY"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "reporting_lines",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_org_chart",
+      0.881
+     ],
+     [
+      "fw_op_model_canvas",
+      0.624
+     ],
+     [
+      "fw_stakeholder_map",
+      0.455
+     ]
+    ],
+    "suff": 1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "ORG.STRUCTURE",
+     "ORG.ACCOUNTABILITY"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "reporting_lines",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_org_chart",
+      0.881
+     ],
+     [
+      "fw_op_model_canvas",
+      0.624
+     ],
+     [
+      "fw_stakeholder_map",
+      0.455
+     ]
+    ],
+    "suff": 1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "ORG.OPERATING_MODEL"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "delivery_model",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_op_model_canvas",
+      0.905
+     ],
+     [
+      "fw_org_chart",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.49
+     ],
+     [
+      "fw_project_charter",
+      0.352
+     ],
+     [
+      "fw_sipoc",
+      0.321
+     ],
+     [
+      "fw_swot",
+      0.26
+     ],
+     [
+      "fw_stakeholder_map",
+      0.238
+     ],
+     [
+      "fw_bpmn",
+      0.207
+     ],
+     [
+      "fw_action_plan",
+      0.193
+     ],
+     [
+      "fw_impact_effort",
+      0.174
+     ],
+     [
+      "fw_pest_steeple",
+      0.16
+     ],
+     [
+      "fw_cause_effect",
+      0.16
+     ],
+     [
+      "fw_risk_matrix",
+      0.16
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.086
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "ORG.OPERATING_MODEL"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "delivery_model",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_op_model_canvas",
+      0.905
+     ],
+     [
+      "fw_org_chart",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.49
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "DESIGN_ORGANISATION",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "ORG.OPERATING_MODEL"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "delivery_model",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_op_model_canvas",
+      0.905
+     ],
+     [
+      "fw_org_chart",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.49
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PPL.ADOPTION",
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.9
+     ],
+     [
+      "fw_project_charter",
+      0.535
+     ],
+     [
+      "fw_action_plan",
+      0.46
+     ],
+     [
+      "fw_impact_effort",
+      0.207
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_risk_matrix",
+      0.193
+     ],
+     [
+      "fw_sipoc",
+      0.19
+     ],
+     [
+      "fw_op_model_canvas",
+      0.186
+     ],
+     [
+      "fw_swot",
+      0.176
+     ],
+     [
+      "fw_cause_effect",
+      0.176
+     ],
+     [
+      "cap_strategic_options",
+      0.176
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.052
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PPL.ADOPTION",
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.9
+     ],
+     [
+      "fw_project_charter",
+      0.535
+     ],
+     [
+      "fw_action_plan",
+      0.46
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "ORG-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PPL.ADOPTION",
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.9
+     ],
+     [
+      "fw_project_charter",
+      0.535
+     ],
+     [
+      "fw_action_plan",
+      0.46
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "MAP_CURRENT_STATE"
+    },
+    "domains": [
+     "OPS.PERFORMANCE",
+     "CX.SERVICE_LEVEL"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 1,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.864
+     ],
+     [
+      "fw_vsm",
+      0.829
+     ],
+     [
+      "fw_bpmn",
+      0.545
+     ],
+     [
+      "fw_sipoc",
+      0.512
+     ],
+     [
+      "fw_five_whys",
+      0.486
+     ],
+     [
+      "fw_org_chart",
+      0.252
+     ],
+     [
+      "fw_op_model_canvas",
+      0.252
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "fw_risk_matrix",
+      0.176
+     ],
+     [
+      "fw_stakeholder_map",
+      0.16
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "MAP_CURRENT_STATE"
+    },
+    "domains": [
+     "OPS.PERFORMANCE",
+     "CX.SERVICE_LEVEL"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 1,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.864
+     ],
+     [
+      "fw_vsm",
+      0.829
+     ],
+     [
+      "fw_bpmn",
+      0.545
+     ],
+     [
+      "fw_sipoc",
+      0.512
+     ],
+     [
+      "fw_five_whys",
+      0.486
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "MAP_CURRENT_STATE"
+    },
+    "domains": [
+     "OPS.PERFORMANCE",
+     "CX.SERVICE_LEVEL"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 1,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.864
+     ],
+     [
+      "fw_vsm",
+      0.829
+     ],
+     [
+      "fw_bpmn",
+      0.545
+     ],
+     [
+      "fw_sipoc",
+      0.512
+     ],
+     [
+      "fw_five_whys",
+      0.486
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.PROCESS_DEFINITION",
+     "OPS.HANDOFFS"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": false,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_sipoc",
+      0.881
+     ],
+     [
+      "fw_bpmn",
+      0.664
+     ],
+     [
+      "fw_op_model_canvas",
+      0.353
+     ],
+     [
+      "fw_org_chart",
+      0.302
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "fw_cause_effect",
+      0.21
+     ],
+     [
+      "fw_stakeholder_map",
+      0.205
+     ],
+     [
+      "fw_five_whys",
+      0.176
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "cap_strategic_options",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.361
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.PROCESS_DEFINITION",
+     "OPS.HANDOFFS"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": false,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_sipoc",
+      0.881
+     ],
+     [
+      "fw_bpmn",
+      0.664
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.PROCESS_DEFINITION",
+     "OPS.HANDOFFS"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": false,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_sipoc",
+      0.881
+     ],
+     [
+      "fw_bpmn",
+      0.664
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "FIND_ROOT_CAUSE"
+    },
+    "domains": [
+     "OPS.WASTE",
+     "OPS.PERFORMANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_vsm",
+      0.96
+     ],
+     [
+      "fw_bpmn",
+      0.602
+     ],
+     [
+      "fw_cause_effect",
+      0.483
+     ],
+     [
+      "fw_org_chart",
+      0.319
+     ],
+     [
+      "fw_op_model_canvas",
+      0.319
+     ],
+     [
+      "fw_five_whys",
+      0.235
+     ],
+     [
+      "fw_swot",
+      0.226
+     ],
+     [
+      "fw_stakeholder_map",
+      0.176
+     ],
+     [
+      "cap_strategic_options",
+      0.16
+     ],
+     [
+      "fw_risk_matrix",
+      0.16
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_sipoc",
+      0.523
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "FIND_ROOT_CAUSE"
+    },
+    "domains": [
+     "OPS.WASTE",
+     "OPS.PERFORMANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_vsm",
+      0.96
+     ],
+     [
+      "fw_bpmn",
+      0.602
+     ],
+     [
+      "fw_cause_effect",
+      0.483
+     ],
+     [
+      "fw_sipoc",
+      0.523
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PROC-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "FIND_ROOT_CAUSE"
+    },
+    "domains": [
+     "OPS.WASTE",
+     "OPS.PERFORMANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 1,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 3,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_vsm",
+      0.96
+     ],
+     [
+      "fw_bpmn",
+      0.602
+     ],
+     [
+      "fw_cause_effect",
+      0.483
+     ],
+     [
+      "fw_sipoc",
+      0.523
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY",
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.846
+     ],
+     [
+      "fw_five_whys",
+      0.436
+     ],
+     [
+      "fw_bpmn",
+      0.343
+     ],
+     [
+      "fw_vsm",
+      0.343
+     ],
+     [
+      "fw_sipoc",
+      0.31
+     ],
+     [
+      "fw_swot",
+      0.176
+     ],
+     [
+      "fw_risk_matrix",
+      0.176
+     ],
+     [
+      "fw_stakeholder_map",
+      0.171
+     ],
+     [
+      "fw_org_chart",
+      0.169
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "cap_strategic_options",
+      0.033
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY",
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.846
+     ],
+     [
+      "fw_five_whys",
+      0.436
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY",
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 3,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.846
+     ],
+     [
+      "fw_five_whys",
+      0.436
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "recurring",
+    "causal_complexity": 1,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_five_whys",
+      0.876
+     ],
+     [
+      "fw_cause_effect",
+      0.762
+     ],
+     [
+      "fw_vsm",
+      0.41
+     ],
+     [
+      "fw_bpmn",
+      0.39
+     ],
+     [
+      "fw_sipoc",
+      0.357
+     ],
+     [
+      "fw_swot",
+      0.176
+     ],
+     [
+      "fw_risk_matrix",
+      0.176
+     ],
+     [
+      "fw_org_chart",
+      0.169
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_stakeholder_map",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "recurring",
+    "causal_complexity": 1,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_five_whys",
+      0.876
+     ],
+     [
+      "fw_cause_effect",
+      0.762
+     ],
+     [
+      "fw_vsm",
+      0.41
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "OPS.QUALITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": "recurring",
+    "causal_complexity": 1,
+    "process_boundaries": true,
+    "steps_known": true,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_five_whys",
+      0.876
+     ],
+     [
+      "fw_cause_effect",
+      0.762
+     ],
+     [
+      "fw_vsm",
+      0.41
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "CX.EXPERIENCE",
+     "FIN.REVENUE"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.779
+     ],
+     [
+      "fw_vsm",
+      0.307
+     ],
+     [
+      "fw_five_whys",
+      0.286
+     ],
+     [
+      "fw_bpmn",
+      0.24
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "fw_sipoc",
+      0.207
+     ],
+     [
+      "fw_risk_matrix",
+      0.176
+     ],
+     [
+      "fw_stakeholder_map",
+      0.171
+     ],
+     [
+      "fw_org_chart",
+      0.169
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "cap_strategic_options",
+      0.1
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "CX.EXPERIENCE",
+     "FIN.REVENUE"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.779
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RCA-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": null
+    },
+    "domains": [
+     "CX.EXPERIENCE",
+     "FIN.REVENUE"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 1,
+    "stakeholders": 4,
+    "constraints": false,
+    "recurrence": "chronic",
+    "causal_complexity": 4,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.779
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": null
+    },
+    "domains": [
+     "RSK.ASSESSMENT",
+     "PRJ.DELIVERY"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.941
+     ],
+     [
+      "fw_pest_steeple",
+      0.293
+     ],
+     [
+      "fw_project_charter",
+      0.29
+     ],
+     [
+      "fw_action_plan",
+      0.28
+     ],
+     [
+      "fw_cause_effect",
+      0.247
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "fw_stakeholder_map",
+      0.21
+     ],
+     [
+      "cap_strategic_options",
+      0.176
+     ],
+     [
+      "fw_five_whys",
+      0.166
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_op_model_canvas",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": null
+    },
+    "domains": [
+     "RSK.ASSESSMENT",
+     "PRJ.DELIVERY"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.941
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": null
+    },
+    "domains": [
+     "RSK.ASSESSMENT",
+     "PRJ.DELIVERY"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.941
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "RSK.ASSESSMENT"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      1
+     ],
+     [
+      "fw_project_charter",
+      0.393
+     ],
+     [
+      "fw_action_plan",
+      0.376
+     ],
+     [
+      "fw_pest_steeple",
+      0.329
+     ],
+     [
+      "fw_stakeholder_map",
+      0.288
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "cap_strategic_options",
+      0.21
+     ],
+     [
+      "fw_cause_effect",
+      0.176
+     ],
+     [
+      "fw_bpmn",
+      0.174
+     ],
+     [
+      "fw_op_model_canvas",
+      0.152
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.124
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.052
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "RSK.ASSESSMENT"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      1
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "RSK.ASSESSMENT"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      1
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 14,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.971
+     ],
+     [
+      "fw_pest_steeple",
+      0.345
+     ],
+     [
+      "fw_impact_effort",
+      0.3
+     ],
+     [
+      "cap_strategic_options",
+      0.276
+     ],
+     [
+      "fw_project_charter",
+      0.276
+     ],
+     [
+      "fw_swot",
+      0.26
+     ],
+     [
+      "fw_action_plan",
+      0.243
+     ],
+     [
+      "fw_stakeholder_map",
+      0.226
+     ],
+     [
+      "fw_vsm",
+      0.207
+     ],
+     [
+      "fw_cause_effect",
+      0.193
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 14,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.971
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "RSK-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "MANAGE_RISK",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "department",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 14,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": true,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_risk_matrix",
+      0.971
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.933
+     ],
+     [
+      "fw_project_charter",
+      0.486
+     ],
+     [
+      "fw_action_plan",
+      0.243
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_swot",
+      0.176
+     ],
+     [
+      "fw_cause_effect",
+      0.176
+     ],
+     [
+      "fw_sipoc",
+      0.174
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "cap_strategic_options",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_impact_effort",
+      0.14
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.933
+     ],
+     [
+      "fw_project_charter",
+      0.486
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS"
+    ],
+    "scope": "cross_functional",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.933
+     ],
+     [
+      "fw_project_charter",
+      0.486
+     ]
+    ],
+    "suff": 0.9,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "STR.EXECUTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.862
+     ],
+     [
+      "fw_project_charter",
+      0.607
+     ],
+     [
+      "fw_action_plan",
+      0.48
+     ],
+     [
+      "fw_cause_effect",
+      0.223
+     ],
+     [
+      "fw_swot",
+      0.212
+     ],
+     [
+      "fw_impact_effort",
+      0.207
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_risk_matrix",
+      0.193
+     ],
+     [
+      "fw_sipoc",
+      0.19
+     ],
+     [
+      "fw_op_model_canvas",
+      0.186
+     ],
+     [
+      "cap_strategic_options",
+      0.176
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.052
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "STR.EXECUTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.862
+     ],
+     [
+      "fw_project_charter",
+      0.607
+     ],
+     [
+      "fw_action_plan",
+      0.48
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "STR.EXECUTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.862
+     ],
+     [
+      "fw_project_charter",
+      0.607
+     ],
+     [
+      "fw_action_plan",
+      0.48
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "MANAGE_RISK"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.815
+     ],
+     [
+      "fw_project_charter",
+      0.477
+     ],
+     [
+      "fw_pest_steeple",
+      0.438
+     ],
+     [
+      "fw_risk_matrix",
+      0.416
+     ],
+     [
+      "fw_action_plan",
+      0.276
+     ],
+     [
+      "fw_swot",
+      0.21
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_cause_effect",
+      0.193
+     ],
+     [
+      "fw_impact_effort",
+      0.176
+     ],
+     [
+      "fw_sipoc",
+      0.174
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "cap_strategic_options",
+      0.16
+     ],
+     [
+      "fw_bpmn",
+      0.124
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "MANAGE_RISK"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.815
+     ],
+     [
+      "fw_project_charter",
+      0.477
+     ],
+     [
+      "fw_pest_steeple",
+      0.438
+     ],
+     [
+      "fw_risk_matrix",
+      0.416
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STK-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "ALIGN_PEOPLE",
+     "secondary": "MANAGE_RISK"
+    },
+    "domains": [
+     "PRJ.STAKEHOLDERS",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 4,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_stakeholder_map",
+      0.815
+     ],
+     [
+      "fw_project_charter",
+      0.477
+     ],
+     [
+      "fw_pest_steeple",
+      0.438
+     ],
+     [
+      "fw_risk_matrix",
+      0.416
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-01",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.ENVIRONMENT",
+     "STR.DIRECTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.912
+     ],
+     [
+      "fw_swot",
+      0.671
+     ],
+     [
+      "cap_strategic_options",
+      0.437
+     ],
+     [
+      "fw_op_model_canvas",
+      0.366
+     ],
+     [
+      "fw_stakeholder_map",
+      0.243
+     ],
+     [
+      "fw_risk_matrix",
+      0.226
+     ],
+     [
+      "fw_project_charter",
+      0.21
+     ],
+     [
+      "fw_impact_effort",
+      0.209
+     ],
+     [
+      "fw_sipoc",
+      0.207
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_action_plan",
+      0.16
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_vsm",
+      0.086
+     ]
+    ],
+    "suff": 0.75,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-01",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.ENVIRONMENT",
+     "STR.DIRECTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.912
+     ],
+     [
+      "fw_swot",
+      0.671
+     ],
+     [
+      "cap_strategic_options",
+      0.437
+     ]
+    ],
+    "suff": 0.938,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.ENVIRONMENT",
+     "STR.DIRECTION"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.912
+     ],
+     [
+      "fw_swot",
+      0.671
+     ],
+     [
+      "cap_strategic_options",
+      0.437
+     ]
+    ],
+    "suff": 0.938,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-02",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.POSITION"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_swot",
+      0.876
+     ],
+     [
+      "fw_pest_steeple",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.486
+     ],
+     [
+      "fw_op_model_canvas",
+      0.319
+     ],
+     [
+      "fw_stakeholder_map",
+      0.243
+     ],
+     [
+      "fw_risk_matrix",
+      0.226
+     ],
+     [
+      "fw_project_charter",
+      0.21
+     ],
+     [
+      "fw_sipoc",
+      0.207
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_cause_effect",
+      0.193
+     ],
+     [
+      "fw_impact_effort",
+      0.174
+     ],
+     [
+      "fw_action_plan",
+      0.16
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.086
+     ]
+    ],
+    "suff": 0.8,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-02",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.POSITION"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_swot",
+      0.876
+     ],
+     [
+      "fw_pest_steeple",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.486
+     ]
+    ],
+    "suff": 0.8,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "STR.POSITION"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_swot",
+      0.876
+     ],
+     [
+      "fw_pest_steeple",
+      0.59
+     ],
+     [
+      "cap_strategic_options",
+      0.486
+     ]
+    ],
+    "suff": 0.8,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "GENERATE_OPTIONS",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "DEC.OPTIONS",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "cap_strategic_options",
+      0.834
+     ],
+     [
+      "fw_impact_effort",
+      0.524
+     ],
+     [
+      "fw_swot",
+      0.367
+     ],
+     [
+      "fw_op_model_canvas",
+      0.269
+     ],
+     [
+      "fw_cause_effect",
+      0.264
+     ],
+     [
+      "fw_risk_matrix",
+      0.226
+     ],
+     [
+      "fw_action_plan",
+      0.21
+     ],
+     [
+      "fw_pest_steeple",
+      0.193
+     ],
+     [
+      "fw_project_charter",
+      0.176
+     ],
+     [
+      "fw_vsm",
+      0.174
+     ],
+     [
+      "fw_stakeholder_map",
+      0.16
+     ],
+     [
+      "fw_five_whys",
+      0.143
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "GENERATE_OPTIONS",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "DEC.OPTIONS",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "cap_strategic_options",
+      0.834
+     ],
+     [
+      "fw_impact_effort",
+      0.524
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "GENERATE_OPTIONS",
+     "secondary": "PRIORITISE_DECIDE"
+    },
+    "domains": [
+     "DEC.OPTIONS",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0.5,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": "chronic",
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "cap_strategic_options",
+      0.834
+     ],
+     [
+      "fw_impact_effort",
+      0.524
+     ]
+    ],
+    "suff": 0.85,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-04",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "DEC.PRIORITISATION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 23,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_impact_effort",
+      0.882
+     ],
+     [
+      "cap_strategic_options",
+      0.39
+     ],
+     [
+      "fw_swot",
+      0.267
+     ],
+     [
+      "fw_action_plan",
+      0.26
+     ],
+     [
+      "fw_risk_matrix",
+      0.243
+     ],
+     [
+      "fw_project_charter",
+      0.21
+     ],
+     [
+      "fw_op_model_canvas",
+      0.202
+     ],
+     [
+      "fw_pest_steeple",
+      0.176
+     ],
+     [
+      "fw_stakeholder_map",
+      0.176
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.102
+     ]
+    ],
+    "suff": 0.6,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-04",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "DEC.PRIORITISATION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 23,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_impact_effort",
+      0.882
+     ]
+    ],
+    "suff": 0.857,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "STR-04",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "DEC.PRIORITISATION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 23,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_impact_effort",
+      0.882
+     ]
+    ],
+    "suff": 0.857,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-01",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "PRJ.INITIATION",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_project_charter",
+      0.853
+     ],
+     [
+      "fw_stakeholder_map",
+      0.477
+     ],
+     [
+      "fw_action_plan",
+      0.476
+     ],
+     [
+      "fw_risk_matrix",
+      0.349
+     ],
+     [
+      "fw_impact_effort",
+      0.293
+     ],
+     [
+      "cap_strategic_options",
+      0.21
+     ],
+     [
+      "fw_op_model_canvas",
+      0.186
+     ],
+     [
+      "fw_pest_steeple",
+      0.178
+     ],
+     [
+      "fw_sipoc",
+      0.174
+     ],
+     [
+      "fw_bpmn",
+      0.174
+     ],
+     [
+      "fw_org_chart",
+      0.169
+     ],
+     [
+      "fw_swot",
+      0.16
+     ],
+     [
+      "fw_cause_effect",
+      0.16
+     ],
+     [
+      "fw_five_whys",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.069
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-01",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "PRJ.INITIATION",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_project_charter",
+      0.853
+     ],
+     [
+      "fw_stakeholder_map",
+      0.477
+     ],
+     [
+      "fw_action_plan",
+      0.476
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": "ALIGN_PEOPLE"
+    },
+    "domains": [
+     "PRJ.INITIATION",
+     "RSK.COMPLIANCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 2,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_project_charter",
+      0.853
+     ],
+     [
+      "fw_stakeholder_map",
+      0.477
+     ],
+     [
+      "fw_action_plan",
+      0.476
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-02",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.PLANNING"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "good",
+    "options_listed": 12,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_action_plan",
+      0.971
+     ],
+     [
+      "fw_project_charter",
+      0.614
+     ],
+     [
+      "fw_impact_effort",
+      0.514
+     ],
+     [
+      "fw_risk_matrix",
+      0.329
+     ],
+     [
+      "fw_stakeholder_map",
+      0.243
+     ],
+     [
+      "cap_strategic_options",
+      0.21
+     ],
+     [
+      "fw_bpmn",
+      0.174
+     ],
+     [
+      "fw_op_model_canvas",
+      0.169
+     ],
+     [
+      "fw_swot",
+      0.143
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_sipoc",
+      0.14
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_vsm",
+      0.105
+     ]
+    ],
+    "suff": 0.65,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-02",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.PLANNING"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "good",
+    "options_listed": 12,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_action_plan",
+      0.971
+     ],
+     [
+      "fw_project_charter",
+      0.614
+     ],
+     [
+      "fw_impact_effort",
+      0.514
+     ]
+    ],
+    "suff": 0.929,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PLAN_EXECUTION",
+     "secondary": null
+    },
+    "domains": [
+     "PRJ.PLANNING"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "good",
+    "options_listed": 12,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_action_plan",
+      0.971
+     ],
+     [
+      "fw_project_charter",
+      0.614
+     ],
+     [
+      "fw_impact_effort",
+      0.514
+     ]
+    ],
+    "suff": 0.929,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-03",
+   "config": "v02",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.DELIVERY"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": "recurring",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.79
+     ],
+     [
+      "fw_action_plan",
+      0.481
+     ],
+     [
+      "fw_five_whys",
+      0.429
+     ],
+     [
+      "fw_project_charter",
+      0.407
+     ],
+     [
+      "fw_risk_matrix",
+      0.369
+     ],
+     [
+      "fw_vsm",
+      0.324
+     ],
+     [
+      "fw_bpmn",
+      0.274
+     ],
+     [
+      "fw_sipoc",
+      0.224
+     ],
+     [
+      "fw_stakeholder_map",
+      0.221
+     ],
+     [
+      "fw_op_model_canvas",
+      0.186
+     ],
+     [
+      "fw_swot",
+      0.176
+     ],
+     [
+      "fw_impact_effort",
+      0.174
+     ],
+     [
+      "fw_org_chart",
+      0.169
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "cap_strategic_options",
+      0.019
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-03",
+   "config": "v03",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.DELIVERY"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": "recurring",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.79
+     ],
+     [
+      "fw_action_plan",
+      0.481
+     ],
+     [
+      "fw_five_whys",
+      0.429
+     ],
+     [
+      "fw_project_charter",
+      0.407
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "PRJ-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": true,
+    "stage": {
+     "primary": "FIND_ROOT_CAUSE",
+     "secondary": "PLAN_EXECUTION"
+    },
+    "domains": [
+     "PRJ.DELIVERY"
+    ],
+    "scope": "multi_entity_ecosystem",
+    "goal": 1,
+    "impact": 0.5,
+    "stakeholders": 3,
+    "constraints": true,
+    "recurrence": "recurring",
+    "causal_complexity": 3,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "some",
+    "options_listed": 0,
+    "deadline_known": true,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_cause_effect",
+      0.79
+     ],
+     [
+      "fw_action_plan",
+      0.481
+     ],
+     [
+      "fw_five_whys",
+      0.429
+     ],
+     [
+      "fw_project_charter",
+      0.407
+     ]
+    ],
+    "suff": 0.95,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-01",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "CX.EXPERIENCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_bpmn",
+      0.586
+     ],
+     [
+      "fw_sipoc",
+      0.476
+     ],
+     [
+      "cap_strategic_options",
+      0.424
+     ],
+     [
+      "fw_vsm",
+      0.355
+     ],
+     [
+      "fw_project_charter",
+      0.352
+     ],
+     [
+      "fw_op_model_canvas",
+      0.352
+     ],
+     [
+      "fw_swot",
+      0.317
+     ],
+     [
+      "fw_org_chart",
+      0.302
+     ],
+     [
+      "fw_stakeholder_map",
+      0.176
+     ],
+     [
+      "fw_impact_effort",
+      0.174
+     ],
+     [
+      "fw_pest_steeple",
+      0.16
+     ],
+     [
+      "fw_risk_matrix",
+      0.16
+     ],
+     [
+      "fw_action_plan",
+      0.16
+     ]
+    ],
+    "suff": 0.55,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-01",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "CX.EXPERIENCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "no_good_fit",
+    "ranked": [
+     [
+      "fw_bpmn",
+      0.586
+     ],
+     [
+      "fw_sipoc",
+      0.476
+     ],
+     [
+      "cap_strategic_options",
+      0.424
+     ]
+    ],
+    "suff": 0.786,
+    "probableNGF": false,
+    "closest": [
+     "fw_bpmn",
+     "fw_sipoc"
+    ]
+   }
+  },
+  {
+   "id": "NGF-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "MAP_CURRENT_STATE",
+     "secondary": "GENERATE_OPTIONS"
+    },
+    "domains": [
+     "CX.EXPERIENCE"
+    ],
+    "scope": "cross_functional",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 2,
+    "process_boundaries": true,
+    "steps_known": false,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_bpmn",
+      0.586
+     ],
+     [
+      "fw_sipoc",
+      0.476
+     ],
+     [
+      "cap_strategic_options",
+      0.424
+     ]
+    ],
+    "suff": 0.786,
+    "probableNGF": true,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-02",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": null
+    },
+    "domains": [
+     "STR.POSITION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.753
+     ],
+     [
+      "fw_swot",
+      0.617
+     ],
+     [
+      "fw_project_charter",
+      0.419
+     ],
+     [
+      "cap_strategic_options",
+      0.307
+     ],
+     [
+      "fw_op_model_canvas",
+      0.269
+     ],
+     [
+      "fw_stakeholder_map",
+      0.243
+     ],
+     [
+      "fw_risk_matrix",
+      0.21
+     ],
+     [
+      "fw_sipoc",
+      0.207
+     ],
+     [
+      "fw_org_chart",
+      0.202
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_bpmn",
+      0.14
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.069
+     ]
+    ],
+    "suff": 0.55,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-02",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": null
+    },
+    "domains": [
+     "STR.POSITION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.753
+     ],
+     [
+      "fw_swot",
+      0.617
+     ],
+     [
+      "fw_project_charter",
+      0.419
+     ]
+    ],
+    "suff": 0.786,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "UNDERSTAND_CONTEXT",
+     "secondary": null
+    },
+    "domains": [
+     "STR.POSITION",
+     "CX.EXPERIENCE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": true,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "ok",
+    "ranked": [
+     [
+      "fw_pest_steeple",
+      0.753
+     ],
+     [
+      "fw_swot",
+      0.617
+     ],
+     [
+      "fw_project_charter",
+      0.419
+     ]
+    ],
+    "suff": 0.786,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-03",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-03",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "FIN.REVENUE"
+    ],
+    "scope": "organisation",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": true,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": true,
+    "data_available": "good",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": true,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-04",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "PPL.CAPABILITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 2,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-04",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "PPL.CAPABILITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 2,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "NGF-04",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": "PRIORITISE_DECIDE",
+     "secondary": null
+    },
+    "domains": [
+     "PPL.CAPABILITY"
+    ],
+    "scope": "team",
+    "goal": 1,
+    "impact": 0,
+    "stakeholders": 2,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": 1,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "anecdotal",
+    "options_listed": 2,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": true
+   },
+   "expected": {
+    "status": "out_of_scope",
+    "ranked": [],
+    "suff": null,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-01",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "department",
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_op_model_canvas",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_stakeholder_map",
+      0.107
+     ],
+     [
+      "fw_project_charter",
+      0.107
+     ],
+     [
+      "fw_action_plan",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-01",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "department",
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-01",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "department",
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.1,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-02",
+   "config": "v02",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "cap_strategic_options",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_project_charter",
+      0.143
+     ],
+     [
+      "fw_action_plan",
+      0.143
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_op_model_canvas",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_stakeholder_map",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-02",
+   "config": "v03",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-02",
+   "config": "v03b",
+   "slots": {
+    "symptom": false,
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": "organisation",
+    "goal": 0.5,
+    "impact": 0,
+    "stakeholders": 0,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-03",
+   "config": "v02",
+   "slots": {
+    "symptom": "vague",
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": null,
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ],
+     [
+      "fw_pest_steeple",
+      0.143
+     ],
+     [
+      "fw_risk_matrix",
+      0.143
+     ],
+     [
+      "fw_stakeholder_map",
+      0.143
+     ],
+     [
+      "fw_org_chart",
+      0.136
+     ],
+     [
+      "fw_op_model_canvas",
+      0.136
+     ],
+     [
+      "fw_sipoc",
+      0.107
+     ],
+     [
+      "fw_bpmn",
+      0.107
+     ],
+     [
+      "fw_impact_effort",
+      0.107
+     ],
+     [
+      "fw_project_charter",
+      0.107
+     ],
+     [
+      "fw_action_plan",
+      0.107
+     ],
+     [
+      "fw_vsm",
+      0.036
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-03",
+   "config": "v03",
+   "slots": {
+    "symptom": "vague",
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": null,
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  },
+  {
+   "id": "INS-03",
+   "config": "v03b",
+   "slots": {
+    "symptom": "vague",
+    "stage": {
+     "primary": null,
+     "secondary": null
+    },
+    "domains": [
+     "X.UNCLEAR"
+    ],
+    "scope": null,
+    "goal": 0,
+    "impact": 0,
+    "stakeholders": 1,
+    "constraints": false,
+    "recurrence": null,
+    "causal_complexity": null,
+    "process_boundaries": null,
+    "steps_known": null,
+    "measurable_symptom": false,
+    "data_available": "none",
+    "options_listed": 0,
+    "deadline_known": false,
+    "new_initiative": false,
+    "external_focus": false,
+    "structure_focus": "none",
+    "items_are_threats": false,
+    "out_of_scope": false
+   },
+   "expected": {
+    "status": "insufficient_context",
+    "ranked": [
+     [
+      "fw_swot",
+      0.143
+     ]
+    ],
+    "suff": 0.15,
+    "probableNGF": false,
+    "closest": null
+   }
+  }
+ ]
+}
